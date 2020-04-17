@@ -12,22 +12,28 @@ import java.util.ArrayList;
 @RestController
 public class UsersController {
 
-    @GetMapping("/users")
+    @GetMapping("api/users/")
     public ArrayList<User> getUsers() {
         ArrayList<User> users = new ArrayList<>();
-        User user = new User();
-        user.setId(1);
-        user.setLogin("test");
-        users.add(user);
+
+        User user1 = new User();
+        user1.setId(1);
+        user1.setLogin("test1");
+        users.add(user1);
+
+        User user2 = new User();
+        user2.setId(2);
+        user2.setLogin("test2");
+        users.add(user2);
+
         return users;
     }
 
-    @GetMapping("/users1")
+    @GetMapping("api/users/test")
     public User getUsers1() {
-        ArrayList<User> users = new ArrayList<>();
         User user = new User();
         user.setId(1);
-        user.setLogin("test");
+        user.setLogin("userFromServer");
         return user;
     }
 
