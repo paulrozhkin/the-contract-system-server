@@ -14,6 +14,7 @@ public class GoblinSlayerSystemServerApplication {
 		app.setDefaultProperties(Collections
 				.singletonMap("server.port", "3450"));
 		app.run(args);
+		// Добавил изменение
 	}
 
 }
