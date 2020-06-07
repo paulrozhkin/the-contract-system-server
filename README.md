@@ -1,5 +1,8 @@
 # GoblinSlayerSystemServer
 
+## Documentation
+- [Server API](https://app.swaggerhub.com/apis/ForsaiR/GoblinSlayerSystem/)
+
 ## Description
 
 Course project on discipline "Методология программной инженерии".
