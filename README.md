@@ -4,6 +4,9 @@
 - [dbDiagram](https://dbdiagram.io/d)
 - [Server API](https://app.swaggerhub.com/apis/ForsaiR/GoblinSlayerSystem/)
 
+## Linked Repositories
+- [Client](https://github.com/paulrozhkin/the-contract-system-web-client)
+
 ## Description
 
 Course project on discipline "Методология программной инженерии".
