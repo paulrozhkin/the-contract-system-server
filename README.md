@@ -1,6 +1,7 @@
 # GoblinSlayerSystemServer
 
 ## Documentation
+- [dbDiagram](https://dbdiagram.io/d)
 - [Server API](https://app.swaggerhub.com/apis/ForsaiR/GoblinSlayerSystem/)
 
 ## Description
