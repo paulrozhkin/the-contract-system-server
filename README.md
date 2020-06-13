@@ -6,6 +6,7 @@
 
 ## Linked Repositories
 - [Client](https://github.com/paulrozhkin/the-contract-system-web-client)
+- [Modelio](https://github.com/paulrozhkin/the-contract-system-modelio)
 
 ## Description
 
