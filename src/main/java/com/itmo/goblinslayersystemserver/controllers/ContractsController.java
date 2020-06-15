@@ -2,6 +2,9 @@ package com.itmo.goblinslayersystemserver.controllers;
 
 import com.itmo.goblinslayersystemserver.models.Contract;
 import com.itmo.goblinslayersystemserver.models.User;
+import com.itmo.goblinslayersystemserver.services.IContractService;
+import com.itmo.goblinslayersystemserver.services.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -10,13 +13,15 @@ import java.util.ArrayList;
 @RequestMapping("api/contracts")
 public class ContractsController {
 
+    @Autowired
+    private IContractService contractService;
+
     /**
      * Get запрос серверу для получения списка контрактов из системы
      **/
     @GetMapping(produces = {"application/json"})
     public ArrayList<Contract> getContracts() {
-
-        return new ArrayList<>();
+        return contractService.getContractsList();
     }
 
     /**
@@ -24,8 +29,7 @@ public class ContractsController {
      **/
     @PostMapping(consumes = {"application/json"}, produces = {"application/json"})
     public ArrayList<Contract> createContracts(@RequestBody ArrayList<Contract> contractArrayList) {
-
-        return contractArrayList;
+        return contractService.createListContracts(contractArrayList);
     }
 
     /**
@@ -33,17 +37,15 @@ public class ContractsController {
      **/
     @GetMapping(value = "/{id}", consumes = {"application/json"}, produces = {"application/json"})
     public Contract getContract(@PathVariable Integer id) {
-
-        return new Contract();
+        return contractService.getContractById(id);
     }
 
     /**
      * Put запрос серверу для обновления контракта в системе по его ID
      **/
     @PutMapping(value = "/{id}", consumes = {"application/json"}, produces = {"application/json"})
-    public Contract updateContract(@PathVariable Integer id) {
-
-        return new Contract();
+    public Contract updateContract(@PathVariable Integer id, @RequestBody Contract contract) {
+        return contractService.updateContractById(id,contract);
     }
 
     /**
@@ -51,7 +53,6 @@ public class ContractsController {
      **/
     @DeleteMapping(value = "/{id}", consumes = {"application/json"}, produces = {"application/json"})
     public String deleteContract(@PathVariable Integer id) {
-
-        return "";
+        return contractService.deleteContractById(id);
     }
 }

@@ -3,27 +3,31 @@ package com.itmo.goblinslayersystemserver.models;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
-import org.apache.tomcat.jni.Time;
 
+import javax.persistence.*;
+import javax.validation.constraints.Positive;
+import java.util.Date;
+
+@Entity
 public class Contract {
 
     /**
      * ID контракта
      **/
-    @Getter @Setter
-    private int id;
+    @Id @Positive @GeneratedValue(strategy= GenerationType.AUTO) @Getter @Setter
+    private Integer id;
 
     /**
      * ID заявителя
      **/
     @NonNull @Getter @Setter
-    private int customer;
+    private Integer customer;
 
     /**
      * ID исполнителя
      **/
     @Getter @Setter
-    private int executor;
+    private Integer executor;
 
     /**
      * Название контракта
@@ -35,12 +39,12 @@ public class Contract {
      * Вознаграждение за контракт
      **/
     @NonNull @Getter @Setter
-    private int reward;
+    private Integer reward;
 
     /**
      * Минимальный ранк авантюриста необходимый для выполнения контракта
      **/
-    @Getter @Setter
+    @Enumerated(EnumType.STRING) @Getter @Setter
     private AdventurerRank minRank;
 
     /**
@@ -52,8 +56,8 @@ public class Contract {
     /**
      * Время создания контракта
      **/
-    @NonNull @Getter @Setter
-    private Time createTime;
+    @Temporal(TemporalType.TIMESTAMP) @NonNull @Getter @Setter
+    private Date createTime;
 
     /**
      * Статус исполнения контракта:
@@ -64,7 +68,7 @@ public class Contract {
      * Выполненяется;
      * Завершен.
      **/
-    @Getter @Setter
+    @Enumerated(EnumType.STRING) @Getter @Setter
     private ContractStatus contractStatus;
 
     /**

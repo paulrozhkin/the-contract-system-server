@@ -4,13 +4,17 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
+import javax.persistence.*;
+import javax.validation.constraints.Positive;
+
+@Entity
 public class User {
 
     /**
      * ID пользователя
      **/
-    @Getter @Setter
-    private int id;
+    @Id @Positive @GeneratedValue(strategy= GenerationType.AUTO) @Getter @Setter
+    private Integer id;
 
     /**
      * Login пользователя
@@ -38,7 +42,7 @@ public class User {
      * Регистратор гильдии;
      * Распорядитель рангов.
      **/
-    @NonNull @Getter @Setter
+    @Enumerated(EnumType.STRING) @NonNull @Getter @Setter
     private Role role;
 
     /**
@@ -54,14 +58,14 @@ public class User {
      * Мертв;
      * Не подтвержден.
      **/
-    @Getter @Setter
+    @Enumerated(EnumType.STRING) @Getter @Setter
     private AdventurerStatus adventurerStatus;
 
     /**
      * Количество очков опыта авнюриста
      **/
     @Getter @Setter
-    private int adventurerExperience;
+    private Integer adventurerExperience;
 
     /**
      * Ранк авантюрита:
@@ -76,6 +80,6 @@ public class User {
      * Обсидиан;
      * Фарфор.
      **/
-    @Getter @Setter
+    @Enumerated(EnumType.STRING) @Getter @Setter
     private AdventurerRank adventurerRank;
 }
