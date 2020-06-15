@@ -1,22 +1,20 @@
 package com.itmo.goblinslayersystemserver.services;
 
-import com.itmo.goblinslayersystemserver.models.AdvancedUser;
-import com.itmo.goblinslayersystemserver.models.Contract;
 import com.itmo.goblinslayersystemserver.models.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
 @Service
-public class UsersService implements IUserService, IAdvancedUserService {
+public class UsersService implements IUserService {
 
     @Override
-    public ArrayList<User> createListAdvancedUser(ArrayList<AdvancedUser> advancedUserArrayList) {
+    public ArrayList<User> createListUser(ArrayList<User> userArrayList) {
         return null;
     }
 
     @Override
-    public User updateAdvancedUserById(Integer id, AdvancedUser advancedUser) {
+    public User updateUserById(Integer id, User user) {
         return null;
     }
 

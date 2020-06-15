@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Positive;
 
 @Entity
+@Table(name = "users")
 public class User {
 
     /**
@@ -21,6 +22,12 @@ public class User {
      **/
     @NonNull @Getter @Setter
     private String login;
+
+    /**
+     * Пароль пользователя
+     **/
+    @Getter @Setter
+    private String password;
 
     /**
      * ФИО пользователя

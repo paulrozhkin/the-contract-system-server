@@ -1,9 +1,6 @@
 package com.itmo.goblinslayersystemserver.controllers;
 
-import com.itmo.goblinslayersystemserver.exceptions.UnauthorizedException;
-import com.itmo.goblinslayersystemserver.models.AdvancedUser;
 import com.itmo.goblinslayersystemserver.models.User;
-import com.itmo.goblinslayersystemserver.services.IAdvancedUserService;
 import com.itmo.goblinslayersystemserver.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,9 +16,6 @@ public class UsersController {
     @Autowired
     private IUserService userService;
 
-    @Autowired
-    private IAdvancedUserService advancedUserService;
-
     /**
      * Get запрос серверу для получения списка пользователей из системы
      **/
@@ -34,8 +28,8 @@ public class UsersController {
      * Post запрос серверу для создания списка пользователей в системе
      **/
     @PostMapping(consumes = {"application/json"}, produces = {"application/json"})
-    public ArrayList<User> createUsers(HttpServletResponse response, @RequestBody ArrayList<AdvancedUser> advancedUserArrayList) {
-        return advancedUserService.createListAdvancedUser(advancedUserArrayList);
+    public ArrayList<User> createUsers(HttpServletResponse response, @RequestBody ArrayList<User> userArrayList) {
+        return userService.createListUser(userArrayList);
     }
 
     /**
@@ -50,8 +44,8 @@ public class UsersController {
      * Put запрос серверу для обновления данных пользователя в системе по его ID
      **/
     @PutMapping(value = "/{id}", consumes = {"application/json"}, produces = {"application/json"})
-    public User updateUser(HttpServletResponse response, @PathVariable Integer id, @RequestBody AdvancedUser advancedUser) {
-        return advancedUserService.updateAdvancedUserById(id, advancedUser);
+    public User updateUser(HttpServletResponse response, @PathVariable Integer id, @RequestBody User user) {
+        return userService.updateUserById(id, user);
     }
 
     /**
@@ -66,7 +60,7 @@ public class UsersController {
 //        }
 //        response.
 //        HttpServletResponse.
-        response.sendError(401);
-        return "";
+//        response.sendError(401);
+        return userService.deleteUserById(id);
     }
 }
