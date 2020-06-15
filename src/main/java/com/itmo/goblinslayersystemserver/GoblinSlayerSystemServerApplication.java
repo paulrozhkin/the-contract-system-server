@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Collections;
 
 @SpringBootApplication
-@EnableAuthorizationServer
-@EnableResourceServer
 @RestController
 public class GoblinSlayerSystemServerApplication {
 

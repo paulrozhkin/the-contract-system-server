@@ -7,6 +7,7 @@ import com.itmo.goblinslayersystemserver.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 
 @RestController
@@ -20,7 +21,7 @@ public class ContractsController {
      * Get запрос серверу для получения списка контрактов из системы
      **/
     @GetMapping(produces = {"application/json"})
-    public ArrayList<Contract> getContracts() {
+    public ArrayList<Contract> getContracts(HttpServletResponse response) {
         return contractService.getContractsList();
     }
 
@@ -28,7 +29,7 @@ public class ContractsController {
      * Post запрос серверу для создания списка контрактов в системе
      **/
     @PostMapping(consumes = {"application/json"}, produces = {"application/json"})
-    public ArrayList<Contract> createContracts(@RequestBody ArrayList<Contract> contractArrayList) {
+    public ArrayList<Contract> createContracts(HttpServletResponse response, @RequestBody ArrayList<Contract> contractArrayList) {
         return contractService.createListContracts(contractArrayList);
     }
 
@@ -36,7 +37,7 @@ public class ContractsController {
      * Get запрос серверу для получения контракта из системы по его ID
      **/
     @GetMapping(value = "/{id}", consumes = {"application/json"}, produces = {"application/json"})
-    public Contract getContract(@PathVariable Integer id) {
+    public Contract getContract(HttpServletResponse response, @PathVariable Integer id) {
         return contractService.getContractById(id);
     }
 
@@ -44,7 +45,7 @@ public class ContractsController {
      * Put запрос серверу для обновления контракта в системе по его ID
      **/
     @PutMapping(value = "/{id}", consumes = {"application/json"}, produces = {"application/json"})
-    public Contract updateContract(@PathVariable Integer id, @RequestBody Contract contract) {
+    public Contract updateContract(HttpServletResponse response, @PathVariable Integer id, @RequestBody Contract contract) {
         return contractService.updateContractById(id,contract);
     }
 
@@ -52,7 +53,7 @@ public class ContractsController {
      * Delete запрос серверу для удаления контракта из системы по его ID
      **/
     @DeleteMapping(value = "/{id}", consumes = {"application/json"}, produces = {"application/json"})
-    public String deleteContract(@PathVariable Integer id) {
+    public String deleteContract(HttpServletResponse response, @PathVariable Integer id) {
         return contractService.deleteContractById(id);
     }
 }

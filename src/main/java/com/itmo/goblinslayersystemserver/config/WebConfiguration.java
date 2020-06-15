@@ -12,7 +12,6 @@ public class WebConfiguration implements WebMvcConfigurer {
 
         //TODO: Разобраться с CORS. Если на localhost с клиента делать запросы, то клиент выдаст ошибку CORS blocked.
         //  Данный блок кода решает эту проблему.
-        registry.addMapping("/**")
-                .allowedMethods("*");
+        registry.addMapping("/**").allowedMethods("*");
     }
 }
