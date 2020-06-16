@@ -26,7 +26,8 @@ public class UsersService implements IUserService {
 
     @Override
     public User updateUserById(Integer id, User user) {
-            User updatableUser;
+        User updatableUser;
+
         try {
             updatableUser = userRepository.findById(id).get();
         } catch (Exception e) {
