@@ -1,6 +1,5 @@
 package com.itmo.goblinslayersystemserver.services;
 
-import com.itmo.goblinslayersystemserver.models.Contract;
 import com.itmo.goblinslayersystemserver.models.User;
 
 import java.util.ArrayList;

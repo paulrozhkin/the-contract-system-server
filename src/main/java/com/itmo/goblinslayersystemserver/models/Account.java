@@ -1,20 +1,34 @@
 package com.itmo.goblinslayersystemserver.models;
 
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 
 public class Account {
 
     /**
      * Login пользователя
      **/
-    @NonNull @Getter @Setter
+    @NonNull
     private String login;
 
     /**
      * Пароль пользователя
      **/
-    @NonNull @Getter @Setter
+    @NonNull
     private String password;
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

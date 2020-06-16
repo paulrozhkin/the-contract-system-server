@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.ArrayList;
 
 @RestController
@@ -52,15 +51,7 @@ public class UsersController {
      * Delete запрос серверу для удаления пользователя из системы по его ID
      **/
     @DeleteMapping(value = "/{id}", consumes = {"application/json"}, produces = {"application/json"})
-    public String deleteUser(HttpServletResponse response, @PathVariable Integer id) throws IOException {
-
-//        response.getHeader("access-token");
-//        if () {
-//
-//        }
-//        response.
-//        HttpServletResponse.
-//        response.sendError(401);
+    public String deleteUser(HttpServletResponse response, @PathVariable Integer id) {
         return userService.deleteUserById(id);
     }
 }

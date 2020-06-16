@@ -1,5 +1,6 @@
 package com.itmo.goblinslayersystemserver.services;
 
+import com.itmo.goblinslayersystemserver.exceptions.BadRequestException;
 import com.itmo.goblinslayersystemserver.exceptions.NotFoundException;
 import com.itmo.goblinslayersystemserver.models.User;
 import com.itmo.goblinslayersystemserver.repositories.UserRepository;
@@ -21,6 +22,11 @@ public class UsersService implements IUserService {
 
     @Override
     public User createUser(User user) {
+        for (User existingUser: userRepository.findAll()) {
+            if (existingUser.getLogin().equals(user.getLogin())) {
+                throw new BadRequestException("A user with this username already exists");
+            }
+        }
         return userRepository.save(user);
     }
 
