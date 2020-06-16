@@ -5,10 +5,7 @@ import com.itmo.goblinslayersystemserver.models.Authorization;
 import com.itmo.goblinslayersystemserver.services.AuthService;
 import com.itmo.goblinslayersystemserver.services.IAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -22,7 +19,7 @@ public class AuthController {
     /**
      * Get запрос серверу для получения данных текущего пользователя из системы
      **/
-    @GetMapping(value = "login", consumes = {"application/json"}, produces = {"application/json"})
+    @PostMapping(value = "login", consumes = {"application/json"}, produces = {"application/json"})
     public Authorization getUsers(HttpServletResponse response, @RequestBody Account account) {
         return auth.authUser(account);
     }
