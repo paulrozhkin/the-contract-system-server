@@ -13,7 +13,7 @@ public class GoblinSlayerSystemServerApplication {
 	public static void main(String[] args) {
 
 		SpringApplication app = new SpringApplication(GoblinSlayerSystemServerApplication.class);
-		app.setDefaultProperties(Collections.singletonMap("server.port", "3450"));
+		//app.setDefaultProperties(Collections.singletonMap("server.port", "3450"));
 		app.run(args);
 	}
 }
