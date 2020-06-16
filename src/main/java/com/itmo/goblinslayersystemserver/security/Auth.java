@@ -13,6 +13,7 @@ public class Auth {
 
 
     private Auth() {
+        passports = new HashMap<>();
         enc = Base64.getEncoder();
         dec = Base64.getDecoder();
     }

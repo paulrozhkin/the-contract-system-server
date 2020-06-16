@@ -18,9 +18,9 @@ public class AccountService implements IAccountService {
     UserRepository userRepository;
 
     @Override
-    public User getCurrentUser(HttpServletResponse response) {
+    public User getCurrentUser(String token) {
         String userLogin;
-        String token = response.getHeader("access_token");
+        System.out.println(token);
 
         try {
             userLogin = Auth.getInstance().getAuthorizeUser(token);
@@ -28,7 +28,10 @@ public class AccountService implements IAccountService {
             throw new UnauthorizedException();
         }
 
-        for (User user: userRepository.findAll()) {
+        ArrayList<User> userArrayList = (ArrayList<User>) userRepository.findAll();
+        for (User user: userArrayList) {
+            System.out.println(user.getLogin());
+            System.out.println(userLogin);
             if (user.getLogin().equals(userLogin)) {
                 return user;
             }

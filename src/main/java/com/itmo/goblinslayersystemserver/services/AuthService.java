@@ -1,5 +1,6 @@
 package com.itmo.goblinslayersystemserver.services;
 
+import com.itmo.goblinslayersystemserver.exceptions.NotFoundException;
 import com.itmo.goblinslayersystemserver.models.Account;
 import com.itmo.goblinslayersystemserver.models.Authorization;
 import com.itmo.goblinslayersystemserver.models.User;
@@ -7,6 +8,8 @@ import com.itmo.goblinslayersystemserver.repositories.UserRepository;
 import com.itmo.goblinslayersystemserver.security.Auth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 
 @Service
 public class AuthService implements IAuthService {
@@ -16,7 +19,8 @@ public class AuthService implements IAuthService {
 
     @Override
     public Authorization authUser(Account account) {
-        for (User user: userRepository.findAll()) {
+        ArrayList<User> userArrayList = (ArrayList<User>) userRepository.findAll();
+        for (User user: userArrayList) {
             if (user.getLogin().equals(account.getLogin())) {
                 Authorization authorization = new Authorization();
                 String token = Auth.getInstance().createToken(user.getLogin());
@@ -26,6 +30,6 @@ public class AuthService implements IAuthService {
             }
         }
 
-        return null;
+        throw new NotFoundException();
     }
 }
