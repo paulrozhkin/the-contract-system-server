@@ -1,6 +1,9 @@
 package com.itmo.goblinslayersystemserver.services;
 
+import com.itmo.goblinslayersystemserver.exceptions.NotFoundException;
 import com.itmo.goblinslayersystemserver.models.User;
+import com.itmo.goblinslayersystemserver.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -8,28 +11,58 @@ import java.util.ArrayList;
 @Service
 public class UsersService implements IUserService {
 
+    @Autowired
+    UserRepository userRepository;
+
     @Override
-    public ArrayList<User> createListUser(ArrayList<User> userArrayList) {
-        return null;
+    public ArrayList<User> getUsersList() {
+        return (ArrayList<User>) userRepository.findAll();
+    }
+
+    @Override
+    public User createUser(User user) {
+        return userRepository.save(user);
     }
 
     @Override
     public User updateUserById(Integer id, User user) {
-        return null;
-    }
+            User updatableUser;
+        try {
+            updatableUser = userRepository.findById(id).get();
+        } catch (Exception e) {
+            throw new NotFoundException();
+        }
 
-    @Override
-    public ArrayList<User> getUsersList() {
-        return null;
+        updatableUser.setLogin(user.getLogin());
+        updatableUser.setName(user.getName());
+        updatableUser.setAddress(user.getAddress());
+        updatableUser.setRole(user.getRole());
+        updatableUser.setBlocked(user.isBlocked());
+        updatableUser.setAdventurerStatus(user.getAdventurerStatus());
+        updatableUser.setAdventurerExperience(user.getAdventurerExperience());
+        updatableUser.setAdventurerRank(user.getAdventurerRank());
+        userRepository.save(updatableUser);
+
+        return updatableUser;
     }
 
     @Override
     public User getUserById(Integer id) {
-        return null;
+        try {
+            return userRepository.findById(id).get();
+        } catch (Exception e) {
+            throw new NotFoundException();
+        }
     }
 
     @Override
     public String deleteUserById(Integer id) {
+        try {
+            userRepository.deleteById(id);
+        } catch (Exception e) {
+            throw new NotFoundException();
+        }
+
         return "";
     }
 }

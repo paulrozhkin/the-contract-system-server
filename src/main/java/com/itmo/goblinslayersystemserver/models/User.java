@@ -14,31 +14,29 @@ public class User {
     /**
      * ID пользователя
      **/
-    @Id @Positive @GeneratedValue(strategy= GenerationType.AUTO) @Getter @Setter
+    @Id @Positive @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
 
     /**
      * Login пользователя
      **/
-    @NonNull @Getter @Setter
+    @NonNull
     private String login;
 
     /**
      * Пароль пользователя
      **/
-    @Getter @Setter
     private String password;
 
     /**
      * ФИО пользователя
      **/
-    @NonNull @Getter @Setter
+    @NonNull
     private String name;
 
     /**
      * Адрес проживания пользователя
      **/
-    @Getter @Setter
     private String address;
 
     /**
@@ -49,13 +47,13 @@ public class User {
      * Регистратор гильдии;
      * Распорядитель рангов.
      **/
-    @Enumerated(EnumType.STRING) @NonNull @Getter @Setter
+    @Enumerated(EnumType.STRING) @NonNull
     private Role role;
 
     /**
      * Флаг блокировки пользователя (true - пользователь заблокирован, false - пользователь разблокирован)
      **/
-    @NonNull @Getter @Setter
+    @Getter @Setter
     private boolean isBlocked;
 
     /**
@@ -65,13 +63,12 @@ public class User {
      * Мертв;
      * Не подтвержден.
      **/
-    @Enumerated(EnumType.STRING) @Getter @Setter
+    @Enumerated(EnumType.STRING)
     private AdventurerStatus adventurerStatus;
 
     /**
      * Количество очков опыта авнюриста
      **/
-    @Getter @Setter
     private Integer adventurerExperience;
 
     /**
@@ -87,6 +84,86 @@ public class User {
      * Обсидиан;
      * Фарфор.
      **/
-    @Enumerated(EnumType.STRING) @Getter @Setter
+    @Enumerated(EnumType.STRING)
     private AdventurerRank adventurerRank;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public boolean isBlocked() {
+        return isBlocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
+    }
+
+    public AdventurerStatus getAdventurerStatus() {
+        return adventurerStatus;
+    }
+
+    public void setAdventurerStatus(AdventurerStatus adventurerStatus) {
+        this.adventurerStatus = adventurerStatus;
+    }
+
+    public Integer getAdventurerExperience() {
+        return adventurerExperience;
+    }
+
+    public void setAdventurerExperience(Integer adventurerExperience) {
+        this.adventurerExperience = adventurerExperience;
+    }
+
+    public AdventurerRank getAdventurerRank() {
+        return adventurerRank;
+    }
+
+    public void setAdventurerRank(AdventurerRank adventurerRank) {
+        this.adventurerRank = adventurerRank;
+    }
 }

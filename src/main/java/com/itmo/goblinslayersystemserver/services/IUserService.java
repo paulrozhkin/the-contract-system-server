@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public interface IUserService {
     ArrayList<User> getUsersList();
-    ArrayList<User> createListUser(ArrayList<User> userArrayList);
+    User createUser(User user);
     User getUserById(Integer id);
     String deleteUserById(Integer id);
     User updateUserById(Integer id, User user);

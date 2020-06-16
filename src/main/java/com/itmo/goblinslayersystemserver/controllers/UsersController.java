@@ -28,8 +28,8 @@ public class UsersController {
      * Post запрос серверу для создания списка пользователей в системе
      **/
     @PostMapping(consumes = {"application/json"}, produces = {"application/json"})
-    public ArrayList<User> createUsers(HttpServletResponse response, @RequestBody ArrayList<User> userArrayList) {
-        return userService.createListUser(userArrayList);
+    public User createUsers(HttpServletResponse response, @RequestBody User user) {
+        return userService.createUser(user);
     }
 
     /**

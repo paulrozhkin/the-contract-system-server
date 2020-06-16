@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public interface IContractService {
     ArrayList<Contract> getContractsList();
-    ArrayList<Contract> createListContracts(ArrayList<Contract> userArrayList);
+    Contract createContract(Contract сontract);
     Contract getContractById(Integer id);
     Contract updateContractById(Integer id, Contract contract);
     String deleteContractById(Integer id);

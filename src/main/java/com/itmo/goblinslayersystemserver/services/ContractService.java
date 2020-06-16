@@ -1,6 +1,8 @@
 package com.itmo.goblinslayersystemserver.services;
 
 import com.itmo.goblinslayersystemserver.models.Contract;
+import com.itmo.goblinslayersystemserver.repositories.ContractRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -8,13 +10,16 @@ import java.util.ArrayList;
 @Service
 public class ContractService implements IContractService {
 
+    @Autowired
+    ContractRepository contractRepository;
+
     @Override
     public ArrayList<Contract> getContractsList() {
         return null;
     }
 
     @Override
-    public ArrayList<Contract> createListContracts(ArrayList<Contract> userArrayList) {
+    public Contract createContract(Contract contract) {
         return null;
     }
 

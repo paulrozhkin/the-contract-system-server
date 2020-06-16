@@ -14,49 +14,48 @@ public class Contract {
     /**
      * ID контракта
      **/
-    @Id @Positive @GeneratedValue(strategy= GenerationType.AUTO) @Getter @Setter
+    @Id @Positive @GeneratedValue(strategy= GenerationType.AUTO)
     private Integer id;
 
     /**
      * ID заявителя
      **/
-    @NonNull @Getter @Setter
+    @NonNull
     private Integer customer;
 
     /**
      * ID исполнителя
      **/
-    @Getter @Setter
     private Integer executor;
 
     /**
      * Название контракта
      **/
-    @NonNull @Getter @Setter
+    @NonNull
     private String nameContract;
 
     /**
      * Вознаграждение за контракт
      **/
-    @NonNull @Getter @Setter
+    @NonNull
     private Integer reward;
 
     /**
      * Минимальный ранк авантюриста необходимый для выполнения контракта
      **/
-    @Enumerated(EnumType.STRING) @Getter @Setter
+    @Enumerated(EnumType.STRING)
     private AdventurerRank minRank;
 
     /**
      * Адрес для исполнения контракта
      **/
-    @NonNull @Getter @Setter
+    @NonNull
     private String address;
 
     /**
      * Время создания контракта
      **/
-    @Temporal(TemporalType.TIMESTAMP) @NonNull @Getter @Setter
+    @Temporal(TemporalType.TIMESTAMP) @NonNull
     private Date createTime;
 
     /**
@@ -68,24 +67,29 @@ public class Contract {
      * Выполненяется;
      * Завершен.
      **/
-    @Enumerated(EnumType.STRING) @Getter @Setter
+    @Enumerated(EnumType.STRING)
     private ContractStatus contractStatus;
 
     /**
      * Описание контракта
      **/
-    @NonNull @Getter @Setter
+    @NonNull
     private String description;
+
+    /**
+     * Отзыв контрактодателя о контракте
+     **/
+    private String requestComment;
 
     /**
      * Отзыв регистратора гильдии о контракте
      **/
-    @Getter @Setter
-    private String requestComment;
+    private String registrarComment;
 
     /**
      * Комментарий авантюриста при закрытии контракта
      **/
-    @Getter @Setter
     private String closedComment;
+
+
 }

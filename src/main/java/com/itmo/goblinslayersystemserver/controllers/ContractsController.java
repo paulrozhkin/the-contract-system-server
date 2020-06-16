@@ -29,8 +29,8 @@ public class ContractsController {
      * Post запрос серверу для создания списка контрактов в системе
      **/
     @PostMapping(consumes = {"application/json"}, produces = {"application/json"})
-    public ArrayList<Contract> createContracts(HttpServletResponse response, @RequestBody ArrayList<Contract> contractArrayList) {
-        return contractService.createListContracts(contractArrayList);
+    public Contract createContracts(HttpServletResponse response, @RequestBody Contract contract) {
+        return contractService.createContract(contract);
     }
 
     /**
