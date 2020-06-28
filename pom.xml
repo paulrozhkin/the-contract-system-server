@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.itmo</groupId>
-	<artifactId>GoblinSlayerSystemServer</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>TheContactSystemServer</artifactId>
+	<version>0.0.1</version>
 	<name>GoblinSlayerSystemServer</name>
-	<description>Demo project for Spring Boot</description>
+	<description>The contract system server</description>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -104,29 +104,6 @@
 
 	<build>
 		<plugins>
-
-
-			<plugin>
-				<artifactId>maven-resources-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>copy-resources</id>
-						<phase>validate</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.directory}/classes/resources/</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${project.basedir}/src/main/resource/public/</directory>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
