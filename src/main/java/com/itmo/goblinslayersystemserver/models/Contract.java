@@ -15,14 +15,14 @@ public class Contract {
      * ID контракта
      **/
     @Column(name="id")
-    @Id @Positive @GeneratedValue(strategy= GenerationType.SEQUENCE)
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
     /**
      * ID заявителя
      **/
     @Column(name="customer")
-    @NonNull
     private Integer customer;
 
     /**
@@ -35,14 +35,12 @@ public class Contract {
      * Название контракта
      **/
     @Column(name="name")
-    @NonNull
     private String nameContract;
 
     /**
      * Вознаграждение за контракт
      **/
     @Column(name="reward")
-    @NonNull
     private Integer reward;
 
     /**
@@ -56,14 +54,12 @@ public class Contract {
      * Адрес для исполнения контракта
      **/
     @Column(name="address")
-    @NonNull
     private String address;
 
     /**
      * Время создания контракта
      **/
     @Column(name="create_time")
-    @NonNull
     private Timestamp createTime;
 
     /**
@@ -83,7 +79,6 @@ public class Contract {
      * Описание контракта
      **/
     @Column(name="description")
-    @NonNull
     private String description;
 
     /**

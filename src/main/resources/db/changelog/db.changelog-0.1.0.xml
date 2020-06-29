@@ -5,46 +5,6 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <changeSet id="createEnums" author="paulrozhkin">
-        <sql>
-            CREATE TYPE "role" AS ENUM (
-            'Admin',
-            'Adventurer',
-            'Customer',
-            'Registrar',
-            'RankPromoter' );
-
-            CREATE TYPE "adventurer_status" AS ENUM (
-            'Active',
-            'Dead',
-            'NotConfirmed'
-            );
-
-            CREATE TYPE "contract_status" AS ENUM (
-            'Created',
-            'Accepted',
-            'Rejected',
-            'Performing',
-            'Performed',
-            'Completed',
-            'Canceled'
-            );
-
-            CREATE TYPE "rank" AS ENUM (
-            'Platinum',
-            'Gold',
-            'Silver',
-            'Bronze',
-            'Ruby',
-            'Emerald',
-            'Sapphire',
-            'Steel',
-            'Obsidian',
-            'Porcelain'
-            );
-        </sql>
-    </changeSet>
-
     <changeSet id="createTable-files" author="paulrozhkin">
         <createTable schemaName="public"
                      tableName="files">
@@ -77,25 +37,16 @@
             </column>
             <column name="name" type="text"/>
             <column name="address" type="text"/>
-            <column name="role" type="role">
+            <column name="role" type="text">
                 <constraints nullable="false"/>
             </column>
-            <column name="is_blocked" type="boolean" defaultValue="false">
+            <column name="blocked" type="boolean" defaultValue="false">
                 <constraints nullable="false"/>
             </column>
-            <column name="adventurer_status" type="adventurer_status">
-                <constraints nullable="false"/>
-            </column>
+            <column name="adventurer_status" type="text"/>
             <column name="adventurer_experience" type="integer"/>
-            <column name="adventurer_rank" type="rank">
-                <constraints nullable="false"/>
-            </column>
+            <column name="adventurer_rank" type="text"/>
         </createTable>
-
-        <sql>
-            alter table users alter column adventurer_status set default 'NotConfirmed'::adventurer_status;
-            alter table users alter column adventurer_rank set default 'Porcelain'::rank;
-        </sql>
     </changeSet>
 
     <changeSet id="createTable-contracts" author="paulrozhkin">
@@ -116,12 +67,10 @@
             <column name="reward" type="integer">
                 <constraints nullable="false"/>
             </column>
-            <column name="min_rank" type="rank">
-                <constraints nullable="false"/>
-            </column>
+            <column name="min_rank" type="text"/>
             <column name="address" type="text"/>
             <column name="create_time" type="timestamp with time zone"/>
-            <column name="status" type="contract_status">
+            <column name="status" type="text">
                 <constraints nullable="false"/>
             </column>
             <column name="description" type="text"/>
@@ -129,9 +78,5 @@
             <column name="registrar_comment" type="text"/>
             <column name="closed_comment" type="text"/>
         </createTable>
-
-        <sql>
-            alter table contracts alter column min_rank set default 'Porcelain'::rank;
-        </sql>
     </changeSet>
 </databaseChangeLog>

@@ -12,6 +12,7 @@ public class User {
     /**
      * ID пользователя
      **/
+    @Column(name="id")
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
@@ -55,7 +56,7 @@ public class User {
     /**
      * Флаг блокировки пользователя (true - пользователь заблокирован, false - пользователь разблокирован)
      **/
-    @Column(name="is_blocked")
+    @Column(name="blocked")
     private boolean blocked;
 
     /**
