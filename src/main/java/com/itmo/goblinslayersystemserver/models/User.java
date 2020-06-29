@@ -1,8 +1,6 @@
 package com.itmo.goblinslayersystemserver.models;
 
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Positive;
@@ -14,29 +12,32 @@ public class User {
     /**
      * ID пользователя
      **/
-    @Id @Positive @GeneratedValue(strategy= GenerationType.AUTO)
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
 
     /**
      * Login пользователя
      **/
-    @NonNull
+    @Column(name="login")
     private String login;
 
     /**
      * Пароль пользователя
      **/
+    @Column(name="password")
     private String password;
 
     /**
      * ФИО пользователя
      **/
-    @NonNull
+    @Column(name="name")
     private String name;
 
     /**
      * Адрес проживания пользователя
      **/
+    @Column(name="address")
     private String address;
 
     /**
@@ -47,14 +48,15 @@ public class User {
      * Регистратор гильдии;
      * Распорядитель рангов.
      **/
-    @Enumerated(EnumType.STRING) @NonNull
+    @Column(name="role")
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     /**
      * Флаг блокировки пользователя (true - пользователь заблокирован, false - пользователь разблокирован)
      **/
-    @Getter @Setter
-    private boolean isBlocked;
+    @Column(name="is_blocked")
+    private boolean blocked;
 
     /**
      * Если пользоваель авантюрист.
@@ -63,12 +65,14 @@ public class User {
      * Мертв;
      * Не подтвержден.
      **/
+    @Column(name="adventurer_status")
     @Enumerated(EnumType.STRING)
     private AdventurerStatus adventurerStatus;
 
     /**
      * Количество очков опыта авнюриста
      **/
+    @Column(name="adventurer_experience")
     private Integer adventurerExperience;
 
     /**
@@ -84,6 +88,7 @@ public class User {
      * Обсидиан;
      * Фарфор.
      **/
+    @Column(name="adventurer_rank")
     @Enumerated(EnumType.STRING)
     private AdventurerRank adventurerRank;
 
@@ -135,12 +140,12 @@ public class User {
         this.role = role;
     }
 
-    public boolean isBlocked() {
-        return isBlocked;
+    public boolean getBlocked() {
+        return blocked;
     }
 
     public void setBlocked(boolean blocked) {
-        isBlocked = blocked;
+        this.blocked = blocked;
     }
 
     public AdventurerStatus getAdventurerStatus() {
