@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 @Service
 public class ContractService implements IContractService {
@@ -21,7 +22,7 @@ public class ContractService implements IContractService {
 
     @Override
     public Contract createContract(Contract contract) {
-        contract.setCreateTime(RfcToCalendarConverter.now());
+        contract.setCreateTime(new java.sql.Timestamp(GregorianCalendar.getInstance().getTimeInMillis()));
         return contractRepository.save(contract);
     }
 

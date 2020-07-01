@@ -4,56 +4,63 @@ import lombok.NonNull;
 
 import javax.persistence.*;
 import javax.validation.constraints.Positive;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 @Entity
+@Table(name = "contracts")
 public class Contract {
 
     /**
      * ID контракта
      **/
-    @Id @Positive @GeneratedValue(strategy= GenerationType.AUTO)
+    @Column(name="id")
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
 
     /**
      * ID заявителя
      **/
-    @NonNull
+    @Column(name="customer")
     private Integer customer;
 
     /**
      * ID исполнителя
      **/
+    @Column(name="executor")
     private Integer executor;
 
     /**
      * Название контракта
      **/
-    @NonNull
+    @Column(name="name")
     private String nameContract;
 
     /**
      * Вознаграждение за контракт
      **/
-    @NonNull
+    @Column(name="reward")
     private Integer reward;
 
     /**
      * Минимальный ранк авантюриста необходимый для выполнения контракта
      **/
+    @Column(name="min_rank")
     @Enumerated(EnumType.STRING)
     private AdventurerRank minRank;
 
     /**
      * Адрес для исполнения контракта
      **/
-    @NonNull
+    @Column(name="address")
     private String address;
 
     /**
      * Время создания контракта
      **/
-    @NonNull
-    private String createTime;
+    @Column(name="create_time")
+    private Timestamp createTime;
 
     /**
      * Статус исполнения контракта:
@@ -64,28 +71,32 @@ public class Contract {
      * Выполненяется;
      * Завершен.
      **/
+    @Column(name="status")
     @Enumerated(EnumType.STRING)
     private ContractStatus contractStatus;
 
     /**
      * Описание контракта
      **/
-    @NonNull
+    @Column(name="description")
     private String description;
 
     /**
      * Отзыв контрактодателя о контракте
      **/
+    @Column(name="customer_comment")
     private String requestComment;
 
     /**
      * Отзыв регистратора гильдии о контракте
      **/
+    @Column(name="registrar_comment")
     private String registrarComment;
 
     /**
      * Комментарий авантюриста при закрытии контракта
      **/
+    @Column(name="closed_comment")
     private String closedComment;
 
     public Integer getId() {
@@ -144,11 +155,11 @@ public class Contract {
         this.address = address;
     }
 
-    public String getCreateTime() {
+    public Timestamp getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String createTime) {
+    public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
     }
 
