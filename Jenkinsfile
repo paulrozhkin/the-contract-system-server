@@ -1,27 +1,40 @@
 pipeline {
-  agent {
-    docker {
-      image 'maven:3-alpine'
-      args '-v /root/.m2:/root/.m2'
-    }
+  agent none
 
-  }
   stages {
-    stage('Build') {
-      steps {
-        sh 'mvn -B -DskipTests clean package'
-      }
-    }
+  	stage ('Build and test the project') {
+	    agent {
+		  docker {
+		    image 'maven:3-alpine'
+		    args '-v /root/.m2:/root/.m2'
+		  }
+		}
 
-    stage('Test') {
-      steps {
-        sh 'mvn test'
-      }
-    }
+		stages {
+		    stage('Build') {
+		      steps {
+		        sh 'mvn -B -DskipTests clean package'
+		      }
+		    }
+
+		    stage('Test') {
+		      steps {
+		        sh 'mvn test'
+		      }
+		    }
+		}
+	}
 
     stage('Deploy') {
+      agent { label 'master' }
+
       steps {
-        sh 'echo "Deploy"'
+        sshagent (credentials: ['github-ssh-key-pipeline']) {
+		  sh 'ssh -o StrictHostKeyChecking=no -l jenkins paulrozhkin.ru uname -a'
+
+		  // Copy jar file
+          sh 'scp ./target/*.jar jenkins@paulrozhkin.ru:/var/www/the-contract-system/server'
+		}
       }
     }
 
