@@ -1,16 +1,17 @@
-package com.itmo.goblinslayersystemserver.services;
+package com.itmo.goblinslayersystemserver.services.implementation;
 
 import com.itmo.goblinslayersystemserver.exceptions.BadRequestException;
 import com.itmo.goblinslayersystemserver.exceptions.NotFoundException;
 import com.itmo.goblinslayersystemserver.models.User;
 import com.itmo.goblinslayersystemserver.repositories.UserRepository;
+import com.itmo.goblinslayersystemserver.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
 @Service
-public class UsersService implements IUserService {
+public class UserService implements IUserService {
 
     @Autowired
     UserRepository userRepository;
@@ -43,8 +44,8 @@ public class UsersService implements IUserService {
         updatableUser.setLogin(user.getLogin());
         updatableUser.setName(user.getName());
         updatableUser.setAddress(user.getAddress());
-        updatableUser.setRole(user.getRole());
-        updatableUser.setBlocked(user.getBlocked());
+        // updatableUser.setRole(user.getRole());
+        updatableUser.setBlocked(user.isBlocked());
         updatableUser.setAdventurerStatus(user.getAdventurerStatus());
         updatableUser.setAdventurerExperience(user.getAdventurerExperience());
         updatableUser.setAdventurerRank(user.getAdventurerRank());
@@ -60,6 +61,12 @@ public class UsersService implements IUserService {
         } catch (Exception e) {
             throw new NotFoundException();
         }
+    }
+
+    @Override
+    public User getUserByLogin(String login) {
+        User result = userRepository.findByLogin(login);
+        return result;
     }
 
     @Override

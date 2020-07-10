@@ -1,4 +1,4 @@
-package com.itmo.goblinslayersystemserver.services;
+package com.itmo.goblinslayersystemserver.services.implementation;
 
 public class AccountDetailsServiceImpl {
 //

@@ -1,6 +1,6 @@
 package com.itmo.goblinslayersystemserver;
 
-import com.itmo.goblinslayersystemserver.services.RfcToCalendarConverter;
+import com.itmo.goblinslayersystemserver.services.implementation.RfcToCalendarConverter;
 import org.junit.jupiter.api.Test;
 
 import java.text.ParseException;

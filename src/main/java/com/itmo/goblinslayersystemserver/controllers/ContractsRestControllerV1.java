@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 
 @RestController
-@RequestMapping("api/contracts")
-public class ContractsController {
+@RequestMapping(Endpoints.ContractsRestControllerV1)
+public class ContractsRestControllerV1 {
 
     @Autowired
     private IContractService contractService;
@@ -46,14 +46,6 @@ public class ContractsController {
      **/
     @PutMapping(value = "/{id}", consumes = {"application/json"}, produces = {"application/json"})
     public Contract updateContract(HttpServletResponse response, @PathVariable Integer id, @RequestBody Contract contract) {
-        return contractService.updateContractById(id,contract);
-    }
-
-    /**
-     * Delete запрос серверу для удаления контракта из системы по его ID
-     **/
-    @DeleteMapping(value = "/{id}", consumes = {"application/json"}, produces = {"application/json"})
-    public String deleteContract(HttpServletResponse response, @PathVariable Integer id) {
-        return contractService.deleteContractById(id);
+        return contractService.updateContractById(id, contract);
     }
 }

@@ -1,8 +1,8 @@
 package com.itmo.goblinslayersystemserver.services;
 
-import com.itmo.goblinslayersystemserver.models.Account;
-import com.itmo.goblinslayersystemserver.models.Authorization;
+import com.itmo.goblinslayersystemserver.dto.AuthenticationRequestDto;
+import com.itmo.goblinslayersystemserver.dto.AuthorizationTokensDto;
 
 public interface IAuthService {
-    Authorization authUser(Account account);
+    AuthorizationTokensDto authUser(AuthenticationRequestDto authenticationRequestDto);
 }

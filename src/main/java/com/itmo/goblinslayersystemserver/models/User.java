@@ -1,22 +1,18 @@
 package com.itmo.goblinslayersystemserver.models;
 
-import lombok.NonNull;
+import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
+import com.itmo.goblinslayersystemserver.models.enums.AdventurerStatus;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
-import javax.validation.constraints.Positive;
+import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "users")
-public class User {
-
-    /**
-     * ID пользователя
-     **/
-    @Column(name="id")
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Integer id;
-
+@Data
+public class User extends BaseEntity {
     /**
      * Login пользователя
      **/
@@ -49,9 +45,11 @@ public class User {
      * Регистратор гильдии;
      * Распорядитель рангов.
      **/
-    @Column(name="role")
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    @JoinTable(name = "user_roles",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
+    @ElementCollection(targetClass=Role.class)
+    private List<Role> roles;
 
     /**
      * Флаг блокировки пользователя (true - пользователь заблокирован, false - пользователь разблокирован)
@@ -92,84 +90,4 @@ public class User {
     @Column(name="adventurer_rank")
     @Enumerated(EnumType.STRING)
     private AdventurerRank adventurerRank;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public boolean getBlocked() {
-        return blocked;
-    }
-
-    public void setBlocked(boolean blocked) {
-        this.blocked = blocked;
-    }
-
-    public AdventurerStatus getAdventurerStatus() {
-        return adventurerStatus;
-    }
-
-    public void setAdventurerStatus(AdventurerStatus adventurerStatus) {
-        this.adventurerStatus = adventurerStatus;
-    }
-
-    public Integer getAdventurerExperience() {
-        return adventurerExperience;
-    }
-
-    public void setAdventurerExperience(Integer adventurerExperience) {
-        this.adventurerExperience = adventurerExperience;
-    }
-
-    public AdventurerRank getAdventurerRank() {
-        return adventurerRank;
-    }
-
-    public void setAdventurerRank(AdventurerRank adventurerRank) {
-        this.adventurerRank = adventurerRank;
-    }
 }

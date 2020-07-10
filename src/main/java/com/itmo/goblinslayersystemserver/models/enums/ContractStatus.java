@@ -1,4 +1,4 @@
-package com.itmo.goblinslayersystemserver.models;
+package com.itmo.goblinslayersystemserver.models.enums;
 
 public enum ContractStatus {
     Filed,

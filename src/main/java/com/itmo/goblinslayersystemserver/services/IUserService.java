@@ -8,6 +8,7 @@ public interface IUserService {
     ArrayList<User> getUsersList();
     User createUser(User user);
     User getUserById(Integer id);
+    User getUserByLogin(String login);
     String deleteUserById(Integer id);
     User updateUserById(Integer id, User user);
 }

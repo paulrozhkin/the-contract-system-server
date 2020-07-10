@@ -1,8 +1,9 @@
-package com.itmo.goblinslayersystemserver.services;
+package com.itmo.goblinslayersystemserver.services.implementation;
 
 import com.itmo.goblinslayersystemserver.exceptions.NotFoundException;
 import com.itmo.goblinslayersystemserver.models.Contract;
 import com.itmo.goblinslayersystemserver.repositories.ContractRepository;
+import com.itmo.goblinslayersystemserver.services.IContractService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class ContractService implements IContractService {
 
     @Override
     public Contract createContract(Contract contract) {
-        contract.setCreateTime(new java.sql.Timestamp(GregorianCalendar.getInstance().getTimeInMillis()));
+        //contract.setCreateTime(new java.sql.Timestamp(GregorianCalendar.getInstance().getTimeInMillis()));
         return contractRepository.save(contract);
     }
 
@@ -51,7 +52,7 @@ public class ContractService implements IContractService {
         updatableContract.setReward(contract.getReward());
         updatableContract.setMinRank(contract.getMinRank());
         updatableContract.setAddress(contract.getAddress());
-        updatableContract.setCreateTime(contract.getCreateTime());
+        updatableContract.setCreated(contract.getCreated());
         updatableContract.setContractStatus(contract.getContractStatus());
         updatableContract.setDescription(contract.getDescription());
         updatableContract.setRequestComment(contract.getRequestComment());
