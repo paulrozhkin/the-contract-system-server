@@ -18,7 +18,7 @@ import java.util.Date;
 public class JwtUser implements UserDetails {
 
     private final Integer id;
-    private final String login;
+    private final String username;
     private final String password;
     private final String name;
     private final String email;
@@ -27,7 +27,7 @@ public class JwtUser implements UserDetails {
     private final Collection<? extends GrantedAuthority> authorities;
 
     public JwtUser(Integer id,
-                   String login,
+                   String username,
                    String password,
                    String name,
                    String email,
@@ -35,7 +35,7 @@ public class JwtUser implements UserDetails {
                    Date created,
                    Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
-        this.login = login;
+        this.username = username;
         this.password = password;
         this.name = name;
         this.email = email;
@@ -51,7 +51,7 @@ public class JwtUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return login;
+        return username;
     }
 
     public String getName() {

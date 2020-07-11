@@ -24,7 +24,7 @@ public class UserService implements IUserService {
     @Override
     public User createUser(User user) {
         for (User existingUser: userRepository.findAll()) {
-            if (existingUser.getLogin().equals(user.getLogin())) {
+            if (existingUser.getUsername().equals(user.getUsername())) {
                 throw new BadRequestException("A user with this username already exists");
             }
         }
@@ -41,7 +41,7 @@ public class UserService implements IUserService {
             throw new NotFoundException();
         }
 
-        updatableUser.setLogin(user.getLogin());
+        updatableUser.setUsername(user.getUsername());
         updatableUser.setName(user.getName());
         updatableUser.setAddress(user.getAddress());
         // updatableUser.setRole(user.getRole());
@@ -64,8 +64,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User getUserByLogin(String login) {
-        User result = userRepository.findByLogin(login);
+    public User getUserByUsername(String username) {
+        User result = userRepository.findByUsername(username);
         return result;
     }
 

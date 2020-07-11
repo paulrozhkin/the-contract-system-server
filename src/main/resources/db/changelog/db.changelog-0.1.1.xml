@@ -136,4 +136,12 @@
                               tableName="contracts"
                               validate="true"/>
     </changeSet>
+
+    <changeSet id="renameLoginColumn" author="paulrozhkin">
+        <!-- Rename login to username in users -->
+        <renameColumn newColumnName="username"
+                      oldColumnName="login"
+                      schemaName="public"
+                      tableName="users"/>
+    </changeSet>
 </databaseChangeLog>

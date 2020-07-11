@@ -14,10 +14,10 @@ import java.util.List;
 @Data
 public class User extends BaseEntity {
     /**
-     * Login пользователя
+     * Username пользователя
      **/
-    @Column(name="login")
-    private String login;
+    @Column(name="username")
+    private String username;
 
     /**
      * Пароль пользователя
