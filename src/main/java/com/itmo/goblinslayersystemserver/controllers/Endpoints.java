@@ -1,7 +1,5 @@
 package com.itmo.goblinslayersystemserver.controllers;
 
-import lombok.Getter;
-
 public class Endpoints {
     private static final String RestControllerV1 = "/api/v1";
     public static final String AdminUserRestControllerV1 = RestControllerV1 + "/admin/users/";

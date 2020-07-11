@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
@@ -36,11 +37,11 @@ public class AuthenticationRestControllerV1 {
      * @param requestDto login and password in Bcrypt.
      * @return username and token.
      */
-    @PostMapping("login")
+    @PostMapping
     public AuthorizationTokensDto login(@RequestBody AuthenticationRequestDto requestDto) {
         try {
-            String username = requestDto.getLogin();
-            //authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
+            String username = requestDto.getUsername();
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
             User user = userService.getUserByUsername(username);
 
             if (user == null) {

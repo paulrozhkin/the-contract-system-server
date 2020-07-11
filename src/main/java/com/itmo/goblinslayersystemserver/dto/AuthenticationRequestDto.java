@@ -23,7 +23,7 @@ public class AuthenticationRequestDto {
      * Login пользователя
      **/
     @NonNull
-    private String login;
+    private String username;
 
     /**
      * Пароль пользователя

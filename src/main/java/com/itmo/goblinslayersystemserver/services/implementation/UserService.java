@@ -6,6 +6,7 @@ import com.itmo.goblinslayersystemserver.models.User;
 import com.itmo.goblinslayersystemserver.repositories.UserRepository;
 import com.itmo.goblinslayersystemserver.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,6 +17,9 @@ public class UserService implements IUserService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public ArrayList<User> getUsersList() {
         return (ArrayList<User>) userRepository.findAll();
@@ -23,12 +27,16 @@ public class UserService implements IUserService {
 
     @Override
     public User createUser(User user) {
-        for (User existingUser: userRepository.findAll()) {
-            if (existingUser.getUsername().equals(user.getUsername())) {
-                throw new BadRequestException("A user with this username already exists");
-            }
+        User userWithSameUsername = userRepository.findByUsername(user.getUsername());
+
+        if (userWithSameUsername != null) {
+            throw new BadRequestException("A user with this username already exists");
         }
-        return userRepository.save(user);
+
+        // Щифруем пароль в BCrypt
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        return userRepository.saveAndFlush(user);
     }
 
     @Override
@@ -41,10 +49,9 @@ public class UserService implements IUserService {
             throw new NotFoundException();
         }
 
-        updatableUser.setUsername(user.getUsername());
         updatableUser.setName(user.getName());
         updatableUser.setAddress(user.getAddress());
-        // updatableUser.setRole(user.getRole());
+        updatableUser.setRoles(user.getRoles());
         updatableUser.setBlocked(user.isBlocked());
         updatableUser.setAdventurerStatus(user.getAdventurerStatus());
         updatableUser.setAdventurerExperience(user.getAdventurerExperience());
