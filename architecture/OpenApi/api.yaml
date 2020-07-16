@@ -519,7 +519,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/contractModel'
+              $ref: '#/components/schemas/contractUpdateModel'
         required: true
       responses:
         '200':
@@ -683,7 +683,7 @@ components:
         - Performed
         - Completed
       example:
-        OnProcessing
+        Created
 
     adventurerModel:
       type: object
@@ -742,10 +742,6 @@ components:
           description: 'Reward for completed task.'
           type: integer
           example: 500
-        minRank:
-          description: 'Minimum required level for completing the task.'
-          type: string
-          example: 'Silver'
         address:
           description: 'The address at which the contract is to be performed.'
           type: boolean
@@ -758,6 +754,43 @@ components:
           description: 'Review of the Guild Registrar on the submitted contract.'
           type: string
           example: 'The abilities of goblins and Hobbs are not described.'
+
+    contractUpdateModel:
+      allOf:
+        - type: object
+          properties:
+            executor:
+              description: 'Contract executor.'
+              type: integer
+              example: 25
+            reward:
+              description: 'Reward for completed task.'
+              type: integer
+              example: 500
+            minRank:
+              $ref: '#/components/schemas/ranksModel'
+            address:
+              description: 'The address at which the contract is to be performed.'
+              type: string
+              example: 'Novoizmaylovsky Prospekt, 21k4, Saint Petersburg, Russia'
+            contractStatus:
+              $ref: '#/components/schemas/contractStatus'
+            description:
+              description: 'Description of the contract submitted by the contractor.'
+              type: string
+              example: 'You need to kill 10 goblins and 1 Hobbs in the winter cave. They are poorly prepared, do not have armor and weapons.'
+            requestComment:
+              description: 'Review of the Guild Registrar on the submitted contract.'
+              type: string
+              example: 'The abilities of goblins and Hobbs are not described.'
+            registrarComment:
+              description: 'Review of the Registrar.'
+              type: string
+              example: 'The abilities of goblins and Hobbs are not described.'
+            closedComment:
+              description: 'Revocation of the adventurer is contract performance.'
+              type: string
+              example: 'All dead.'
 
     contractModel:
       allOf:
