@@ -1,7 +1,6 @@
 package com.itmo.goblinslayersystemserver.models;
 
-import com.itmo.goblinslayersystemserver.models.BaseEntity;
-import com.itmo.goblinslayersystemserver.models.User;
+import com.itmo.goblinslayersystemserver.models.enums.RoleEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -19,7 +18,8 @@ import java.util.List;
 public class Role extends BaseEntity {
 
     @Column(name = "name")
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private RoleEnum name;
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private List<User> users;

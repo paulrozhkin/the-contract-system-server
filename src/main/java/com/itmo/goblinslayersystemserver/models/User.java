@@ -49,6 +49,7 @@ public class User extends BaseEntity {
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
     @ElementCollection(targetClass=Role.class)
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
 
     /**

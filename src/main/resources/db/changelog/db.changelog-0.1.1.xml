@@ -70,10 +70,6 @@
         </insert>
 
         <insert tableName="roles">
-            <column name="name" value="ROLE_RANKER"/>
-        </insert>
-
-        <insert tableName="roles">
             <column name="name" value="ROLE_DISTRIBUTOR"/>
         </insert>
 
@@ -143,5 +139,25 @@
                       oldColumnName="login"
                       schemaName="public"
                       tableName="users"/>
+    </changeSet>
+
+    <changeSet id="add-default-admin-user" author="paulrozhkin">
+        <insert tableName="users">
+            <column name="username" value="admin"/>
+            <column name="password" value="$2y$12$dsTQkKa/EMSK56l8AL.v7OviF6I4dQhEnGbycQK5TT20b1NodSH1u"/>
+            <column name="name" value="Administrator"/>
+            <column name="username" value="admin"/>
+        </insert>
+
+        <!-- Расчет на то, что в БД это первый пользователь. -->
+        <insert tableName="user_roles">
+            <column name="user_id" value="1"/>
+            <column name="role_id" value="1"/>
+        </insert>
+
+        <insert tableName="user_roles">
+            <column name="user_id" value="1"/>
+            <column name="role_id" value="2"/>
+        </insert>
     </changeSet>
 </databaseChangeLog>
