@@ -1,4 +1,4 @@
-package com.itmo.goblinslayersystemserver.services;
+package com.itmo.goblinslayersystemserver.services.implementation;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

@@ -1,0 +1,87 @@
+Table users as U {
+  id                        integer     [pk, increment] // auto-increment
+  username                  text
+  password                  text
+  avatar                    integer     [ref: > F.id]
+  name                      text
+  address                   text
+  blocked                   boolean
+  adventurer_status         adventurer_status
+  adventurer_experience     integer
+  adventurer_rank           rank
+  created                   timestamp
+  updated                   timestamp
+}
+
+Table files as F {
+  id                        integer     [pk, increment]
+  original_name             text
+  local_name                text
+  created                   timestamp
+  updated                   timestamp
+}
+
+Table roles as R {
+  id                        integer     [pk, increment]
+  name                      role
+  created                   timestamp
+  updated                   timestamp
+}
+
+Table user_roles as UR {
+  user_id                   integer     [ref: > U.id]
+  role_id                   integer     [ref: > R.id]
+}
+
+
+Table contracts as CT {
+  id                        integer     [pk, increment]
+  customer                  integer     [ref: > U.id]
+  executor                  integer     [ref: > U.id]
+  name                      text
+  reward                    integer
+  min_rank                  rank
+  address                   text
+  status                    contract_status
+  description               text
+  customer_comment          text
+  registrar_comment         text
+  created                   timestamp
+  updated                   timestamp
+}
+
+Enum role {
+  ROLE_ADMIN
+  ROLE_CUSTOMER
+  ROLE_ADVENTURER
+  ROLE_REGISTRAR
+  ROLE_DISTRIBUTOR
+}
+
+Enum adventurer_status {
+  Active
+  Dead
+  NotConfirmed
+}
+
+Enum contract_status {
+  Created
+  Rejected
+  Accepted
+  Performing
+  Performed
+  Completed
+}
+
+Enum rank {
+  Platinum    // adventurer_experience for rank - 10000
+  Gold        // 5000
+  Silver      // 1000
+  Bronze      // 500
+  Ruby        // 200
+  Emerald     // 100
+  Sapphire    // 50
+  Steel       // 10
+  Obsidian    // 5
+  Porcelain   // 0
+}

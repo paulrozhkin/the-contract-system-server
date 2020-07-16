@@ -1,0 +1,856 @@
+openapi: 3.0.0
+
+info:
+  description: >-
+    This is the API for a course project at ITMO University. The theme of the
+    course is "The goblin slayer contract system". Server on github.
+  version: "0.1.0"
+  title: Goblin Slayer Server API
+  contact:
+    name: Kirill Markin
+    email: kirill1997_markin@mail.ru
+
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: 'https://virtserver.swaggerhub.com/ForsaiR/GoblinSlayerSystem/1.0.0'
+  - url: 'https://petstore.swagger.io/v2'
+
+tags:
+  - name: auth
+    description: Endpoint for authentication.
+  - name: admin
+    description: Endpoint for admin.
+  - name: users
+    description: Endpoint for working with users.
+  - name: account
+    description: Endrpoint for working with current account.
+  - name: contracts
+    description: Endpoint for working with contracts.
+
+
+paths:
+  /api/v1/auth/:
+    post:
+      tags:
+        - auth
+      operationId: userAuthentication
+      summary: Receiving Access Token and Refresh Token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/creditionals'
+        required: true
+      responses:
+        '200':
+          description: Tokens authorizations
+          content:
+            application-json:
+              schema:
+                $ref: '#/components/schemas/authenticationModel'
+        '400':
+          description: Bad Reaquest.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+
+  /api/v1/admin/users/:
+    #Получение списка пользователей
+    get:
+      tags:
+        - admin
+      operationId: getAllUsers
+      summary: Getting a list of users
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Getting a list of users
+          content:
+            application-json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/user'
+        '400':
+          description: Bad Reaquest.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '403':
+          description: Forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+    #Создание новой модели пользователя
+    post:
+      tags:
+        - admin
+      operationId: createUserWithRoles
+      summary: Create the user's model
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userCreatebleAdminModel'
+        required: true
+      responses:
+        '200':
+          description: The user's model was created successfully.
+          content:
+            application-json:
+              schema:
+                $ref: '#/components/schemas/user'
+        '400':
+          description: Bad Reaquest.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '403':
+          description: Forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+  /api/v1/admin/users/{id}:
+    #Обновление модели пользователя
+    put:
+      tags:
+        - admin
+      operationId: updateUserById
+      summary: Update the user's model
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          description: 'User ID.'
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userUpdatebleModel'
+        required: true
+      responses:
+        '200':
+          description: The user's model was updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        '400':
+          description: Bad Reaquest.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '403':
+          description: Forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+  /api/v1/users/:
+    #Создание новой модели пользователя
+    post:
+      tags:
+        - users
+      operationId: createUser
+      summary: Create the user's model
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userCreatebleModel'
+        required: true
+      responses:
+        '200':
+          description: The user's model was created successfully.
+          content:
+            application-json:
+              schema:
+                $ref: '#/components/schemas/user'
+        '400':
+          description: Bad Reaquest.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+  /api/v1/users/{id}:
+    #Получение модели пользователя по ID
+    get:
+      tags:
+        - users
+      operationId: getUserById
+      summary: Getting the user's model by ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          description: 'User ID.'
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User model
+          content:
+            application-json:
+              schema:
+                $ref: '#/components/schemas/user'
+        '400':
+          description: Bad Reaquest.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+  /api/v1/account/:
+    #Получение модели пользователя по JWT
+    get:
+      tags:
+        - account
+      operationId: getСurrentUser
+      summary: Getting the current user's model
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User model
+          content:
+            application-json:
+              schema:
+                $ref: '#/components/schemas/user'
+        '400':
+          description: Bad Reaquest.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+  /api/v1/contracts/:
+    #Получение списка всех контрактов
+    get:
+      tags:
+        - contracts
+      operationId: getContracts
+      summary: Getting a list of contracts
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Getting a list of contracts
+          content:
+            application-json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/contract'
+        '400':
+          description: Bad Reaquest.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+    #Создание новой модели контракта
+    post:
+      tags:
+        - contracts
+      operationId: createContract
+      summary: Create the contract's model
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/contractCreateModel'
+        required: true
+      responses:
+        '200':
+          description: The contract's model was created successfully.
+          content:
+            application-json:
+              schema:
+                $ref: '#/components/schemas/contract'
+        '400':
+          description: Bad Reaquest.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+  /api/v1/contracts/{id}:
+    #Получение модели контракта по ID
+    get:
+      tags:
+        - contracts
+      operationId: getСontractById
+      summary: Getting the contract's model by ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          description: 'Contract ID.'
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Contract model
+          content:
+            application-json:
+              schema:
+                $ref: '#/components/schemas/contract'
+        '400':
+          description: Bad Reaquest.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+      #Удаление модели пользователя по ID
+
+    #Обновление модели контракта по ID
+    put:
+      tags:
+        - contracts
+      operationId: updateContractById
+      summary: Update the contract's model
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          description: 'Contract ID.'
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/contractUpdateModel'
+        required: true
+      responses:
+        '200':
+          description: The cotract's model was updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/contract'
+        '400':
+          description: Bad Reaquest.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+components:
+  schemas:
+
+    creditionals:
+      type: object
+      properties:
+        username:
+          description: 'Username for auth or registration'
+          type: string
+          example: 'username@email.com'
+        password:
+          description: 'Password without encoding'
+          type: string
+          example: 'password'
+
+    authenticationModel:
+      type: object
+      properties:
+        username:
+          description: 'Username of authorized user'
+          type: string
+          example: ''
+        token:
+          description: 'User jwt access token'
+          type: string
+          example: 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0Iiwicm9sZXMiOlsiUk9MRV9DVVNUT01FUiJdLCJpYXQiOjE1OTQ4MjEwOTIsImV4cCI6MTU5NDgyNDY5Mn0.PdvjqHjclbbhmXu3vn-Qsl4-G4XA9YgsoLdbpMeiOnc'
+
+    user:
+      allOf:
+        - $ref: '#/components/schemas/userIdModel'
+        - type: object
+          properties:
+            username:
+              description: 'Username.'
+              type: string
+              example: 'blackIIIfox@gmail.com'
+        - $ref: '#/components/schemas/userModel'
+
+    userCommonInfoWithoutRoles:
+      type: object
+      properties:
+        name:
+          description: 'User is full name'
+          type: string
+          example: 'Rozkin Pavel Aleksandrovich'
+        address:
+          description: 'User is residential address.'
+          type: string
+          example: 'Russia, Moscow'
+
+    userCommonInfo:
+      allOf:
+        - $ref: '#/components/schemas/userCommonInfoWithoutRoles'
+        - type: object
+          properties:
+            roles:
+              type: array
+              items:
+                $ref: '#/components/schemas/role'
+
+    userCommonInfoWithBlocked:
+      allOf:
+        - $ref: '#/components/schemas/userCommonInfo'
+        - type: object
+          properties:
+            isBlocked:
+              description: 'The user is status, whether blocked or not.'
+              type: boolean
+              example: false
+
+    userCreatebleAdminModel:
+      allOf:
+        - $ref: '#/components/schemas/creditionals'
+        - $ref: '#/components/schemas/userCommonInfo'
+
+    userCreatebleModel:
+      allOf:
+        - $ref: '#/components/schemas/creditionals'
+        - $ref: '#/components/schemas/userCommonInfoWithoutRoles'
+
+    userUpdatebleModel:
+      allOf:
+        - $ref: '#/components/schemas/userCommonInfoWithBlocked'
+
+    userIdModel:
+      type: object
+      properties:
+        id:
+          description: 'Unique identifier of the user.'
+          type: integer
+          example: 12
+
+    userModel:
+      allOf:
+        - $ref: '#/components/schemas/userCommonInfoWithBlocked'
+        - $ref: '#/components/schemas/adventurerModel'
+
+    role:
+      description: 'User role in system. Define user privileges in the system.'
+      type: string
+      enum:
+        - Admin
+        - Adventurer
+        - Customer
+        - Registrar
+        - Distributor
+      example:
+        Admin
+
+    adventurerStatus:
+      description: 'The status of the adventurer.'
+      type: string
+      enum:
+        - Active
+        - Dead
+        - NotConfirmed
+      example:
+        Active
+
+    contractStatus:
+      description: 'Contract status in the system.'
+      type: string
+      enum:
+        - Created
+        - Rejected
+        - Accepted
+        - Performing
+        - Performed
+        - Completed
+      example:
+        Created
+
+    adventurerModel:
+      type: object
+      properties:
+        adventurerStatus:
+          $ref: '#/components/schemas/adventurerStatus'
+        adventurerExperience:
+          description: 'Experience points obtained by the adventurer'
+          type: integer
+          example: 10
+        adventurerRank:
+          $ref: '#/components/schemas/ranksModel'
+
+    ranksModel:
+      description: 'The rank of adventurer.'
+      type: string
+      enum:
+        - Platinum
+        - Gold
+        - Silver
+        - Bronze
+        - Ruby
+        - Emerald
+        - Sapphire
+        - Steel
+        - Obsidian
+        - Porcelain
+      example:
+        Emerald
+
+    contract:
+      allOf:
+        - $ref: '#/components/schemas/contractIdModel'
+        - $ref: '#/components/schemas/contractModel'
+
+    contractIdModel:
+      type: object
+      properties:
+        id:
+          description: 'Unique identifier of the user.'
+          type: integer
+          example: 15
+
+    contractCreateModel:
+      type: object
+      properties:
+        customer:
+          description: 'Contract customer.'
+          type: integer
+          example: 12
+        nameContract:
+          description: 'Name of contract.'
+          type: string
+          example: 'Killing goblins in the mountains'
+        reward:
+          description: 'Reward for completed task.'
+          type: integer
+          example: 500
+        address:
+          description: 'The address at which the contract is to be performed.'
+          type: boolean
+          example: 'Novoizmaylovsky Prospekt, 21k4, Saint Petersburg, Russia'
+        description:
+          description: 'Description of the contract submitted by the contractor.'
+          type: string
+          example: 'You need to kill 10 goblins and 1 Hobbs in the winter cave. They are poorly prepared, do not have armor and weapons.'
+        requestComment:
+          description: 'Review of the Guild Registrar on the submitted contract.'
+          type: string
+          example: 'The abilities of goblins and Hobbs are not described.'
+
+    contractUpdateModel:
+      allOf:
+        - type: object
+          properties:
+            executor:
+              description: 'Contract executor.'
+              type: integer
+              example: 25
+            reward:
+              description: 'Reward for completed task.'
+              type: integer
+              example: 500
+            minRank:
+              $ref: '#/components/schemas/ranksModel'
+            address:
+              description: 'The address at which the contract is to be performed.'
+              type: string
+              example: 'Novoizmaylovsky Prospekt, 21k4, Saint Petersburg, Russia'
+            contractStatus:
+              $ref: '#/components/schemas/contractStatus'
+            description:
+              description: 'Description of the contract submitted by the contractor.'
+              type: string
+              example: 'You need to kill 10 goblins and 1 Hobbs in the winter cave. They are poorly prepared, do not have armor and weapons.'
+            requestComment:
+              description: 'Review of the Guild Registrar on the submitted contract.'
+              type: string
+              example: 'The abilities of goblins and Hobbs are not described.'
+            registrarComment:
+              description: 'Review of the Registrar.'
+              type: string
+              example: 'The abilities of goblins and Hobbs are not described.'
+            closedComment:
+              description: 'Revocation of the adventurer is contract performance.'
+              type: string
+              example: 'All dead.'
+
+    contractModel:
+      allOf:
+        - type: object
+          properties:
+            customer:
+              description: 'Contract customer.'
+              type: integer
+              example: 12
+            executor:
+              description: 'Contract executor.'
+              type: integer
+              example: 25
+            nameContract:
+              description: 'Name of contract.'
+              type: string
+              example: 'Killing goblins in the mountains'
+            reward:
+              description: 'Reward for completed task.'
+              type: integer
+              example: 500
+            minRank:
+              $ref: '#/components/schemas/ranksModel'
+            address:
+              description: 'The address at which the contract is to be performed.'
+              type: string
+              example: 'Novoizmaylovsky Prospekt, 21k4, Saint Petersburg, Russia'
+            createTime:
+              description: 'Date the contract was created.'
+              type: string
+              format: date-time
+              example: '2017-07-21T17:32:28Z'
+            contractStatus:
+              $ref: '#/components/schemas/contractStatus'
+            description:
+              description: 'Description of the contract submitted by the contractor.'
+              type: string
+              example: 'You need to kill 10 goblins and 1 Hobbs in the winter cave. They are poorly prepared, do not have armor and weapons.'
+            requestComment:
+              description: 'Review of the Guild Registrar on the submitted contract.'
+              type: string
+              example: 'The abilities of goblins and Hobbs are not described.'
+            registrarComment:
+              description: 'Review of the Registrar.'
+              type: string
+              example: 'The abilities of goblins and Hobbs are not described.'
+            closedComment:
+              description: 'Revocation of the adventurer is contract performance.'
+              type: string
+              example: 'All dead.'
+
+    errorModel:
+      type: object
+      properties:
+        message:
+          type: string
+          description: 'Error description.'
+
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes

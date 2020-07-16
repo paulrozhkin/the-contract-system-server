@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="createTable-roles" author="paulrozhkin">
+
+        <!-- New table for user roles -->
+        <createTable tableName="roles">
+            <column name="id" type="serial" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="name" type="text">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="created" type="timestamp with time zone" defaultValue="now()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="updated" type="timestamp with time zone" defaultValue="now()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- Link table for link user and roles -->
+        <createTable schemaName="public"
+                     tableName="user_roles">
+            <column name="user_id" type="integer">
+            </column>
+
+            <column name="role_id" type="integer">
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="user_roles"
+                                 constraintName="fk_user_roles_user"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="users"/>
+
+        <addForeignKeyConstraint baseColumnNames="role_id"
+                                 baseTableName="user_roles"
+                                 constraintName="fk_user_roles_roles"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="roles"/>
+
+        <!-- Add some base roles -->
+        <insert tableName="roles">
+            <column name="name" value="ROLE_ADMIN"/>
+        </insert>
+
+        <insert tableName="roles">
+            <column name="name" value="ROLE_CUSTOMER"/>
+        </insert>
+
+        <insert tableName="roles">
+            <column name="name" value="ROLE_ADVENTURER"/>
+        </insert>
+
+        <insert tableName="roles">
+            <column name="name" value="ROLE_REGISTRAR"/>
+        </insert>
+
+        <insert tableName="roles">
+            <column name="name" value="ROLE_DISTRIBUTOR"/>
+        </insert>
+
+        <!-- Remove old role column in user table -->
+        <dropColumn schemaName="public"
+                    tableName="users"
+                    columnName="role"/>
+    </changeSet>
+
+    <changeSet id="updateTablesForBaseEntity" author="paulrozhkin">
+
+
+        <!-- Update users -->
+        <addColumn schemaName="public"
+                   tableName="users">
+
+            <column name="created" type="timestamp with time zone" defaultValue="now()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="updated" type="timestamp with time zone" defaultValue="now()">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <!-- Update files -->
+        <addColumn schemaName="public"
+                   tableName="files">
+
+            <column name="created" type="timestamp with time zone" defaultValue="now()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="updated" type="timestamp with time zone" defaultValue="now()">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <!-- Update contracts -->
+        <renameColumn newColumnName="created"
+                      oldColumnName="create_time"
+                      schemaName="public"
+                      tableName="contracts"/>
+
+        <addColumn schemaName="public"
+                   tableName="contracts">
+            <column name="updated" type="timestamp with time zone" defaultValue="now()">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <addDefaultValue columnDataType="timestamp with time zone"
+                         columnName="created"
+                         defaultValue="now()"
+                         schemaName="public"
+                         tableName="contracts"/>
+
+        <addNotNullConstraint columnName="created"
+                              schemaName="public"
+                              tableName="contracts"
+                              validate="true"/>
+    </changeSet>
+
+    <changeSet id="renameLoginColumn" author="paulrozhkin">
+        <!-- Rename login to username in users -->
+        <renameColumn newColumnName="username"
+                      oldColumnName="login"
+                      schemaName="public"
+                      tableName="users"/>
+    </changeSet>
+
+    <changeSet id="add-default-admin-user" author="paulrozhkin">
+        <insert tableName="users">
+            <column name="username" value="admin"/>
+            <column name="password" value="$2y$12$dsTQkKa/EMSK56l8AL.v7OviF6I4dQhEnGbycQK5TT20b1NodSH1u"/>
+            <column name="name" value="Administrator"/>
+            <column name="username" value="admin"/>
+        </insert>
+
+        <!-- Расчет на то, что в БД это первый пользователь. -->
+        <insert tableName="user_roles">
+            <column name="user_id" value="1"/>
+            <column name="role_id" value="1"/>
+        </insert>
+
+        <insert tableName="user_roles">
+            <column name="user_id" value="1"/>
+            <column name="role_id" value="2"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
