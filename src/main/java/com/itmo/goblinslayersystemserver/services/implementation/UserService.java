@@ -2,6 +2,7 @@ package com.itmo.goblinslayersystemserver.services.implementation;
 
 import com.itmo.goblinslayersystemserver.dto.UserCreateAdminDto;
 import com.itmo.goblinslayersystemserver.dto.UserCreateDto;
+import com.itmo.goblinslayersystemserver.dto.UserUpdateAdminDto;
 import com.itmo.goblinslayersystemserver.exceptions.BadRequestException;
 import com.itmo.goblinslayersystemserver.exceptions.NotFoundException;
 import com.itmo.goblinslayersystemserver.models.Role;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService implements IUserService {
@@ -43,10 +45,7 @@ public class UserService implements IUserService {
         }
 
         // Роль заказчика имеют все пользователи системы по умолчанию.
-        Role customerRole = rolesService.get(RoleEnum.ROLE_CUSTOMER);
-        if (!user.getRoles().contains(customerRole)) {
-            user.getRoles().add(customerRole);
-        }
+        addCustomerRole(user);
 
         // Щифруем пароль в BCrypt
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -55,25 +54,36 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User update(Integer id, User user) {
-        User updatableUser;
+    public User update(Integer id, User update) {
+        Optional<User> userOptional = userRepository.findById(id);
 
-        try {
-            updatableUser = userRepository.findById(id).get();
-        } catch (Exception e) {
+        if (!userOptional.isPresent()) {
             throw new NotFoundException();
         }
 
-        updatableUser.setName(user.getName());
-        updatableUser.setAddress(user.getAddress());
-        updatableUser.setRoles(user.getRoles());
-        updatableUser.setBlocked(user.isBlocked());
-        updatableUser.setAdventurerStatus(user.getAdventurerStatus());
-        updatableUser.setAdventurerExperience(user.getAdventurerExperience());
-        updatableUser.setAdventurerRank(user.getAdventurerRank());
-        userRepository.save(updatableUser);
+        User user = userOptional.get();
 
-        return updatableUser;
+        user.setName(update.getName());
+        user.setAddress(update.getAddress());
+        user.setRoles(update.getRoles());
+        user.setBlocked(update.isBlocked());
+        user.setAdventurerStatus(update.getAdventurerStatus());
+        user.setAdventurerExperience(update.getAdventurerExperience());
+        user.setAdventurerRank(update.getAdventurerRank());
+        addCustomerRole(user);
+        userRepository.save(user);
+
+        return get(user.getId());
+    }
+
+    @Override
+    public User update(Integer id, UserUpdateAdminDto update) {
+        User user = new User();
+        user.setName(update.getName());
+        user.setAddress(update.getAddress());
+        user.setBlocked(update.getBlocked());
+        user.setRoles(rolesService.getByDtoName(update.getRoles()));
+        return update(id, user);
     }
 
     @Override
@@ -99,10 +109,9 @@ public class UserService implements IUserService {
         if (user.getRoles() == null || user.getRoles().isEmpty()) {
             Role customerRole = rolesService.get(RoleEnum.ROLE_CUSTOMER);
             userRoles.add(customerRole);
-        }
-        else {
+        } else {
             user.getRoles().forEach(roleDto -> {
-                userRoles.add(rolesService.get(roleDto.getDbRole()));
+                userRoles.add(rolesService.get(roleDto));
             });
         }
 
@@ -118,25 +127,34 @@ public class UserService implements IUserService {
 
     @Override
     public User get(Integer id) {
-        try {
-            return userRepository.findById(id).get();
-        } catch (Exception e) {
+        Optional<User> userOptional = userRepository.findById(id);
+
+        if (!userOptional.isPresent()) {
             throw new NotFoundException();
         }
+
+        return userOptional.get();
     }
 
     @Override
     public User get(String username) {
-        User result = userRepository.findByUsername(username);
-        return result;
+        return userRepository.findByUsername(username);
     }
 
     @Override
     public void delete(Integer id) {
-        try {
-            userRepository.deleteById(id);
-        } catch (Exception e) {
-            throw new NotFoundException();
+        userRepository.deleteById(id);
+    }
+
+    private void addCustomerRole(User user) {
+        Role customerRole = rolesService.get(RoleEnum.ROLE_CUSTOMER);
+
+        if (user.getRoles() == null) {
+            user.setRoles(new ArrayList<>());
+        }
+
+        if (!user.getRoles().contains(customerRole)) {
+            user.getRoles().add(customerRole);
         }
     }
 }

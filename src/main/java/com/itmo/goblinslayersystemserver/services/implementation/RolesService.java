@@ -10,6 +10,10 @@ import com.itmo.goblinslayersystemserver.services.IRolesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class RolesService implements IRolesService {
 
@@ -28,5 +32,24 @@ public class RolesService implements IRolesService {
     @Override
     public Role get(RoleEnum role) {
         return repository.findByName(role);
+    }
+
+    @Override
+    public Role get(RoleDto role) {
+        return repository.findByName(role.getDbRole());
+    }
+
+    @Override
+    public List<Role> get(List<RoleEnum> rolesEnum) {
+        return rolesEnum.stream()
+                .map(roleEnum -> get(roleEnum))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Role> getByDtoName(List<RoleDto> rolesEnum) {
+        return get(rolesEnum.stream()
+                .map(RoleDto::getDbRole)
+                .collect(Collectors.toList()));
     }
 }

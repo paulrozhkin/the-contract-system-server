@@ -2,6 +2,7 @@ package com.itmo.goblinslayersystemserver.services;
 
 import com.itmo.goblinslayersystemserver.dto.UserCreateAdminDto;
 import com.itmo.goblinslayersystemserver.dto.UserCreateDto;
+import com.itmo.goblinslayersystemserver.dto.UserUpdateAdminDto;
 import com.itmo.goblinslayersystemserver.models.User;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public interface IUserService {
     User get(String username);
     void delete(Integer id);
     User update(Integer id, User user);
+    User update(Integer id, UserUpdateAdminDto user);
     User create(UserCreateDto user);
     User create(UserCreateAdminDto user);
 }
