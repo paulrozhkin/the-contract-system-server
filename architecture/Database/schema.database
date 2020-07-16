@@ -1,86 +1,87 @@
-Table user as U {
-  user_id           integer     [pk, increment] // auto-increment
-  user_login        text
-  user_password     password
-  user_icon         integer     [ref: > F.file_id]
-  user_name         text
-  user_address      text
-  user_role         role    
-  user_is_blocked   boolean
-  user_about_me     string
-}
-
-Table ranks as R {
-  rank_id           integer     [pk, increment]
-  rank_name         text
-  count_contract    integer
-  // Platinum    10000
-  // Gold        5000
-  // Silver      1000
-  // Bronze      500
-  // Ruby        200
-  // Emerald     100
-  // Sapphire    50
-  // Steel       10
-  // Obsidian    5
-  // Porcelain   0
+Table users as U {
+  id                        integer     [pk, increment] // auto-increment
+  username                  text
+  password                  text
+  avatar                    integer     [ref: > F.id]
+  name                      text
+  address                   text
+  blocked                   boolean
+  adventurer_status         adventurer_status
+  adventurer_experience     integer
+  adventurer_rank           rank
+  created                   timestamp
+  updated                   timestamp
 }
 
 Table files as F {
-  file_id     integer     [pk, increment]
-  file_name   text
-  file_path   text
+  id                        integer     [pk, increment]
+  original_name             text
+  local_name                text
+  created                   timestamp
+  updated                   timestamp
 }
 
-Table bank_account as B {
-  bank_accoun_id      integer     [pk, increment]
-  account_owner_id    integer     [ref: > U.user_id]
-  value               integer
+Table roles as R {
+  id                        integer     [pk, increment]
+  name                      role
+  created                   timestamp
+  updated                   timestamp
 }
 
-Table adventurer as A {
-  adventurer_id             integer     [pk, increment]
-  user_adventurer_id        integer     [ref: > U.user_id]
-  adventurer_status         status  
-  adventurer_level          integer     [ref: > R.rank_id]
-  adventurer_experience     integer
-  adventurer_about_me       string
+Table user_roles as UR {
+  user_id                   integer     [ref: > U.id]
+  role_id                   integer     [ref: > R.id]
 }
 
-Table contract_request as CR {
-  contract_reauest_id           integer     [pk, increment]
-  contract_customer_id          integer     [ref: > U.user_id]
-  contract_executor_id          integer     [ref: > A.adventurer_id]
-  contract_name                 text
-  contract_reward               money
-  contract_min_level            integer     [ref: > R.rank_id]
-  contract_address              text
-  create_time                   timestamp
-  contract_request_status       contract_status
-  contract_description          text
-  comment_contract_request      text
-  comment_closed_contract       text
+
+Table contracts as CT {
+  id                        integer     [pk, increment]
+  customer                  integer     [ref: > U.id]
+  executor                  integer     [ref: > U.id]
+  name                      text
+  reward                    integer
+  min_rank                  rank
+  address                   text
+  status                    contract_status
+  description               text
+  customer_comment          text
+  registrar_comment         text
+  created                   timestamp
+  updated                   timestamp
 }
 
 Enum role {
-  admin
-  adventurer
-  customer
-  registrar
-  rankPromoter
+  ROLE_ADMIN
+  ROLE_CUSTOMER
+  ROLE_ADVENTURER
+  ROLE_REGISTRAR
+  ROLE_DISTRIBUTOR
 }
 
-Enum status {
-  active
-  dead
-  not_confirmed
+Enum adventurer_status {
+  Active
+  Dead
+  NotConfirmed
 }
 
 Enum contract_status {
-  Filed
-  OnProcessing
+  Created
   Rejected
   Accepted
+  Performing
   Performed
   Completed
+}
+
+Enum rank {
+  Platinum    // adventurer_experience for rank - 10000
+  Gold        // 5000
+  Silver      // 1000
+  Bronze      // 500
+  Ruby        // 200
+  Emerald     // 100
+  Sapphire    // 50
+  Steel       // 10
+  Obsidian    // 5
+  Porcelain   // 0
 }
