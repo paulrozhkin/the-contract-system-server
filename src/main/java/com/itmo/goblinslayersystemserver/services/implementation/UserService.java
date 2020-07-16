@@ -67,9 +67,6 @@ public class UserService implements IUserService {
         user.setAddress(update.getAddress());
         user.setRoles(update.getRoles());
         user.setBlocked(update.isBlocked());
-        user.setAdventurerStatus(update.getAdventurerStatus());
-        user.setAdventurerExperience(update.getAdventurerExperience());
-        user.setAdventurerRank(update.getAdventurerRank());
         addCustomerRole(user);
         userRepository.save(user);
 
