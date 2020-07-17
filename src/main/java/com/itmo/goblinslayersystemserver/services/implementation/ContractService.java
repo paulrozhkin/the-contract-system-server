@@ -4,13 +4,18 @@ import com.itmo.goblinslayersystemserver.dto.ContractCreateDto;
 import com.itmo.goblinslayersystemserver.dto.ContractUpdateDto;
 import com.itmo.goblinslayersystemserver.exceptions.NotFoundException;
 import com.itmo.goblinslayersystemserver.models.Contract;
+import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
 import com.itmo.goblinslayersystemserver.models.enums.ContractStatus;
 import com.itmo.goblinslayersystemserver.repositories.ContractRepository;
 import com.itmo.goblinslayersystemserver.services.IContractService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,8 +25,17 @@ public class ContractService implements IContractService {
     ContractRepository contractRepository;
 
     @Override
-    public ArrayList<Contract> get() {
-        return (ArrayList<Contract>) contractRepository.findAll();
+    public Page<Contract> get(String nameContractFilter,
+                              Integer customerFilter,
+                              Integer executorFilter,
+                              AdventurerRank minRankFilter,
+                              ContractStatus contractStatusFilter,
+                              int pagePagination,
+                              int sizePagination) {
+        Pageable paging = PageRequest.of(pagePagination, sizePagination);
+
+        Page<Contract> pages = contractRepository.findAll(paging);
+        return pages;
     }
 
     @Override
