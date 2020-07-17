@@ -66,7 +66,7 @@ public class ContractsRestControllerV1 {
      * Post запрос серверу для создания списка контрактов в системе
      **/
     @PostMapping(consumes = {"application/json"}, produces = {"application/json"})
-    public ContractDto createContracts(HttpServletResponse response, @RequestBody ContractCreateDto contract) {
+    public ContractDto createContracts(@RequestBody ContractCreateDto contract) {
         return new ContractDto(contractService.create(contract));
     }
 
@@ -74,7 +74,7 @@ public class ContractsRestControllerV1 {
      * Get запрос серверу для получения контракта из системы по его ID
      **/
     @GetMapping(value = "/{id}", consumes = {"application/json"}, produces = {"application/json"})
-    public ContractDto getContract(HttpServletResponse response, @PathVariable Integer id) {
+    public ContractDto getContract(@PathVariable Integer id) {
         return new ContractDto(contractService.get(id));
     }
 
@@ -82,7 +82,7 @@ public class ContractsRestControllerV1 {
      * Put запрос серверу для обновления контракта в системе по его ID
      **/
     @PutMapping(value = "/{id}", consumes = {"application/json"}, produces = {"application/json"})
-    public ContractDto updateContract(HttpServletResponse response, @PathVariable Integer id, @RequestBody ContractUpdateDto contract) {
+    public ContractDto updateContract(@PathVariable Integer id, @RequestBody ContractUpdateDto contract) {
         return new ContractDto(contractService.update(id, contract));
     }
 }

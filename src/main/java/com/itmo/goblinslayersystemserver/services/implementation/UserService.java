@@ -12,11 +12,13 @@ import com.itmo.goblinslayersystemserver.repositories.UserRepository;
 import com.itmo.goblinslayersystemserver.services.IRolesService;
 import com.itmo.goblinslayersystemserver.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,8 +34,12 @@ public class UserService implements IUserService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public List<User> get() {
-        return userRepository.findAll();
+    public Page<User> get(String usernameFilter,
+                          int pagePagination,
+                          int sizePagination) {
+
+        Pageable paging = PageRequest.of(pagePagination, sizePagination);
+        return userRepository.findAll(paging);
     }
 
     @Override

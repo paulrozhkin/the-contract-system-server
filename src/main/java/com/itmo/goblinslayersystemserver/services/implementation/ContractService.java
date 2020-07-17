@@ -33,9 +33,7 @@ public class ContractService implements IContractService {
                               int pagePagination,
                               int sizePagination) {
         Pageable paging = PageRequest.of(pagePagination, sizePagination);
-
-        Page<Contract> pages = contractRepository.findAll(paging);
-        return pages;
+        return contractRepository.findAll(paging);
     }
 
     @Override
