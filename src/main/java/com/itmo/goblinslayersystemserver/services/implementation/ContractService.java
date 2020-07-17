@@ -4,18 +4,20 @@ import com.itmo.goblinslayersystemserver.dto.ContractCreateDto;
 import com.itmo.goblinslayersystemserver.dto.ContractUpdateDto;
 import com.itmo.goblinslayersystemserver.exceptions.NotFoundException;
 import com.itmo.goblinslayersystemserver.models.Contract;
+import com.itmo.goblinslayersystemserver.models.QContract;
 import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
 import com.itmo.goblinslayersystemserver.models.enums.ContractStatus;
 import com.itmo.goblinslayersystemserver.repositories.ContractRepository;
 import com.itmo.goblinslayersystemserver.services.IContractService;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.CollectionExpression;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,8 +34,43 @@ public class ContractService implements IContractService {
                               ContractStatus contractStatusFilter,
                               int pagePagination,
                               int sizePagination) {
+
+        // Создаем параметры фильрации
+        QContract contract = QContract.contract;
+        BooleanBuilder where = new BooleanBuilder();
+
+        if (nameContractFilter != null) {
+            // Используем ругулярное выражение для имени
+            BooleanExpression expression = contract.nameContract.
+                    likeIgnoreCase(String.format("%%%s%%", nameContractFilter));
+            where.and(expression);
+        }
+
+        if (customerFilter != null) {
+            BooleanExpression expression = contract.customer.eq(customerFilter);
+            where.and(expression);
+        }
+
+        if (executorFilter != null) {
+            BooleanExpression expression = contract.executor.eq(executorFilter);
+            where.and(expression);
+        }
+
+        if (minRankFilter != null) {
+            BooleanExpression expression = contract.minRank.in(AdventurerRank.GetRanksThatLessOrEqual(minRankFilter));
+            where.and(expression);
+        }
+
+        if (contractStatusFilter != null) {
+            BooleanExpression expression = contract.contractStatus.eq(contractStatusFilter);
+            where.and(expression);
+        }
+
+        // Создаем пагинацию
         Pageable paging = PageRequest.of(pagePagination, sizePagination);
-        return contractRepository.findAll(paging);
+
+        // Делаем поиск с параметрами
+        return contractRepository.findAll(where, paging);
     }
 
     @Override
