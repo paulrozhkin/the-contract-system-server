@@ -23,7 +23,7 @@ public class UsersRestControllerV1 {
      * Post запрос для создания пользователя в системе с полномочиями заказчика.
      **/
     @PostMapping(consumes = {"application/json"}, produces = {"application/json"})
-    public UserDto createUser(HttpServletResponse response, @RequestBody UserCreateDto user) {
+    public UserDto createUser(@RequestBody UserCreateDto user) {
         User newUser = userService.create(user);
         return new UserDto(newUser);
     }
@@ -32,7 +32,7 @@ public class UsersRestControllerV1 {
      * Get запрос для получения пользователя из системы по его ID
      **/
     @GetMapping(value = "/{id}", consumes = {"application/json"}, produces = {"application/json"})
-    public UserDto getUser(HttpServletResponse response, @PathVariable Integer id) {
+    public UserDto getUser(@PathVariable Integer id) {
         return new UserDto(userService.get(id));
     }
 }

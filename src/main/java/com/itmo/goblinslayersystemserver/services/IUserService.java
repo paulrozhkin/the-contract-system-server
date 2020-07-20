@@ -4,12 +4,10 @@ import com.itmo.goblinslayersystemserver.dto.UserCreateAdminDto;
 import com.itmo.goblinslayersystemserver.dto.UserCreateDto;
 import com.itmo.goblinslayersystemserver.dto.UserUpdateAdminDto;
 import com.itmo.goblinslayersystemserver.models.User;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface IUserService {
-    List<User> get();
+    Page<User> get(String usernameFilter, int pagePagination, int sizePagination);
     User create(User user);
     User get(Integer id);
     User get(String username);

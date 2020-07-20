@@ -5,18 +5,24 @@ import com.itmo.goblinslayersystemserver.dto.UserCreateDto;
 import com.itmo.goblinslayersystemserver.dto.UserUpdateAdminDto;
 import com.itmo.goblinslayersystemserver.exceptions.BadRequestException;
 import com.itmo.goblinslayersystemserver.exceptions.NotFoundException;
+import com.itmo.goblinslayersystemserver.models.QContract;
+import com.itmo.goblinslayersystemserver.models.QUser;
 import com.itmo.goblinslayersystemserver.models.Role;
 import com.itmo.goblinslayersystemserver.models.User;
 import com.itmo.goblinslayersystemserver.models.enums.RoleEnum;
 import com.itmo.goblinslayersystemserver.repositories.UserRepository;
 import com.itmo.goblinslayersystemserver.services.IRolesService;
 import com.itmo.goblinslayersystemserver.services.IUserService;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,8 +38,26 @@ public class UserService implements IUserService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public List<User> get() {
-        return userRepository.findAll();
+    public Page<User> get(String usernameFilter,
+                          int pagePagination,
+                          int sizePagination) {
+
+        // Создаем параметры фильрации
+        QUser user = QUser.user;
+        BooleanBuilder where = new BooleanBuilder();
+
+        if (usernameFilter != null) {
+            // Используем ругулярное выражение для имени
+            BooleanExpression expression = user.username.
+                    likeIgnoreCase(String.format("%%%s%%", usernameFilter));
+            where.and(expression);
+        }
+
+        // Создаем пагинацию
+        Pageable paging = PageRequest.of(pagePagination, sizePagination);
+
+        // Делаем поиск с параметрами
+        return userRepository.findAll(where, paging);
     }
 
     @Override

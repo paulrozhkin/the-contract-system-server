@@ -4,16 +4,12 @@ info:
   description: >-
     This is the API for a course project at ITMO University. The theme of the
     course is "The goblin slayer contract system". Server on github.
-  version: "0.1.0"
+  version: "0.2.0"
   title: Goblin Slayer Server API
-  contact:
-    name: Kirill Markin
-    email: kirill1997_markin@mail.ru
 
 servers:
-  - description: SwaggerHub API Auto Mocking
-    url: 'https://virtserver.swaggerhub.com/ForsaiR/GoblinSlayerSystem/1.0.0'
-  - url: 'https://petstore.swagger.io/v2'
+  - description: Server
+    url: 'http://paulrozhkin.ru:3464/'
 
 tags:
   - name: auth
@@ -77,15 +73,39 @@ paths:
       summary: Getting a list of users
       security:
         - bearerAuth: []
+      parameters:
+        - in: query
+          name: username
+          schema:
+            type: string
+          required: false
+          description: Filtration by username
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: false
+          description: Pagination parameter
+        - in: query
+          name: size
+          schema:
+            type: integer
+          required: false
+          description: Pagination parameter
       responses:
         '200':
           description: Getting a list of users
           content:
             application-json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/user'
+                allOf:
+                  - $ref: '#/components/schemas/paginationInfo'
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/user'
         '400':
           description: Bad Reaquest.
           content:
@@ -370,15 +390,64 @@ paths:
       summary: Getting a list of contracts
       security:
         - bearerAuth: []
+      parameters:
+        - in: query
+          name: nameContract
+          schema:
+            type: string
+          required: false
+          description: Filtration by name
+        - in: query
+          name: customer
+          schema:
+            type: integer
+          required: false
+          description: Filtration by customer
+        - in: query
+          name: executor
+          schema:
+            type: integer
+          required: false
+          description: Filtration by executor
+        - in: query
+          name: minRank
+          schema:
+            $ref: '#/components/schemas/ranksModel'
+          required: false
+          description: Filtration by minimum rank. Returned all contracts that are less than or equal to the required minimum rank
+        - in: query
+          name: contractStatus
+          schema:
+            $ref: '#/components/schemas/contractStatus'
+          required: false
+          description: Filtration by contractStatus.
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: false
+          description: Pagination parameter
+        - in: query
+          name: size
+          schema:
+            type: integer
+          required: false
+          description: Pagination parameter
       responses:
         '200':
           description: Getting a list of contracts
           content:
             application-json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/contract'
+                allOf:
+                  - $ref: '#/components/schemas/paginationInfo'
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/contract'
+
         '400':
           description: Bad Reaquest.
           content:
@@ -579,6 +648,23 @@ components:
           description: 'User jwt access token'
           type: string
           example: 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0Iiwicm9sZXMiOlsiUk9MRV9DVVNUT01FUiJdLCJpYXQiOjE1OTQ4MjEwOTIsImV4cCI6MTU5NDgyNDY5Mn0.PdvjqHjclbbhmXu3vn-Qsl4-G4XA9YgsoLdbpMeiOnc'
+
+    paginationInfo:
+      type: object
+      properties:
+        currentPage:
+          description: 'Pagination current page'
+          type: integer
+          example: '0'
+        totalItems:
+          description: 'Pagination total items'
+          type: integer
+          format: int64
+          example: '45'
+        totalPages:
+          description: 'Pagination total pages'
+          type: integer
+          example: '15'
 
     user:
       allOf:
