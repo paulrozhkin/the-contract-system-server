@@ -2,41 +2,43 @@ package com.itmo.goblinslayersystemserver.models;
 
 import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
 import com.itmo.goblinslayersystemserver.models.enums.ContractStatus;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "contracts")
+@Data
 public class Contract extends BaseEntity {
     /**
      * ID заявителя
      **/
     @Column(name="customer")
-    @Getter @Setter
     private Integer customer;
 
     /**
      * ID исполнителя
      **/
     @Column(name="executor")
-    @Getter @Setter
     private Integer executor;
 
     /**
      * Название контракта
      **/
     @Column(name="name")
-    @Getter @Setter
     private String nameContract;
 
     /**
      * Вознаграждение за контракт
      **/
     @Column(name="reward")
-    @Getter @Setter
     private Integer reward;
 
     /**
@@ -44,14 +46,12 @@ public class Contract extends BaseEntity {
      **/
     @Column(name="min_rank")
     @Enumerated(EnumType.STRING)
-    @Getter @Setter
     private AdventurerRank minRank;
 
     /**
      * Адрес для исполнения контракта
      **/
     @Column(name="address")
-    @Getter @Setter
     private String address;
 
     /**
@@ -65,34 +65,64 @@ public class Contract extends BaseEntity {
      **/
     @Column(name="status")
     @Enumerated(EnumType.STRING)
-    @Getter @Setter
     private ContractStatus contractStatus;
 
     /**
      * Описание контракта
      **/
     @Column(name="description")
-    @Getter @Setter
     private String description;
 
     /**
      * Отзыв контрактодателя о контракте
      **/
     @Column(name="customer_comment")
-    @Getter @Setter
     private String requestComment;
 
     /**
      * Отзыв регистратора гильдии о контракте
      **/
     @Column(name="registrar_comment")
-    @Getter @Setter
     private String registrarComment;
 
     /**
      * Комментарий авантюриста при закрытии контракта
      **/
     @Column(name="closed_comment")
-    @Getter @Setter
     private String closedComment;
+
+    /**
+     * Оповещения об изменении статуса контракта.
+     **/
+    @OneToMany(mappedBy = "contract",
+            targetEntity=ContractNotification.class,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    private List<ContractNotification> notifications;
+
+    public void setContractStatus(ContractStatus newStatus)
+    {
+        ContractNotification newStatusChangeNotification = new ContractNotification();
+        newStatusChangeNotification.setConfirmed(false);
+
+        // Если это новый контракт, то ставим ему статус ContractStatus.Created
+        if (getContractStatus() == null)
+        {
+            contractStatus = ContractStatus.Created;
+        }
+
+        newStatusChangeNotification.setOldStatus(getContractStatus());
+        newStatusChangeNotification.setNewStatus(newStatus);
+        newStatusChangeNotification.setContract(this);
+
+        contractStatus = newStatus;
+
+        if (notifications == null)
+        {
+            notifications = new ArrayList<>();
+        }
+
+        notifications.add(newStatusChangeNotification);
+    }
 }
