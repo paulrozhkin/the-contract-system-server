@@ -6,10 +6,9 @@ import com.itmo.goblinslayersystemserver.models.User;
 import com.itmo.goblinslayersystemserver.services.INotificationService;
 import com.itmo.goblinslayersystemserver.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(Endpoints.AccountRestControllerV1)
@@ -38,5 +37,18 @@ public class AccountRestControllerV1 {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.get(username);
         return notificationService.getUserNotifications(user.getId());
+    }
+
+    /**
+     * Post запрос серверу для подтверждения оповещения об обновлении контракта.
+     **/
+    @PostMapping(path = "notifications/contract-notifications/{contractNotificationId}")
+    public ResponseEntity<Void> confirmedNotifications(@PathVariable Integer contractNotificationId) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.get(username);
+
+        notificationService.confirmContractNotification(contractNotificationId, user);
+
+        return ResponseEntity.ok().build();
     }
 }
