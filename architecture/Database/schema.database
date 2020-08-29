@@ -50,7 +50,7 @@ Table contracts as CT {
   updated                   timestamp
 }
 
-Table contract_notification as CN {
+Table contract_notifications as CN {
   id                        integer
   contract                  integer [ref: > CT.id]
   old_status                contract_status
