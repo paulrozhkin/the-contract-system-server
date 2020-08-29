@@ -4,7 +4,7 @@ info:
   description: >-
     This is the API for a course project at ITMO University. The theme of the
     course is "The goblin slayer contract system". Server on github.
-  version: "0.2.0"
+  version: "0.3.0"
   title: Goblin Slayer Server API
 
 servers:
@@ -315,6 +315,47 @@ paths:
             application-json:
               schema:
                 $ref: '#/components/schemas/user'
+        '400':
+          description: Bad Reaquest.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+  /api/v1/account/notifications:
+    # Получить нотификации пользователя
+    get:
+      tags:
+        - account
+      operationId: getСurrentUserNotifications
+      summary: Getting the current user notifications
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Notification model
+          content:
+            application-json:
+              schema:
+                $ref: '#/components/schemas/notification'
         '400':
           description: Bad Reaquest.
           content:
@@ -927,6 +968,49 @@ components:
               description: 'Revocation of the adventurer is contract performance.'
               type: string
               example: 'All dead.'
+
+    notification:
+      allOf:
+        - type: object
+          properties:
+            contractNotifications:
+              type: array
+              items:
+                $ref: '#/components/schemas/contractNotification'
+
+    contractNotification:
+      type: object
+      properties:
+        id:
+          description: 'Unique identifier of the contractNotification.'
+          type: integer
+          example: 15
+        contractId:
+          description: 'The contract id that has been updated.'
+          type: integer
+          example: 12
+        contractName:
+          description: 'The contract name that has been updated.'
+          type: string
+          example: "Kill all goblins"
+        contractOldStatus:
+          $ref: '#/components/schemas/contractStatus'
+        contractNewStatus:
+          $ref: '#/components/schemas/contractStatus'
+        executor:
+          description: 'Contract executor.'
+          type: integer
+          example: 25
+        customer:
+          description: 'Contract customer.'
+          type: integer
+          example: 122
+        createTime:
+          description: 'Date the contract was created.'
+          type: string
+          format: date-time
+          example: '2017-07-21T17:32:28Z'
+
 
     errorModel:
       type: object
