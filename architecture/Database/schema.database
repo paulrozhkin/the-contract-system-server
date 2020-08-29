@@ -50,6 +50,16 @@ Table contracts as CT {
   updated                   timestamp
 }
 
+Table contract_notification as CN {
+  id                        integer
+  contract                  integer [ref: > CT.id]
+  old_status                contract_status
+  new_status                contract_status
+  confirmed                 boolean
+  created                   timestamp
+  updated                   timestamp
+}
+
 Enum role {
   ROLE_ADMIN
   ROLE_CUSTOMER
