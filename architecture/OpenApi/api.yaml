@@ -35,7 +35,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/creditionals'
+              $ref: '#/components/schemas/credentials'
         required: true
       responses:
         '200':
@@ -147,7 +147,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/userCreatebleAdminModel'
+              $ref: '#/components/schemas/userCreatableAdminModel'
         required: true
       responses:
         '200':
@@ -207,7 +207,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/userUpdatebleModel'
+              $ref: '#/components/schemas/userUpdatableModel'
         required: true
       responses:
         '200':
@@ -258,7 +258,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/userCreatebleModel'
+              $ref: '#/components/schemas/userCreatableModel'
         required: true
       responses:
         '200':
@@ -340,7 +340,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorModel'
 
-  /api/v1/account/notifications:
+  /api/v1/account/notifications/:
     # Получить нотификации пользователя
     get:
       tags:
@@ -370,6 +370,50 @@ paths:
                 $ref: '#/components/schemas/errorModel'
         '404':
           description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+  /api/v1/account/notifications/contract-notifications/{id}:
+    # Подтвердить прием оповещения об изменении контракта
+    post:
+      tags:
+        - account
+      operationId: confirmNotification
+      summary: Сonfirm contract notification
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          description: 'Contract notification ID.'
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Confirmed.
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '403':
+          description: Forbidden. You are not customer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found notification by id.
           content:
             application/json:
               schema:
@@ -666,7 +710,7 @@ paths:
 components:
   schemas:
 
-    creditionals:
+    credentials:
       type: object
       properties:
         username:
@@ -750,17 +794,17 @@ components:
               type: boolean
               example: false
 
-    userCreatebleAdminModel:
+    userCreatableAdminModel:
       allOf:
-        - $ref: '#/components/schemas/creditionals'
+        - $ref: '#/components/schemas/credentials'
         - $ref: '#/components/schemas/userCommonInfo'
 
-    userCreatebleModel:
+    userCreatableModel:
       allOf:
-        - $ref: '#/components/schemas/creditionals'
+        - $ref: '#/components/schemas/credentials'
         - $ref: '#/components/schemas/userCommonInfoWithoutRoles'
 
-    userUpdatebleModel:
+    userUpdatableModel:
       allOf:
         - $ref: '#/components/schemas/userCommonInfoWithBlocked'
 
