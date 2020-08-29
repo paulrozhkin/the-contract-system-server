@@ -7,9 +7,6 @@ import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
 import com.itmo.goblinslayersystemserver.models.enums.ContractStatus;
 import org.springframework.data.domain.Page;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public interface IContractService {
     Page<Contract> get(String nameContractFilter,
                        Integer customerFilter,

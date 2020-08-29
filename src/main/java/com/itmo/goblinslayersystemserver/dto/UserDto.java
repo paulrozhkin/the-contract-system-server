@@ -4,7 +4,6 @@ import com.itmo.goblinslayersystemserver.models.Role;
 import com.itmo.goblinslayersystemserver.models.User;
 import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
 import com.itmo.goblinslayersystemserver.models.enums.AdventurerStatus;
-import com.itmo.goblinslayersystemserver.models.enums.RoleEnum;
 import lombok.Data;
 import lombok.NonNull;
 

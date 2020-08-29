@@ -1,7 +1,6 @@
 package com.itmo.goblinslayersystemserver.dto;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 
 import java.util.List;
