@@ -8,7 +8,6 @@ import com.itmo.goblinslayersystemserver.models.ContractNotification;
 import com.itmo.goblinslayersystemserver.models.User;
 import com.itmo.goblinslayersystemserver.repositories.ContractNotificationRepository;
 import com.itmo.goblinslayersystemserver.services.INotificationService;
-import netscape.security.ForbiddenTargetException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
