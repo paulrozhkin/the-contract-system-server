@@ -69,21 +69,7 @@ public class AdventurersRestControllerV1 {
      **/
     @PutMapping(value = "/{id}/status/", consumes = {"application/json"}, produces = {"application/json"})
     public AdventurerDto updateAdventurerStatus(@PathVariable Integer id, @RequestBody AdventurerStatusUpdateDto adventurerStatusUpdateDto) {
-        User mockUser = new User();
-        mockUser.setId(1);
-        Role role = new Role();
-        role.setName(RoleEnum.ROLE_ADVENTURER);
-        mockUser.setRoles(Collections.singletonList(role));
-        mockUser.setAddress("mock address");
-        mockUser.setUsername("mock username");
-        mockUser.setName("mock name");
-        mockUser.setAdventurerExperience(100000);
-        mockUser.setAdventurerRank(AdventurerRank.Gold);
-        mockUser.setAdventurerStatus(adventurerStatusUpdateDto.getStatus());
-
-        return new AdventurerDto(mockUser);
-
-        //return new UserDto(userService.update(id, user));
+        return new AdventurerDto(userService.updateAdventurerStatus(id, adventurerStatusUpdateDto.getStatus()));
     }
 
     /**

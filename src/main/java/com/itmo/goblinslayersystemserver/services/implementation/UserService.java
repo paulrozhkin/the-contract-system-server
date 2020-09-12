@@ -144,6 +144,26 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public User updateAdventurerStatus(Integer id, AdventurerStatus newStatus) {
+        Optional<User> userOptional = userRepository.findById(id);
+
+        if (!userOptional.isPresent()) {
+            throw new NotFoundException();
+        }
+
+        User user = userOptional.get();
+
+        if (user.getRoles().stream().noneMatch(role -> role.getName().equals(RoleEnum.ROLE_ADVENTURER))) {
+            throw new BadRequestException("User not adventurer.");
+        }
+
+        user.setAdventurerStatus(newStatus);
+        userRepository.save(user);
+
+        return get(id);
+    }
+
+    @Override
     public User create(UserCreateDto user) {
         Role customerRole = rolesService.get(RoleEnum.ROLE_CUSTOMER);
         ArrayList<Role> userRoles = new ArrayList<>();
