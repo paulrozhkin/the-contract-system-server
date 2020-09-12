@@ -3,8 +3,6 @@ package com.itmo.goblinslayersystemserver.dto;
 import lombok.Data;
 import lombok.NonNull;
 
-import java.util.List;
-
 @Data
 public class UserCreateDto {
     @NonNull

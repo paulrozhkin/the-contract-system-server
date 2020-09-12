@@ -10,7 +10,6 @@ import com.itmo.goblinslayersystemserver.models.enums.ContractStatus;
 import com.itmo.goblinslayersystemserver.repositories.ContractRepository;
 import com.itmo.goblinslayersystemserver.services.IContractService;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.types.CollectionExpression;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

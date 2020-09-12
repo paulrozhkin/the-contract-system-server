@@ -4,7 +4,7 @@ info:
   description: >-
     This is the API for a course project at ITMO University. The theme of the
     course is "The goblin slayer contract system". Server on github.
-  version: "0.2.0"
+  version: "0.3.0"
   title: Goblin Slayer Server API
 
 servers:
@@ -35,7 +35,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/creditionals'
+              $ref: '#/components/schemas/credentials'
         required: true
       responses:
         '200':
@@ -147,7 +147,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/userCreatebleAdminModel'
+              $ref: '#/components/schemas/userCreatableAdminModel'
         required: true
       responses:
         '200':
@@ -207,7 +207,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/userUpdatebleModel'
+              $ref: '#/components/schemas/userUpdatableModel'
         required: true
       responses:
         '200':
@@ -258,7 +258,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/userCreatebleModel'
+              $ref: '#/components/schemas/userCreatableModel'
         required: true
       responses:
         '200':
@@ -329,6 +329,91 @@ paths:
                 $ref: '#/components/schemas/errorModel'
         '404':
           description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+  /api/v1/account/notifications/:
+    # Получить нотификации пользователя
+    get:
+      tags:
+        - account
+      operationId: getСurrentUserNotifications
+      summary: Getting the current user notifications
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Notification model
+          content:
+            application-json:
+              schema:
+                $ref: '#/components/schemas/notification'
+        '400':
+          description: Bad Reaquest.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+  /api/v1/account/notifications/contract-notifications/{id}:
+    # Подтвердить прием оповещения об изменении контракта
+    post:
+      tags:
+        - account
+      operationId: confirmNotification
+      summary: Сonfirm contract notification
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          description: 'Contract notification ID.'
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Confirmed.
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '403':
+          description: Forbidden. You are not customer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found notification by id.
           content:
             application/json:
               schema:
@@ -625,7 +710,7 @@ paths:
 components:
   schemas:
 
-    creditionals:
+    credentials:
       type: object
       properties:
         username:
@@ -709,17 +794,17 @@ components:
               type: boolean
               example: false
 
-    userCreatebleAdminModel:
+    userCreatableAdminModel:
       allOf:
-        - $ref: '#/components/schemas/creditionals'
+        - $ref: '#/components/schemas/credentials'
         - $ref: '#/components/schemas/userCommonInfo'
 
-    userCreatebleModel:
+    userCreatableModel:
       allOf:
-        - $ref: '#/components/schemas/creditionals'
+        - $ref: '#/components/schemas/credentials'
         - $ref: '#/components/schemas/userCommonInfoWithoutRoles'
 
-    userUpdatebleModel:
+    userUpdatableModel:
       allOf:
         - $ref: '#/components/schemas/userCommonInfoWithBlocked'
 
@@ -927,6 +1012,49 @@ components:
               description: 'Revocation of the adventurer is contract performance.'
               type: string
               example: 'All dead.'
+
+    notification:
+      allOf:
+        - type: object
+          properties:
+            contractNotifications:
+              type: array
+              items:
+                $ref: '#/components/schemas/contractNotification'
+
+    contractNotification:
+      type: object
+      properties:
+        id:
+          description: 'Unique identifier of the contractNotification.'
+          type: integer
+          example: 15
+        contractId:
+          description: 'The contract id that has been updated.'
+          type: integer
+          example: 12
+        contractName:
+          description: 'The contract name that has been updated.'
+          type: string
+          example: "Kill all goblins"
+        contractOldStatus:
+          $ref: '#/components/schemas/contractStatus'
+        contractNewStatus:
+          $ref: '#/components/schemas/contractStatus'
+        executor:
+          description: 'Contract executor.'
+          type: integer
+          example: 25
+        customer:
+          description: 'Contract customer.'
+          type: integer
+          example: 122
+        createTime:
+          description: 'Date the contract was created.'
+          type: string
+          format: date-time
+          example: '2017-07-21T17:32:28Z'
+
 
     errorModel:
       type: object

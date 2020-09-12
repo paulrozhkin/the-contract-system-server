@@ -5,8 +5,6 @@ import com.itmo.goblinslayersystemserver.models.enums.ContractStatus;
 import lombok.Data;
 import lombok.NonNull;
 
-import java.util.Date;
-
 @Data
 public class ContractUpdateDto {
 

@@ -1,7 +1,5 @@
 package com.itmo.goblinslayersystemserver.dto;
 
-import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
-import com.itmo.goblinslayersystemserver.models.enums.ContractStatus;
 import lombok.Data;
 import lombok.NonNull;
 

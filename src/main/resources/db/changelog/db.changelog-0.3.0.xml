@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="add-contract-notifications-table" author="paulrozhkin">
+        <createTable schemaName="public"
+                     tableName="contract_notifications">
+            <column name="id" type="serial" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="contract" type="integer">
+                <constraints foreignKeyName="fk_contract_notifications_contracts" references="contracts(id)" nullable="false"/>
+            </column>
+
+            <column name="old_status" type="text">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="new_status" type="text">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="confirmed" type="boolean"/>
+
+            <column name="created" type="timestamp with time zone" defaultValue="now()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="updated" type="timestamp with time zone" defaultValue="now()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
