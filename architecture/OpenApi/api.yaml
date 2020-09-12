@@ -519,12 +519,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorModel'
 
-    #Обновление модели пользователя
+  /api/v1/adventurers/{id}/status/:
+    # Обновление статуса авантюриста
     put:
       tags:
         - adventurers
-      operationId: updateAdventurerById
-      summary: Update the adventurer model
+      operationId: updateAdventurerStatusById
+      summary: Update the adventurer status
       security:
         - bearerAuth: []
       parameters:
@@ -538,7 +539,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/adventurerUpdatableModel'
+              $ref: '#/components/schemas/adventurerStatusUpdatableModel'
         required: true
       responses:
         '200':
@@ -560,7 +561,67 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorModel'
         '403':
-          description: "Forbidden. Registrar can only update the status, distributor can only update the ranks."
+          description: "Forbidden. Registrar and admin can only update the status."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+  /api/v1/adventurers/{id}/ranks/:
+    # Обновление ранга авантюриста
+    put:
+      tags:
+        - adventurers
+      operationId: updateAdventurerRankById
+      summary: Update the adventurer rank
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          description: 'User ID.'
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/adventurerRanksUpdatableModel'
+        required: true
+      responses:
+        '200':
+          description: The adventurer model was updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adventurerModel'
+        '400':
+          description: Bad Reaquest.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '403':
+          description: "Forbidden. Distributor and admin can only update the ranks."
           content:
             application/json:
               schema:
@@ -1095,19 +1156,21 @@ components:
               type: string
               example: "I want to kill all the goblins."
 
-    adventurerUpdatableModel:
+    adventurerStatusUpdatableModel:
       type: object
       properties:
         status:
           $ref: '#/components/schemas/adventurerStatus'
-        rank:
-          type: object
-          properties:
-            newRank:
-              $ref: '#/components/schemas/ranksModel'
-            reason:
-              type: string
-              description: "Reason for changing rank"
+
+    adventurerRanksUpdatableModel:
+      type: object
+      properties:
+        newRank:
+          $ref: '#/components/schemas/ranksModel'
+        reason:
+          type: string
+          description: "Reason for changing rank"
+          example: "Too weak."
 
     role:
       description: 'User role in system. Define user privileges in the system.'
