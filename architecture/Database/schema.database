@@ -9,6 +9,7 @@ Table users as U {
   adventurer_status         adventurer_status
   adventurer_experience     integer
   adventurer_rank           rank
+  adventurer_reason         text
   created                   timestamp
   updated                   timestamp
 }

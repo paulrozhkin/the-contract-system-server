@@ -1132,6 +1132,10 @@ components:
           example: 10
         rank:
           $ref: '#/components/schemas/ranksModel'
+        reason:
+          description: 'Reason for becoming an adventurer.'
+          type: string
+          example: "I want to kill all the goblins."
 
     adventurerModel:
       allOf:
@@ -1152,7 +1156,7 @@ components:
         - type: object
           properties:
             reason:
-              description: 'The user is status, whether blocked or not.'
+              description: 'Reason for becoming an adventurer.'
               type: string
               example: "I want to kill all the goblins."
 
@@ -1393,7 +1397,6 @@ components:
           type: string
           format: date-time
           example: '2017-07-21T17:32:28Z'
-
 
     errorModel:
       type: object
