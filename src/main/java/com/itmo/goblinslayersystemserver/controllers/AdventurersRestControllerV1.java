@@ -10,6 +10,7 @@ import com.itmo.goblinslayersystemserver.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Collections;
 import java.util.stream.Collectors;
@@ -77,20 +78,6 @@ public class AdventurersRestControllerV1 {
      **/
     @PutMapping(value = "/{id}/ranks/", consumes = {"application/json"}, produces = {"application/json"})
     public AdventurerDto updateAdventurerRank(@PathVariable Integer id, @RequestBody AdventurerRankUpdateDto adventurerRankUpdateDto) {
-        User mockUser = new User();
-        mockUser.setId(1);
-        Role role = new Role();
-        role.setName(RoleEnum.ROLE_ADVENTURER);
-        mockUser.setRoles(Collections.singletonList(role));
-        mockUser.setAddress("mock address");
-        mockUser.setUsername("mock username");
-        mockUser.setName("mock name");
-        mockUser.setAdventurerExperience(100000);
-        mockUser.setAdventurerRank(adventurerRankUpdateDto.getNewRank());
-        mockUser.setAdventurerStatus(AdventurerStatus.NotConfirmed);
-
-        return new AdventurerDto(mockUser);
-
-        //return new UserDto(userService.update(id, user));
+        throw new NotImplementedException();
     }
 }
