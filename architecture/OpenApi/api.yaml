@@ -4,7 +4,7 @@ info:
   description: >-
     This is the API for a course project at ITMO University. The theme of the
     course is "The goblin slayer contract system". Server on github.
-  version: "0.3.0"
+  version: "0.4.0"
   title: Goblin Slayer Server API
 
 servers:
@@ -22,6 +22,8 @@ tags:
     description: Endrpoint for working with current account.
   - name: contracts
     description: Endpoint for working with contracts.
+  - name: adventurers
+    description: Endpoint for working with adventurers.
 
 
 paths:
@@ -188,7 +190,7 @@ paths:
                 $ref: '#/components/schemas/errorModel'
 
   /api/v1/admin/users/{id}:
-    #Обновление модели пользователя
+    # Обновление модели пользователя
     put:
       tags:
         - admin
@@ -323,6 +325,242 @@ paths:
                 $ref: '#/components/schemas/errorModel'
         '401':
           description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+  /api/v1/adventurers/:
+    # Получение списка авантюристов
+    get:
+      tags:
+        - adventurers
+      operationId: getAllAdventurers
+      summary: Getting a list of adventurers
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: username
+          schema:
+            type: string
+          required: false
+          description: Filtration by username
+        - in: query
+          name: rank
+          schema:
+            $ref: '#/components/schemas/ranksModel'
+          required: false
+          description: Filtration by rank. Returned all adventurers that equal to the required rank
+        - in: query
+          name: status
+          schema:
+            $ref: '#/components/schemas/adventurerStatus'
+          required: false
+          description: Adventurer status
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: false
+          description: Pagination parameter
+        - in: query
+          name: size
+          schema:
+            type: integer
+          required: false
+          description: Pagination parameter
+      responses:
+        '200':
+          description: Getting a list of users
+          content:
+            application-json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/paginationInfo'
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/adventurerModel'
+        '400':
+          description: Bad Reaquest.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '403':
+          description: Forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+    #Создание новой модели пользователя
+    post:
+      tags:
+        - adventurers
+      operationId: createAdventurer
+      summary: Create the adventurers model
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/adventurerCreatableModel'
+        required: true
+      responses:
+        '200':
+          description: The user's model was created successfully.
+          content:
+            application-json:
+              schema:
+                $ref: '#/components/schemas/user'
+        '400':
+          description: Bad Reaquest.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+  /api/v1/adventurers/{id}:
+    #Получение модели авантюриста по ID
+    get:
+      tags:
+        - adventurers
+      operationId: getAdventurerById
+      summary: Getting the adventurer model by ID
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          description: 'Adventurer ID.'
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Adventurer model
+          content:
+            application-json:
+              schema:
+                $ref: '#/components/schemas/adventurerModel'
+        '400':
+          description: Bad Reaquest.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+    #Обновление модели пользователя
+    put:
+      tags:
+        - adventurers
+      operationId: updateAdventurerById
+      summary: Update the adventurer model
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          description: 'User ID.'
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/adventurerUpdatableModel'
+        required: true
+      responses:
+        '200':
+          description: The adventurer model was updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adventurerModel'
+        '400':
+          description: Bad Reaquest.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '403':
+          description: "Forbidden. Registrar can only update the status, distributor can only update the ranks."
           content:
             application/json:
               schema:
@@ -799,6 +1037,7 @@ components:
         - $ref: '#/components/schemas/credentials'
         - $ref: '#/components/schemas/userCommonInfo'
 
+
     userCreatableModel:
       allOf:
         - $ref: '#/components/schemas/credentials'
@@ -807,6 +1046,7 @@ components:
     userUpdatableModel:
       allOf:
         - $ref: '#/components/schemas/userCommonInfoWithBlocked'
+
 
     userIdModel:
       type: object
@@ -819,7 +1059,55 @@ components:
     userModel:
       allOf:
         - $ref: '#/components/schemas/userCommonInfoWithBlocked'
-        - $ref: '#/components/schemas/adventurerModel'
+
+    adventurerInfo:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/adventurerStatus'
+        experience:
+          description: 'Experience points obtained by the adventurer'
+          type: integer
+          example: 10
+        rank:
+          $ref: '#/components/schemas/ranksModel'
+
+    adventurerModel:
+      allOf:
+        - $ref: '#/components/schemas/userIdModel'
+        - type: object
+          properties:
+            username:
+              description: 'Username.'
+              type: string
+              example: 'blackIIIfox@gmail.com'
+        - $ref: '#/components/schemas/userCommonInfoWithoutRoles'
+        - $ref: '#/components/schemas/adventurerInfo'
+
+    adventurerCreatableModel:
+      allOf:
+        - $ref: '#/components/schemas/credentials'
+        - $ref: '#/components/schemas/userCommonInfoWithoutRoles'
+        - type: object
+          properties:
+            reason:
+              description: 'The user is status, whether blocked or not.'
+              type: string
+              example: "I want to kill all the goblins."
+
+    adventurerUpdatableModel:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/adventurerStatus'
+        rank:
+          type: object
+          properties:
+            newRank:
+              $ref: '#/components/schemas/ranksModel'
+            reason:
+              type: string
+              description: "Reason for changing rank"
 
     role:
       description: 'User role in system. Define user privileges in the system.'
@@ -855,18 +1143,6 @@ components:
         - Completed
       example:
         Created
-
-    adventurerModel:
-      type: object
-      properties:
-        adventurerStatus:
-          $ref: '#/components/schemas/adventurerStatus'
-        adventurerExperience:
-          description: 'Experience points obtained by the adventurer'
-          type: integer
-          example: 10
-        adventurerRank:
-          $ref: '#/components/schemas/ranksModel'
 
     ranksModel:
       description: 'The rank of adventurer.'
