@@ -8,10 +8,11 @@ import com.itmo.goblinslayersystemserver.models.enums.AdventurerStatus;
 import com.itmo.goblinslayersystemserver.models.enums.RoleEnum;
 import com.itmo.goblinslayersystemserver.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(Endpoints.AdventurersRestControllerV1)
@@ -29,19 +30,21 @@ public class AdventurersRestControllerV1 {
                                                   @RequestParam(required = false) AdventurerStatus status,
                                                   @RequestParam(defaultValue = "0") int page,
                                                   @RequestParam(defaultValue = "5") int size) {
+        Page<User> usersPage = userService.get(username,
+                rank,
+                status,
+                page,
+                size);
 
-        return new ItemsDto<AdventurerDto>(1, (long) 1, 1, new ArrayList<>());
-//        Page<User> usersPage = userService.get(username, page, size);
-//
-//        return new ItemsDto<>(
-//                usersPage.getNumber(),
-//                usersPage.getTotalElements(),
-//                usersPage.getTotalPages(),
-//                usersPage
-//                        .getContent()
-//                        .stream()
-//                        .map(UserDto::new)
-//                        .collect(Collectors.toList()));
+        return new ItemsDto<>(
+                usersPage.getNumber(),
+                usersPage.getTotalElements(),
+                usersPage.getTotalPages(),
+                usersPage
+                        .getContent()
+                        .stream()
+                        .map(AdventurerDto::new)
+                        .collect(Collectors.toList()));
     }
 
     /**
@@ -50,18 +53,7 @@ public class AdventurersRestControllerV1 {
      **/
     @PostMapping(consumes = {"application/json"}, produces = {"application/json"})
     public AdventurerDto createAdventurer(@RequestBody AdventurerCreateDto adventurer) {
-        User mockUser = new User();
-        Role role = new Role();
-        role.setName(RoleEnum.ROLE_ADVENTURER);
-        mockUser.setId(1);
-        mockUser.setRoles(Collections.singletonList(role));
-        mockUser.setAddress("mock address");
-        mockUser.setUsername("mock username");
-        mockUser.setAdventurerExperience(100000);
-        mockUser.setAdventurerRank(AdventurerRank.Gold);
-        mockUser.setAdventurerStatus(AdventurerStatus.NotConfirmed);
-
-        return new AdventurerDto(mockUser);
+        return new AdventurerDto(userService.create(adventurer));
     }
 
     /**
@@ -69,20 +61,7 @@ public class AdventurersRestControllerV1 {
      **/
     @GetMapping(value = "/{id}", consumes = {"application/json"}, produces = {"application/json"})
     public AdventurerDto getAdventurer(@PathVariable Integer id) {
-        User mockUser = new User();
-        mockUser.setId(1);
-        Role role = new Role();
-        role.setName(RoleEnum.ROLE_ADVENTURER);
-        mockUser.setRoles(Collections.singletonList(role));
-        mockUser.setAddress("mock address");
-        mockUser.setUsername("mock username");
-        mockUser.setName("mock name");
-        mockUser.setAdventurerExperience(100000);
-        mockUser.setAdventurerRank(AdventurerRank.Gold);
-        mockUser.setAdventurerStatus(AdventurerStatus.NotConfirmed);
-
-        return new AdventurerDto(mockUser);
-        // return new UserDto(userService.get(id));
+        return new AdventurerDto(userService.get(id));
     }
 
     /**

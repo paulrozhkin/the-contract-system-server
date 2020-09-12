@@ -1,5 +1,6 @@
 package com.itmo.goblinslayersystemserver.dto;
 
+import com.itmo.goblinslayersystemserver.exceptions.BadRequestException;
 import com.itmo.goblinslayersystemserver.models.User;
 import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
 import com.itmo.goblinslayersystemserver.models.enums.AdventurerStatus;
@@ -23,12 +24,14 @@ public class AdventurerDto {
     private Integer experience;
     @NonNull
     private AdventurerRank rank;
+    @NonNull
+    private String reason;
 
     public AdventurerDto(User user) {
         if (user.getRoles().stream().noneMatch(role ->
                 role.getName() == RoleEnum.ROLE_ADVENTURER))
         {
-            throw new RuntimeException("User not adventurer");
+            throw new BadRequestException("User not adventurer");
         }
 
         id = user.getId();
@@ -38,5 +41,6 @@ public class AdventurerDto {
         experience = user.getAdventurerExperience();
         rank = user.getAdventurerRank();
         status = user.getAdventurerStatus();
+        reason = user.getAdventurerReason();
     }
 }

@@ -10,6 +10,8 @@ import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.querydsl.binding.SingleValueBinding;
 
+import java.util.List;
+
 public interface UserRepository extends JpaRepository<User, Integer>,
         QuerydslPredicateExecutor<User>,
         QuerydslBinderCustomizer<QUser> {
