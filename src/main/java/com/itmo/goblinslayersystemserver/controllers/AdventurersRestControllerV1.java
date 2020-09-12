@@ -25,10 +25,12 @@ public class AdventurersRestControllerV1 {
      **/
     @GetMapping(produces = {"application/json"})
     public ItemsDto<AdventurerDto> getAdventurers(@RequestParam(required = false) String username,
-                                      @RequestParam(defaultValue = "0") int page,
-                                      @RequestParam(defaultValue = "5") int size) {
+                                                  @RequestParam(required = false) AdventurerRank rank,
+                                                  @RequestParam(required = false) AdventurerStatus status,
+                                                  @RequestParam(defaultValue = "0") int page,
+                                                  @RequestParam(defaultValue = "5") int size) {
 
-        return new ItemsDto<AdventurerDto>(1, (long)1, 1, new ArrayList<>());
+        return new ItemsDto<AdventurerDto>(1, (long) 1, 1, new ArrayList<>());
 //        Page<User> usersPage = userService.get(username, page, size);
 //
 //        return new ItemsDto<>(
