@@ -16,7 +16,7 @@ The server application for the contract system in the world "Goblin Slayer".
 ## Deployment:
 This section describes how to deploy a server.
 
-###Developer environment:
+### Developer environment:
 1. Download [repository](https://github.com/BlackIIIFOX/GoblinSlayerRankSystemClient) client application.
 2. Install [PostgreSQL](https://www.postgresql.org/download/) on your machine
 3. Create a database in PostgreSQL as `the_contract_system`
@@ -43,7 +43,7 @@ jwt.token.secret=<secret key to generate jwt XxnIa43zAUuo1gXHzkM5>
 ```
 5. Run server from maven script or in IntelliJ
 
-###Production environment:
+### Production environment:
 Deployment to a production environment is an automated process through Jenkins CI.
 [Jenkins](http://paulrozhkin.ru:8080/blue/organizations/jenkins/the-contract-system-server-pipeline/branches) automatically deploys software to production server when merged into master.
 For changing pipeline see Jenkinsfile in source folder. 
