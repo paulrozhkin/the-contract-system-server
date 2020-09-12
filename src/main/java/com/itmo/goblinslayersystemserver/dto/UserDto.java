@@ -24,9 +24,6 @@ public class UserDto {
     private List<RoleDto> roles;
     @NonNull
     private Boolean blocked;
-    private AdventurerStatus adventurerStatus;
-    private Integer adventurerExperience;
-    private AdventurerRank adventurerRank;
 
     public UserDto(User user) {
         id = user.getId();
@@ -58,8 +55,5 @@ public class UserDto {
 
         roles = rolesDto;
         blocked = user.isBlocked();
-        adventurerExperience = user.getAdventurerExperience();
-        adventurerRank = user.getAdventurerRank();
-        adventurerStatus = user.getAdventurerStatus();
     }
 }
