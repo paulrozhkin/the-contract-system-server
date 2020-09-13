@@ -2,11 +2,13 @@ package com.itmo.goblinslayersystemserver.services.implementation;
 
 import com.itmo.goblinslayersystemserver.dto.ContractCreateDto;
 import com.itmo.goblinslayersystemserver.dto.ContractUpdateDto;
+import com.itmo.goblinslayersystemserver.exceptions.BadRequestException;
 import com.itmo.goblinslayersystemserver.exceptions.NotFoundException;
 import com.itmo.goblinslayersystemserver.models.Contract;
 import com.itmo.goblinslayersystemserver.models.QContract;
 import com.itmo.goblinslayersystemserver.models.User;
 import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
+import com.itmo.goblinslayersystemserver.models.enums.AdventurerStatus;
 import com.itmo.goblinslayersystemserver.models.enums.ContractStatus;
 import com.itmo.goblinslayersystemserver.repositories.ContractRepository;
 import com.itmo.goblinslayersystemserver.services.IContractService;
@@ -17,7 +19,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Optional;
 
@@ -147,16 +148,77 @@ public class ContractService implements IContractService {
 
     @Override
     public Contract startPerforming(Integer id, User executor) {
-        throw new NotImplementedException();
+        Optional<Contract> contractOptional = contractRepository.findById(id);
+        if (!contractOptional.isPresent()) {
+            throw new NotFoundException();
+        }
+
+        Contract contract = contractOptional.get();
+
+        if (contract.getContractStatus() != ContractStatus.Accepted) {
+            throw new BadRequestException("Contract have invalid status for start performing (must be Accepted) - " + contract.getContractStatus());
+        }
+
+        if (contract.getExecutor() != null) {
+            throw new BadRequestException("Contract already have executor id - " + contract.getExecutor());
+        }
+
+        if (executor.getAdventurerRank().IsLess(contract.getMinRank())) {
+            throw new BadRequestException("Adventurer can't start performing. Minimum rank is - " + contract.getMinRank());
+        }
+
+        if (executor.getAdventurerStatus() != AdventurerStatus.Active) {
+            throw new BadRequestException("Adventurer can't start performing. He's not active - " + executor.getAdventurerStatus());
+        }
+
+        contract.setExecutor(executor.getId());
+        contract.setContractStatus(ContractStatus.Performing);
+        contract.setCancellationComment(null);
+        contractRepository.save(contract);
+
+        return get(id);
     }
 
     @Override
     public Contract stopPerformingContract(Integer id, String performedComment) {
-        throw new NotImplementedException();
+        Optional<Contract> contractOptional = contractRepository.findById(id);
+        if (!contractOptional.isPresent()) {
+            throw new NotFoundException();
+        }
+
+        Contract contract = contractOptional.get();
+
+        if (contract.getContractStatus() != ContractStatus.Performing) {
+            throw new BadRequestException("Contract have invalid status for start performing (must be Performing) - " + contract.getContractStatus());
+        }
+
+        contract.setContractStatus(ContractStatus.Performed);
+        contract.setPerformedComment(performedComment);
+        contract.setCancellationComment(null);
+        contractRepository.save(contract);
+
+        return get(id);
     }
 
     @Override
     public Contract cancelContract(Integer id, String cancellationComment) {
-        throw new NotImplementedException();
+        Optional<Contract> contractOptional = contractRepository.findById(id);
+        if (!contractOptional.isPresent()) {
+            throw new NotFoundException();
+        }
+
+        Contract contract = contractOptional.get();
+
+        if (contract.getContractStatus() != ContractStatus.Performing) {
+            throw new BadRequestException("Contract have invalid status for cancel performing (must be Performing) - " + contract.getContractStatus());
+        }
+
+        contract.setContractStatus(ContractStatus.Accepted);
+        contract.setCancellationComment(cancellationComment);
+        contract.setExecutor(null);
+        contract.setPerformedComment(null);
+        contractRepository.save(contract);
+
+        return get(id);
     }
 }

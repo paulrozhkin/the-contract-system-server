@@ -38,6 +38,15 @@ public enum AdventurerRank {
      }
 
      /**
+      * Сравнивает два ранга на меньшинство.
+      * @param rank ранг-параметр.
+      * @return Возвращает true, если ранг меньше по приоритету.
+      */
+     public boolean IsLess(AdventurerRank rank) {
+          return this.getExperienceRequired() < rank.getExperienceRequired();
+     }
+
+     /**
       * Возвращает ранги, которые являются меньше, чем передаваемый ранг (сам ранг тоже входит в коллекцию).
       * @param rank анализируемый ранг.
       * @return Коллекция рангов, которые меньше, либо равны по приоритету.
