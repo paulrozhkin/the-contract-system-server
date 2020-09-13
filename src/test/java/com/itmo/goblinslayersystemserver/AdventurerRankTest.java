@@ -31,9 +31,7 @@ public class AdventurerRankTest {
         AdventurerRank givenRank = AdventurerRank.Sapphire;
         AdventurerRank givenRankLess = AdventurerRank.Emerald;
 
-        // When
-
-        // Then
+        // When & Then
         assertTrue(givenRank.IsLessOrEqual(givenRankLess));
     }
 
@@ -43,9 +41,36 @@ public class AdventurerRankTest {
         AdventurerRank givenRank = AdventurerRank.Sapphire;
         AdventurerRank givenRankEqual = AdventurerRank.Sapphire;
 
-        // When
+        //
 
-        // Then
+        // When & Then
         assertTrue(givenRank.IsLessOrEqual(givenRankEqual));
+    }
+
+    @Test
+    public void Should_CorrectNextRank_When_RankNotMaximum() {
+        // Given
+        AdventurerRank givenRank = AdventurerRank.Sapphire;
+
+        // When & Then
+        assertEquals(AdventurerRank.Emerald, givenRank.NextRank());
+    }
+
+    @Test
+    public void Should_CorrectNextRank_When_RankMaximum() {
+        // Given
+        AdventurerRank givenRank = AdventurerRank.Platinum;
+
+        // When & Then
+        assertEquals(AdventurerRank.Platinum, givenRank.NextRank());
+    }
+
+    @Test
+    public void Should_CorrectNextRank_When_RankMinimum() {
+        // Given
+        AdventurerRank givenRank = AdventurerRank.Porcelain;
+
+        // When & Then
+        assertEquals(AdventurerRank.Obsidian, givenRank.NextRank());
     }
 }

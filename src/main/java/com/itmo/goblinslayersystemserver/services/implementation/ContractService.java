@@ -12,6 +12,7 @@ import com.itmo.goblinslayersystemserver.models.enums.AdventurerStatus;
 import com.itmo.goblinslayersystemserver.models.enums.ContractStatus;
 import com.itmo.goblinslayersystemserver.repositories.ContractRepository;
 import com.itmo.goblinslayersystemserver.services.IContractService;
+import com.itmo.goblinslayersystemserver.services.IUserService;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class ContractService implements IContractService {
 
     @Autowired
     ContractRepository contractRepository;
+
+    @Autowired
+    IUserService userService;
 
     @Override
     public Page<Contract> get(String nameContractFilter,
@@ -95,11 +99,12 @@ public class ContractService implements IContractService {
 
     @Override
     public Contract get(Integer id) {
-        try {
-            return contractRepository.findById(id).get();
-        } catch (Exception e) {
+        Optional<Contract> contractOptional = contractRepository.findById(id);
+        if (!contractOptional.isPresent()) {
             throw new NotFoundException();
         }
+
+        return contractOptional.get();
     }
 
     @Override
@@ -121,6 +126,12 @@ public class ContractService implements IContractService {
         contract.setRequestComment(update.getRequestComment());
         contract.setRegistrarComment(update.getRegistrarComment());
         contract.setPerformedComment(update.getPerformedComment());
+
+        if (contract.getContractStatus() == ContractStatus.Completed) {
+            // За выполнение любого контракта даем 1 единцицу опыта авантюристу.
+            userService.updateAdventurerRank(contract.getExecutor(), 1);
+        }
+
         contractRepository.save(contract);
 
         return get(contract.getId());
@@ -137,7 +148,6 @@ public class ContractService implements IContractService {
         contract.setDescription(update.getDescription());
         contract.setRequestComment(update.getRequestComment());
         contract.setRegistrarComment(update.getRegistrarComment());
-        contract.setPerformedComment(update.getClosedComment());
         return update(id, contract);
     }
 

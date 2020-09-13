@@ -1574,10 +1574,6 @@ components:
               description: 'Review of the Registrar.'
               type: string
               example: 'The abilities of goblins and Hobbs are not described.'
-            closedComment:
-              description: 'Revocation of the adventurer is contract performance.'
-              type: string
-              example: 'All dead.'
 
     contractModel:
       allOf:
