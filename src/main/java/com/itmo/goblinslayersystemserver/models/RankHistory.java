@@ -45,4 +45,18 @@ public class RankHistory extends BaseEntity {
      */
     @Column(name = "reason")
     private String reason;
+
+    /**
+     * Распределитель рангов, который выполнил изменение ранга (для типа Distributor)
+     **/
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "distributor")
+    private User distributor;
+
+    /**
+     * Контракт, благодаря которому был поднят ранг (для типа Auto)
+     **/
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "contract")
+    private Contract contract;
 }

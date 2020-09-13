@@ -10,6 +10,7 @@ import com.itmo.goblinslayersystemserver.models.enums.RoleEnum;
 import com.itmo.goblinslayersystemserver.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -79,7 +80,10 @@ public class AdventurersRestControllerV1 {
      **/
     @PutMapping(value = "/{id}/ranks/", consumes = {"application/json"}, produces = {"application/json"})
     public AdventurerDto updateAdventurerRank(@PathVariable Integer id, @RequestBody AdventurerRankUpdateDto adventurerRankUpdateDto) {
-        throw new NotImplementedException();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User distributor = userService.get(username);
+
+        return new AdventurerDto(userService.updateAdventurerRank(id, adventurerRankUpdateDto, distributor));
     }
 
     /**

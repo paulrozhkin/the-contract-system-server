@@ -24,6 +24,7 @@ public interface IUserService {
     User update(Integer id, User user);
     User update(Integer id, UserUpdateAdminDto user);
     User updateAdventurerStatus(Integer id, AdventurerStatus newStatus);
+    User updateAdventurerRank(Integer id, AdventurerRankUpdateDto adventurerRankUpdateDto, User distributor);
 
     void delete(Integer id);
 }

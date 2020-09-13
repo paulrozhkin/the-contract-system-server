@@ -1,9 +1,6 @@
 package com.itmo.goblinslayersystemserver.services.implementation;
 
-import com.itmo.goblinslayersystemserver.dto.AdventurerCreateDto;
-import com.itmo.goblinslayersystemserver.dto.UserCreateAdminDto;
-import com.itmo.goblinslayersystemserver.dto.UserCreateDto;
-import com.itmo.goblinslayersystemserver.dto.UserUpdateAdminDto;
+import com.itmo.goblinslayersystemserver.dto.*;
 import com.itmo.goblinslayersystemserver.exceptions.BadRequestException;
 import com.itmo.goblinslayersystemserver.exceptions.NotFoundException;
 import com.itmo.goblinslayersystemserver.models.QUser;
@@ -12,6 +9,7 @@ import com.itmo.goblinslayersystemserver.models.Role;
 import com.itmo.goblinslayersystemserver.models.User;
 import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
 import com.itmo.goblinslayersystemserver.models.enums.AdventurerStatus;
+import com.itmo.goblinslayersystemserver.models.enums.RankHistoryType;
 import com.itmo.goblinslayersystemserver.models.enums.RoleEnum;
 import com.itmo.goblinslayersystemserver.repositories.UserRepository;
 import com.itmo.goblinslayersystemserver.services.IRolesService;
@@ -166,6 +164,36 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public User updateAdventurerRank(Integer id, AdventurerRankUpdateDto adventurerRankUpdateDto, User distributor) {
+        Optional<User> userOptional = userRepository.findById(id);
+
+        if (!userOptional.isPresent()) {
+            throw new NotFoundException();
+        }
+
+        User user = userOptional.get();
+
+        if (user.getRoles().stream().noneMatch(role -> role.getName().equals(RoleEnum.ROLE_ADVENTURER))) {
+            throw new BadRequestException("User not adventurer.");
+        }
+
+        RankHistory newHistoryItem = new RankHistory();
+        newHistoryItem.setAdventurer(user);
+        newHistoryItem.setOldRank(user.getAdventurerRank());
+        newHistoryItem.setNewRank(adventurerRankUpdateDto.getNewRank());
+        newHistoryItem.setReason(adventurerRankUpdateDto.getReason());
+        newHistoryItem.setType(RankHistoryType.Distributor);
+        newHistoryItem.setDistributor(distributor);
+
+        user.getRankHistories().add(newHistoryItem);
+        user.setAdventurerRank(newHistoryItem.getNewRank());
+
+        userRepository.save(user);
+
+        return get(id);
+    }
+
+    @Override
     public User create(UserCreateDto user) {
         Role customerRole = rolesService.get(RoleEnum.ROLE_CUSTOMER);
         ArrayList<Role> userRoles = new ArrayList<>();
@@ -189,9 +217,7 @@ public class UserService implements IUserService {
             Role customerRole = rolesService.get(RoleEnum.ROLE_CUSTOMER);
             userRoles.add(customerRole);
         } else {
-            user.getRoles().forEach(roleDto -> {
-                userRoles.add(rolesService.get(roleDto));
-            });
+            user.getRoles().forEach(roleDto -> userRoles.add(rolesService.get(roleDto)));
         }
 
         User newUser = new User();
