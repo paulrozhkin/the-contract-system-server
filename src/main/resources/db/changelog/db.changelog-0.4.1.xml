@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="add-adventurer-rank-history-table" author="paulrozhkin">
+        <createTable schemaName="public"
+                     tableName="rank_history">
+            <column name="id" type="serial" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+
+            <column name="adventurer" type="integer">
+                <constraints foreignKeyName="fk_rank_history_users" references="users(id)" nullable="false"/>
+            </column>
+
+            <column name="old_rank" type="text">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="new_rank" type="text">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="type" type="text">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="reason" type="text"/>
+
+            <column name="created" type="timestamp with time zone" defaultValue="now()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="updated" type="timestamp with time zone" defaultValue="now()">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
