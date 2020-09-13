@@ -3,6 +3,7 @@ package com.itmo.goblinslayersystemserver.config;
 import com.itmo.goblinslayersystemserver.controllers.Endpoints;
 import com.itmo.goblinslayersystemserver.security.jwt.JwtConfigurer;
 import com.itmo.goblinslayersystemserver.security.jwt.JwtTokenProvider;
+import com.itmo.goblinslayersystemserver.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtTokenProvider jwtTokenProvider;
+    private IUserService userService;
 
     private final String ROLE_ADMIN = "ADMIN";
     private final String ROLE_CUSTOMER = "CUSTOMER";
@@ -27,8 +29,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Autowired
-    public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
+    public SecurityConfig(JwtTokenProvider jwtTokenProvider,
+                          IUserService userService) {
         this.jwtTokenProvider = jwtTokenProvider;
+        this.userService = userService;
     }
 
     @Bean
@@ -57,6 +61,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, Endpoints.UsersRestControllerV1).permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .apply(new JwtConfigurer(jwtTokenProvider));
+                .apply(new JwtConfigurer(jwtTokenProvider, userService));
     }
 }
