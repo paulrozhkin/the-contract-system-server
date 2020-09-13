@@ -45,7 +45,9 @@ public class ContractDto {
 
     private String registrarComment;
 
-    private String closedComment;
+    private String performedComment;
+
+    private String cancellationComment;
 
     public ContractDto(Contract contract) {
         id = contract.getId();
@@ -60,6 +62,7 @@ public class ContractDto {
         description = contract.getDescription();
         requestComment = contract.getRequestComment();
         registrarComment = contract.getRegistrarComment();
-        closedComment = contract.getClosedComment();
+        performedComment = contract.getPerformedComment();
+        cancellationComment = contract.getCancellationComment();
     }
 }

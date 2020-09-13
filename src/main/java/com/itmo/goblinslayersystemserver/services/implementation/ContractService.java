@@ -117,7 +117,7 @@ public class ContractService implements IContractService {
         contract.setDescription(update.getDescription());
         contract.setRequestComment(update.getRequestComment());
         contract.setRegistrarComment(update.getRegistrarComment());
-        contract.setClosedComment(update.getClosedComment());
+        contract.setPerformedComment(update.getPerformedComment());
         contractRepository.save(contract);
 
         return get(contract.getId());
@@ -134,7 +134,7 @@ public class ContractService implements IContractService {
         contract.setDescription(update.getDescription());
         contract.setRequestComment(update.getRequestComment());
         contract.setRegistrarComment(update.getRegistrarComment());
-        contract.setClosedComment(update.getClosedComment());
+        contract.setPerformedComment(update.getClosedComment());
         return update(id, contract);
     }
 
