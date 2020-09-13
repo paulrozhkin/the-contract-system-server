@@ -18,13 +18,14 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -269,8 +270,29 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Page<RankHistory> getAdventurerRankHistory() {
-        throw new NotImplementedException();
+    public Page<RankHistory> getAdventurerRankHistory(Integer id, int pagePagination,
+                                                      int sizePagination) {
+        Optional<User> userOptional = userRepository.findById(id);
+
+        if (!userOptional.isPresent()) {
+            throw new NotFoundException();
+        }
+
+        User user = userOptional.get();
+
+        if (user.getRoles().stream().noneMatch(role -> role.getName().equals(RoleEnum.ROLE_ADVENTURER))) {
+            throw new BadRequestException("User not adventurer.");
+        }
+
+        // Получем полный список истории рангов
+        List<RankHistory> rankHistoryList = user.getRankHistories();
+
+        // Создаем пагинацию
+        Pageable paging = PageRequest.of(pagePagination, sizePagination);
+        int start = Math.min((int)paging.getOffset(), rankHistoryList.size());
+        int end = Math.min((start + paging.getPageSize()), rankHistoryList.size());
+
+        return new PageImpl<>(rankHistoryList.subList(start, end), paging, rankHistoryList.size());
     }
 
     @Override

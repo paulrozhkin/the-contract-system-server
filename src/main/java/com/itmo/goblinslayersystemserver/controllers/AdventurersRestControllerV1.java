@@ -2,19 +2,15 @@ package com.itmo.goblinslayersystemserver.controllers;
 
 import com.itmo.goblinslayersystemserver.dto.*;
 import com.itmo.goblinslayersystemserver.models.RankHistory;
-import com.itmo.goblinslayersystemserver.models.Role;
 import com.itmo.goblinslayersystemserver.models.User;
 import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
 import com.itmo.goblinslayersystemserver.models.enums.AdventurerStatus;
-import com.itmo.goblinslayersystemserver.models.enums.RoleEnum;
 import com.itmo.goblinslayersystemserver.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.util.Collections;
 import java.util.stream.Collectors;
 
 @RestController
@@ -93,7 +89,7 @@ public class AdventurersRestControllerV1 {
     public ItemsDto<AdventurerRankHistoryDto> getAdventurerRankHistory(@PathVariable Integer id,
                                                                        @RequestParam(defaultValue = "0") int page,
                                                                        @RequestParam(defaultValue = "5") int size) {
-        Page<RankHistory> usersPage = userService.getAdventurerRankHistory();
+        Page<RankHistory> usersPage = userService.getAdventurerRankHistory(id, page, size);
 
         return new ItemsDto<>(
                 usersPage.getNumber(),

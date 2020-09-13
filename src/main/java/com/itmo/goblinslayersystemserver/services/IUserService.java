@@ -19,7 +19,9 @@ public interface IUserService {
 
     User get(Integer id);
     User get(String username);
-    Page<RankHistory> getAdventurerRankHistory();
+    Page<RankHistory> getAdventurerRankHistory(Integer id,
+                                               int pagePagination,
+                                               int sizePagination);
 
     User update(Integer id, User user);
     User update(Integer id, UserUpdateAdminDto user);
