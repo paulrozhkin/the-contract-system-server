@@ -655,6 +655,18 @@ paths:
           required: true
           schema:
             type: integer
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: false
+          description: Pagination parameter
+        - in: query
+          name: size
+          schema:
+            type: integer
+          required: false
+          description: Pagination parameter
       responses:
         '200':
           description: List of rank history
