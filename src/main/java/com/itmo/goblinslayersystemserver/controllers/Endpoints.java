@@ -7,4 +7,9 @@ public class Endpoints {
     public static final String AuthenticationRestControllerV1 = RestControllerV1 + "/auth/";
     public static final String ContractsRestControllerV1 = RestControllerV1 + "/contracts/";
     public static final String UsersRestControllerV1 = RestControllerV1 + "/users/";
+    public static final String AdventurersRestControllerV1 = RestControllerV1 + "/adventurers/";
+
+    // specific endpoints
+    public static final String AdventurersStatusUpdateRestControllerV1 = AdventurersRestControllerV1 + "{id}/status/";
+    public static final String AdventurersRankUpdateRestControllerV1 = AdventurersRestControllerV1 + "{id}/ranks/";
 }

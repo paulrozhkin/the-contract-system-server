@@ -91,4 +91,10 @@ public class User extends BaseEntity {
     @Column(name="adventurer_rank")
     @Enumerated(EnumType.STRING)
     private AdventurerRank adventurerRank;
+
+    /**
+     * Причина становления авантюристом.
+     */
+    @Column(name = "adventurer_reason")
+    private String adventurerReason;
 }
