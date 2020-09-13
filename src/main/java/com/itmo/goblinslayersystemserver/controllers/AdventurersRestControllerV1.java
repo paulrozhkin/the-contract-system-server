@@ -1,6 +1,7 @@
 package com.itmo.goblinslayersystemserver.controllers;
 
 import com.itmo.goblinslayersystemserver.dto.*;
+import com.itmo.goblinslayersystemserver.models.RankHistory;
 import com.itmo.goblinslayersystemserver.models.Role;
 import com.itmo.goblinslayersystemserver.models.User;
 import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
@@ -79,5 +80,25 @@ public class AdventurersRestControllerV1 {
     @PutMapping(value = "/{id}/ranks/", consumes = {"application/json"}, produces = {"application/json"})
     public AdventurerDto updateAdventurerRank(@PathVariable Integer id, @RequestBody AdventurerRankUpdateDto adventurerRankUpdateDto) {
         throw new NotImplementedException();
+    }
+
+    /**
+     * Get запрос для истории рангов авантюриста из системы по его ID
+     **/
+    @GetMapping(value = "/{id}/ranks/history/", consumes = {"application/json"}, produces = {"application/json"})
+    public ItemsDto<AdventurerRankHistoryDto> getAdventurerRankHistory(@PathVariable Integer id,
+                                                                       @RequestParam(defaultValue = "0") int page,
+                                                                       @RequestParam(defaultValue = "5") int size) {
+        Page<RankHistory> usersPage = userService.getAdventurerRankHistory();
+
+        return new ItemsDto<>(
+                usersPage.getNumber(),
+                usersPage.getTotalElements(),
+                usersPage.getTotalPages(),
+                usersPage
+                        .getContent()
+                        .stream()
+                        .map(AdventurerRankHistoryDto::new)
+                        .collect(Collectors.toList()));
     }
 }

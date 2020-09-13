@@ -7,6 +7,7 @@ import com.itmo.goblinslayersystemserver.dto.UserUpdateAdminDto;
 import com.itmo.goblinslayersystemserver.exceptions.BadRequestException;
 import com.itmo.goblinslayersystemserver.exceptions.NotFoundException;
 import com.itmo.goblinslayersystemserver.models.QUser;
+import com.itmo.goblinslayersystemserver.models.RankHistory;
 import com.itmo.goblinslayersystemserver.models.Role;
 import com.itmo.goblinslayersystemserver.models.User;
 import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
@@ -23,6 +24,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -238,6 +240,11 @@ public class UserService implements IUserService {
     @Override
     public User get(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public Page<RankHistory> getAdventurerRankHistory() {
+        throw new NotImplementedException();
     }
 
     @Override
