@@ -1,5 +1,7 @@
 package com.itmo.goblinslayersystemserver.controllers;
 
+import com.itmo.goblinslayersystemserver.dto.AccountPasswordUpdateDto;
+import com.itmo.goblinslayersystemserver.dto.AccountUpdateDto;
 import com.itmo.goblinslayersystemserver.dto.NotificationDto;
 import com.itmo.goblinslayersystemserver.dto.UserDto;
 import com.itmo.goblinslayersystemserver.models.User;
@@ -27,6 +29,24 @@ public class AccountRestControllerV1 {
     public UserDto getCurrentUser() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         return new UserDto(userService.get(username));
+    }
+
+    /**
+     * Get запрос серверу для обнолвнеия данных текущего пользователя
+     **/
+    @PutMapping(consumes = {"application/json"}, produces = {"application/json"})
+    public UserDto updateCurrentUser(@RequestBody AccountUpdateDto accountUpdateDto) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return new UserDto(userService.update(username, accountUpdateDto));
+    }
+
+    /**
+     * Get запрос серверу для обнолвнеия данных текущего пользователя
+     **/
+    @PutMapping(value = "/password/", consumes = {"application/json"}, produces = {"application/json"})
+    public UserDto updatePasswordCurrentUser(@RequestBody AccountPasswordUpdateDto passwordUpdateDto) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return new UserDto(userService.updatePassword(username, passwordUpdateDto));
     }
 
     /**

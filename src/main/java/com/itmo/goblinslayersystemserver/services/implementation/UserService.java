@@ -204,6 +204,32 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public User update(String username, AccountUpdateDto accountUpdateDto) {
+        User user = get(username);
+
+        user.setName(accountUpdateDto.getName());
+        user.setAddress(accountUpdateDto.getAddress());
+
+        userRepository.save(user);
+
+        return get(user.getId());
+    }
+
+    @Override
+    public User updatePassword(String username, AccountPasswordUpdateDto passwordUpdateDto) {
+        User user = get(username);
+
+        if (!passwordEncoder.matches(passwordUpdateDto.getOldPassword(), user.getPassword())) {
+            throw new BadRequestException("Incorrect password entered.");
+        }
+
+        user.setPassword(passwordEncoder.encode(passwordUpdateDto.getNewPassword()));
+        userRepository.save(user);
+
+        return get(user.getId());
+    }
+
+    @Override
     public User create(UserCreateDto user) {
         Role customerRole = rolesService.get(RoleEnum.ROLE_CUSTOMER);
         ArrayList<Role> userRoles = new ArrayList<>();
