@@ -47,6 +47,8 @@ Table contracts as CT {
   description               text
   customer_comment          text
   registrar_comment         text
+  performed_comment         text
+  cancellation_comment      text
   created                   timestamp
   updated                   timestamp
 }
@@ -101,7 +103,6 @@ Enum rank_type {
   Auto
   Distributor
 }
-
 
 Enum rank {
   Platinum    // adventurer_experience for rank - 10000

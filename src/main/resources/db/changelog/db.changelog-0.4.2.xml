@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="add-new-columns-for-adventurer-contract-management" author="paulrozhkin">
+        <addColumn schemaName="public"
+                   tableName="contracts">
+            <column name="cancellation_comment"
+                    position="12"
+                    type="text"/>
+        </addColumn>
+
+        <renameColumn columnDataType="text"
+                      newColumnName="performed_comment"
+                      oldColumnName="closed_comment"
+                      schemaName="public"
+                      tableName="contracts"/>
+    </changeSet>
+</databaseChangeLog>

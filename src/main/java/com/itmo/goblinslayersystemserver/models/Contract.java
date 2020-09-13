@@ -86,10 +86,16 @@ public class Contract extends BaseEntity {
     private String registrarComment;
 
     /**
-     * Комментарий авантюриста при закрытии контракта
+     * Комментарий авантюриста при завершении контракта
      **/
-    @Column(name="closed_comment")
-    private String closedComment;
+    @Column(name="performed_comment")
+    private String performedComment;
+
+    /**
+     * Комментарий авантюриста при отмене контракта
+     **/
+    @Column(name="cancellation_comment")
+    private String cancellationComment;
 
     /**
      * Оповещения об изменении статуса контракта.

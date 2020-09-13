@@ -1079,6 +1079,180 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorModel'
 
+  /api/v1/contracts/{id}/perform/:
+    # Начать исполнение контракта авантюристом
+    post:
+      tags:
+        - contracts
+      operationId: startPerformContractByAdventurer
+      summary: Start performing contact
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          description: 'Contract ID.'
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: The adventurer model was updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/contract'
+        '400':
+          description: Bad Reaquest.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '403':
+          description: "Forbidden. Only adventurer can start perform contact."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+  /api/v1/contracts/{id}/performed/:
+    # Завершить исполнение контракта авантюристом
+    post:
+      tags:
+        - contracts
+      operationId: performedContractByAdventurer
+      summary: Stop performing contract if completed
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          description: 'Contract ID.'
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/contractPerformedModel'
+        required: true
+      responses:
+        '200':
+          description: The adventurer model was updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/contract'
+        '400':
+          description: Bad Reaquest.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '403':
+          description: "Forbidden. Only adventurer can stop performing contact."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+  /api/v1/contracts/{id}/cancel/:
+    # Отменить исполнение контракта текущим авантюристом
+    post:
+      tags:
+        - contracts
+      operationId: cancelContractByAdventurer
+      summary: Cancel contact
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          description: 'Contract ID.'
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/contractCancellationModel'
+        required: true
+      responses:
+        '200':
+          description: The contract was cancelled.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/contract'
+        '400':
+          description: Bad Reaquest.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '403':
+          description: "Forbidden. Only adventurer, registrar and admin can cancel contact."
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
 components:
   schemas:
 
@@ -1171,7 +1345,6 @@ components:
         - $ref: '#/components/schemas/credentials'
         - $ref: '#/components/schemas/userCommonInfo'
 
-
     userCreatableModel:
       allOf:
         - $ref: '#/components/schemas/credentials'
@@ -1180,7 +1353,6 @@ components:
     userUpdatableModel:
       allOf:
         - $ref: '#/components/schemas/userCommonInfoWithBlocked'
-
 
     userIdModel:
       type: object
@@ -1452,10 +1624,14 @@ components:
               description: 'Review of the Registrar.'
               type: string
               example: 'The abilities of goblins and Hobbs are not described.'
-            closedComment:
+            performedComment:
               description: 'Revocation of the adventurer is contract performance.'
               type: string
               example: 'All dead.'
+            cancellationComment:
+              description: 'Cancellation comment.'
+              type: string
+              example: 'The contract was too difficult.'
 
     notification:
       allOf:
@@ -1498,6 +1674,22 @@ components:
           type: string
           format: date-time
           example: '2017-07-21T17:32:28Z'
+
+    contractPerformedModel:
+      type: object
+      properties:
+        performedComment:
+          description: 'Unique identifier of the contractNotification.'
+          type: string
+          example: "All the goblins are killed."
+
+    contractCancellationModel:
+      type: object
+      properties:
+        cancellationComment:
+          description: 'Unique identifier of the contractNotification.'
+          type: string
+          example: "The contract was too difficult."
 
     errorModel:
       type: object
