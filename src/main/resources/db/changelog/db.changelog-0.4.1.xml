@@ -30,6 +30,14 @@
 
             <column name="reason" type="text"/>
 
+            <column name="distributor" type="integer">
+                <constraints foreignKeyName="fk_rank_history_users_distributor" references="users(id)" nullable="true"/>
+            </column>
+
+            <column name="contract" type="integer">
+                <constraints foreignKeyName="fk_rank_history_contracts" references="contracts(id)" nullable="true"/>
+            </column>
+
             <column name="created" type="timestamp with time zone" defaultValue="now()">
                 <constraints nullable="false"/>
             </column>

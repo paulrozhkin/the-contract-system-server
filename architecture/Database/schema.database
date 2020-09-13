@@ -68,6 +68,8 @@ Table rank_history as RH {
   new_rank                  rank
   type                      rank_type
   reason                    text
+  distributor               integer [ref: > U.id]
+  contract                  integer [ref: > CT.id]
   created                   timestamp
   updated                   timestamp
 }
