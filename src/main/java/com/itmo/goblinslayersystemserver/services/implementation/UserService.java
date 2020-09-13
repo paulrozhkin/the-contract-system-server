@@ -146,13 +146,7 @@ public class UserService implements IUserService {
 
     @Override
     public User updateAdventurerStatus(Integer id, AdventurerStatus newStatus) {
-        Optional<User> userOptional = userRepository.findById(id);
-
-        if (!userOptional.isPresent()) {
-            throw new NotFoundException();
-        }
-
-        User user = userOptional.get();
+        User user = get(id);
 
         if (user.getRoles().stream().noneMatch(role -> role.getName().equals(RoleEnum.ROLE_ADVENTURER))) {
             throw new BadRequestException("User not adventurer.");
@@ -166,13 +160,7 @@ public class UserService implements IUserService {
 
     @Override
     public User updateAdventurerRank(Integer id, AdventurerRankUpdateDto adventurerRankUpdateDto, User distributor) {
-        Optional<User> userOptional = userRepository.findById(id);
-
-        if (!userOptional.isPresent()) {
-            throw new NotFoundException();
-        }
-
-        User user = userOptional.get();
+        User user = get(id);
 
         if (user.getRoles().stream().noneMatch(role -> role.getName().equals(RoleEnum.ROLE_ADVENTURER))) {
             throw new BadRequestException("User not adventurer.");
@@ -188,6 +176,27 @@ public class UserService implements IUserService {
 
         user.getRankHistories().add(newHistoryItem);
         user.setAdventurerRank(newHistoryItem.getNewRank());
+
+        userRepository.save(user);
+
+        return get(id);
+    }
+
+    @Override
+    public User updateAdventurerRank(Integer id, Integer experience) {
+        User user = get(id);
+
+        if (user.getRoles().stream().noneMatch(role -> role.getName().equals(RoleEnum.ROLE_ADVENTURER))) {
+            throw new BadRequestException("User not adventurer.");
+        }
+
+        AdventurerRank nextRank = user.getAdventurerRank().NextRank();
+
+        user.setAdventurerExperience(user.getAdventurerExperience() + experience);
+
+        if (user.getAdventurerExperience() >= nextRank.getExperienceRequired()) {
+            user.setAdventurerRank(nextRank);
+        }
 
         userRepository.save(user);
 
@@ -272,13 +281,7 @@ public class UserService implements IUserService {
     @Override
     public Page<RankHistory> getAdventurerRankHistory(Integer id, int pagePagination,
                                                       int sizePagination) {
-        Optional<User> userOptional = userRepository.findById(id);
-
-        if (!userOptional.isPresent()) {
-            throw new NotFoundException();
-        }
-
-        User user = userOptional.get();
+        User user = get(id);
 
         if (user.getRoles().stream().noneMatch(role -> role.getName().equals(RoleEnum.ROLE_ADVENTURER))) {
             throw new BadRequestException("User not adventurer.");
@@ -289,7 +292,7 @@ public class UserService implements IUserService {
 
         // Создаем пагинацию
         Pageable paging = PageRequest.of(pagePagination, sizePagination);
-        int start = Math.min((int)paging.getOffset(), rankHistoryList.size());
+        int start = Math.min((int) paging.getOffset(), rankHistoryList.size());
         int end = Math.min((start + paging.getPageSize()), rankHistoryList.size());
 
         return new PageImpl<>(rankHistoryList.subList(start, end), paging, rankHistoryList.size());

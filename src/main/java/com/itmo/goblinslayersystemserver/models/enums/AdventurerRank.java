@@ -2,9 +2,8 @@ package com.itmo.goblinslayersystemserver.models.enums;
 
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public enum AdventurerRank {
      Platinum(10000),
@@ -44,6 +43,15 @@ public enum AdventurerRank {
       */
      public boolean IsLess(AdventurerRank rank) {
           return this.getExperienceRequired() < rank.getExperienceRequired();
+     }
+
+     public AdventurerRank NextRank() {
+          int experience = this.getExperienceRequired();
+          Optional<AdventurerRank> rankNext = Arrays.stream(AdventurerRank.values())
+                  .filter(rank -> rank.getExperienceRequired() > experience)
+                  .min(Comparator.comparingInt(AdventurerRank::getExperienceRequired));
+
+          return rankNext.orElse(AdventurerRank.Platinum);
      }
 
      /**

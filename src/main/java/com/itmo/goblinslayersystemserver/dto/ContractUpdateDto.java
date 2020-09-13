@@ -29,6 +29,4 @@ public class ContractUpdateDto {
     private String requestComment;
 
     private String registrarComment;
-
-    private String closedComment;
 }
