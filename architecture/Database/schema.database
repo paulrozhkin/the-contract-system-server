@@ -61,6 +61,19 @@ Table contract_notifications as CN {
   updated                   timestamp
 }
 
+Table rank_history as RH {
+  id                        integer
+  adventurer                integer [ref: > U.id]
+  old_rank                  rank
+  new_rank                  rank
+  type                      rank_type
+  reason                    text
+  distributor               integer [ref: > U.id]
+  contract                  integer [ref: > CT.id]
+  created                   timestamp
+  updated                   timestamp
+}
+
 Enum role {
   ROLE_ADMIN
   ROLE_CUSTOMER
@@ -83,6 +96,12 @@ Enum contract_status {
   Performed
   Completed
 }
+
+Enum rank_type {
+  Auto
+  Distributor
+}
+
 
 Enum rank {
   Platinum    // adventurer_experience for rank - 10000

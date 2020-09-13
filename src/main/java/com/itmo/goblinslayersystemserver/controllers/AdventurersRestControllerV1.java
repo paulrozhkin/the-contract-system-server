@@ -1,18 +1,16 @@
 package com.itmo.goblinslayersystemserver.controllers;
 
 import com.itmo.goblinslayersystemserver.dto.*;
-import com.itmo.goblinslayersystemserver.models.Role;
+import com.itmo.goblinslayersystemserver.models.RankHistory;
 import com.itmo.goblinslayersystemserver.models.User;
 import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
 import com.itmo.goblinslayersystemserver.models.enums.AdventurerStatus;
-import com.itmo.goblinslayersystemserver.models.enums.RoleEnum;
 import com.itmo.goblinslayersystemserver.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.util.Collections;
 import java.util.stream.Collectors;
 
 @RestController
@@ -78,6 +76,29 @@ public class AdventurersRestControllerV1 {
      **/
     @PutMapping(value = "/{id}/ranks/", consumes = {"application/json"}, produces = {"application/json"})
     public AdventurerDto updateAdventurerRank(@PathVariable Integer id, @RequestBody AdventurerRankUpdateDto adventurerRankUpdateDto) {
-        throw new NotImplementedException();
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User distributor = userService.get(username);
+
+        return new AdventurerDto(userService.updateAdventurerRank(id, adventurerRankUpdateDto, distributor));
+    }
+
+    /**
+     * Get запрос для истории рангов авантюриста из системы по его ID
+     **/
+    @GetMapping(value = "/{id}/ranks/history/", consumes = {"application/json"}, produces = {"application/json"})
+    public ItemsDto<AdventurerRankHistoryDto> getAdventurerRankHistory(@PathVariable Integer id,
+                                                                       @RequestParam(defaultValue = "0") int page,
+                                                                       @RequestParam(defaultValue = "5") int size) {
+        Page<RankHistory> usersPage = userService.getAdventurerRankHistory(id, page, size);
+
+        return new ItemsDto<>(
+                usersPage.getNumber(),
+                usersPage.getTotalElements(),
+                usersPage.getTotalPages(),
+                usersPage
+                        .getContent()
+                        .stream()
+                        .map(AdventurerRankHistoryDto::new)
+                        .collect(Collectors.toList()));
     }
 }

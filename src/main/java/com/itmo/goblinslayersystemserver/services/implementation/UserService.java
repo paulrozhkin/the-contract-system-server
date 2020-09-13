@@ -1,16 +1,15 @@
 package com.itmo.goblinslayersystemserver.services.implementation;
 
-import com.itmo.goblinslayersystemserver.dto.AdventurerCreateDto;
-import com.itmo.goblinslayersystemserver.dto.UserCreateAdminDto;
-import com.itmo.goblinslayersystemserver.dto.UserCreateDto;
-import com.itmo.goblinslayersystemserver.dto.UserUpdateAdminDto;
+import com.itmo.goblinslayersystemserver.dto.*;
 import com.itmo.goblinslayersystemserver.exceptions.BadRequestException;
 import com.itmo.goblinslayersystemserver.exceptions.NotFoundException;
 import com.itmo.goblinslayersystemserver.models.QUser;
+import com.itmo.goblinslayersystemserver.models.RankHistory;
 import com.itmo.goblinslayersystemserver.models.Role;
 import com.itmo.goblinslayersystemserver.models.User;
 import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
 import com.itmo.goblinslayersystemserver.models.enums.AdventurerStatus;
+import com.itmo.goblinslayersystemserver.models.enums.RankHistoryType;
 import com.itmo.goblinslayersystemserver.models.enums.RoleEnum;
 import com.itmo.goblinslayersystemserver.repositories.UserRepository;
 import com.itmo.goblinslayersystemserver.services.IRolesService;
@@ -19,12 +18,14 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -164,6 +165,36 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public User updateAdventurerRank(Integer id, AdventurerRankUpdateDto adventurerRankUpdateDto, User distributor) {
+        Optional<User> userOptional = userRepository.findById(id);
+
+        if (!userOptional.isPresent()) {
+            throw new NotFoundException();
+        }
+
+        User user = userOptional.get();
+
+        if (user.getRoles().stream().noneMatch(role -> role.getName().equals(RoleEnum.ROLE_ADVENTURER))) {
+            throw new BadRequestException("User not adventurer.");
+        }
+
+        RankHistory newHistoryItem = new RankHistory();
+        newHistoryItem.setAdventurer(user);
+        newHistoryItem.setOldRank(user.getAdventurerRank());
+        newHistoryItem.setNewRank(adventurerRankUpdateDto.getNewRank());
+        newHistoryItem.setReason(adventurerRankUpdateDto.getReason());
+        newHistoryItem.setType(RankHistoryType.Distributor);
+        newHistoryItem.setDistributor(distributor);
+
+        user.getRankHistories().add(newHistoryItem);
+        user.setAdventurerRank(newHistoryItem.getNewRank());
+
+        userRepository.save(user);
+
+        return get(id);
+    }
+
+    @Override
     public User create(UserCreateDto user) {
         Role customerRole = rolesService.get(RoleEnum.ROLE_CUSTOMER);
         ArrayList<Role> userRoles = new ArrayList<>();
@@ -187,9 +218,7 @@ public class UserService implements IUserService {
             Role customerRole = rolesService.get(RoleEnum.ROLE_CUSTOMER);
             userRoles.add(customerRole);
         } else {
-            user.getRoles().forEach(roleDto -> {
-                userRoles.add(rolesService.get(roleDto));
-            });
+            user.getRoles().forEach(roleDto -> userRoles.add(rolesService.get(roleDto)));
         }
 
         User newUser = new User();
@@ -238,6 +267,32 @@ public class UserService implements IUserService {
     @Override
     public User get(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public Page<RankHistory> getAdventurerRankHistory(Integer id, int pagePagination,
+                                                      int sizePagination) {
+        Optional<User> userOptional = userRepository.findById(id);
+
+        if (!userOptional.isPresent()) {
+            throw new NotFoundException();
+        }
+
+        User user = userOptional.get();
+
+        if (user.getRoles().stream().noneMatch(role -> role.getName().equals(RoleEnum.ROLE_ADVENTURER))) {
+            throw new BadRequestException("User not adventurer.");
+        }
+
+        // Получем полный список истории рангов
+        List<RankHistory> rankHistoryList = user.getRankHistories();
+
+        // Создаем пагинацию
+        Pageable paging = PageRequest.of(pagePagination, sizePagination);
+        int start = Math.min((int)paging.getOffset(), rankHistoryList.size());
+        int end = Math.min((start + paging.getPageSize()), rankHistoryList.size());
+
+        return new PageImpl<>(rankHistoryList.subList(start, end), paging, rankHistoryList.size());
     }
 
     @Override

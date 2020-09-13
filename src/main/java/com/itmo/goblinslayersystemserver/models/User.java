@@ -97,4 +97,11 @@ public class User extends BaseEntity {
      */
     @Column(name = "adventurer_reason")
     private String adventurerReason;
+
+    @OneToMany(mappedBy = "adventurer",
+            targetEntity=RankHistory.class,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    private List<RankHistory> rankHistories;
 }
