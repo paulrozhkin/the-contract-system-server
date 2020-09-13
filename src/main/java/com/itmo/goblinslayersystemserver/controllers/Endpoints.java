@@ -12,4 +12,8 @@ public class Endpoints {
     // specific endpoints
     public static final String AdventurersStatusUpdateRestControllerV1 = AdventurersRestControllerV1 + "{id}/status/";
     public static final String AdventurersRankUpdateRestControllerV1 = AdventurersRestControllerV1 + "{id}/ranks/";
+
+    public static final String ContractPerformRestControllerV1 = ContractsRestControllerV1 + "{id}/perform/";
+    public static final String ContractPerformedRestControllerV1 = ContractsRestControllerV1 + "{id}/performed/";
+    public static final String ContractCancelRestControllerV1 = ContractsRestControllerV1 + "{id}/cancel/";
 }

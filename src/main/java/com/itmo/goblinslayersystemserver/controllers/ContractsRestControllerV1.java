@@ -1,17 +1,17 @@
 package com.itmo.goblinslayersystemserver.controllers;
 
-import com.itmo.goblinslayersystemserver.dto.ContractCreateDto;
-import com.itmo.goblinslayersystemserver.dto.ContractDto;
-import com.itmo.goblinslayersystemserver.dto.ContractUpdateDto;
-import com.itmo.goblinslayersystemserver.dto.ItemsDto;
+import com.itmo.goblinslayersystemserver.dto.*;
 import com.itmo.goblinslayersystemserver.models.Contract;
+import com.itmo.goblinslayersystemserver.models.User;
 import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
 import com.itmo.goblinslayersystemserver.models.enums.ContractStatus;
 import com.itmo.goblinslayersystemserver.services.IContractService;
+import com.itmo.goblinslayersystemserver.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -27,6 +27,9 @@ public class ContractsRestControllerV1 {
 
     @Autowired
     private IContractService contractService;
+
+    @Autowired
+    private IUserService userService;
 
     /**
      * Get запрос серверу для получения списка контрактов из системы
@@ -84,5 +87,32 @@ public class ContractsRestControllerV1 {
     @PutMapping(value = "/{id}", consumes = {"application/json"}, produces = {"application/json"})
     public ContractDto updateContract(@PathVariable Integer id, @RequestBody ContractUpdateDto contract) {
         return new ContractDto(contractService.update(id, contract));
+    }
+
+    /**
+     * Post запрос серверу для начала исполнения контракта авантюристом
+     **/
+    @PostMapping(value = "/{id}/perform/", consumes = {"application/json"}, produces = {"application/json"})
+    public ContractDto startPerformingContract(@PathVariable Integer id) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User executor = userService.get(username);
+
+        return new ContractDto(contractService.startPerforming(id, executor));
+    }
+
+    /**
+     * Post запрос серверу для начала исполнения контракта авантюристом
+     **/
+    @PostMapping(value = "/{id}/performed/", consumes = {"application/json"}, produces = {"application/json"})
+    public ContractDto stopPerformingContract(@PathVariable Integer id, @RequestBody ContractPerformedDto commentDto) {
+        return new ContractDto(contractService.stopPerformingContract(id, commentDto.getPerformedComment()));
+    }
+
+    /**
+     * Post запрос серверу для отмены исполнения контракта авантюристом
+     **/
+    @PostMapping(value = "/{id}/cancel/", consumes = {"application/json"}, produces = {"application/json"})
+    public ContractDto cancelContract(@PathVariable Integer id, @RequestBody ContractCancelDto commentDto) {
+        return new ContractDto(contractService.cancelContract(id, commentDto.getCancellationComment()));
     }
 }

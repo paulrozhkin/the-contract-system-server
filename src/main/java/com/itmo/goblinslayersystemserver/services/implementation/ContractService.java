@@ -5,6 +5,7 @@ import com.itmo.goblinslayersystemserver.dto.ContractUpdateDto;
 import com.itmo.goblinslayersystemserver.exceptions.NotFoundException;
 import com.itmo.goblinslayersystemserver.models.Contract;
 import com.itmo.goblinslayersystemserver.models.QContract;
+import com.itmo.goblinslayersystemserver.models.User;
 import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
 import com.itmo.goblinslayersystemserver.models.enums.ContractStatus;
 import com.itmo.goblinslayersystemserver.repositories.ContractRepository;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Optional;
 
@@ -141,5 +143,20 @@ public class ContractService implements IContractService {
     @Override
     public void delete(Integer id) {
         contractRepository.deleteById(id);
+    }
+
+    @Override
+    public Contract startPerforming(Integer id, User executor) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public Contract stopPerformingContract(Integer id, String performedComment) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public Contract cancelContract(Integer id, String cancellationComment) {
+        throw new NotImplementedException();
     }
 }
