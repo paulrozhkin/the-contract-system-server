@@ -639,6 +639,67 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorModel'
 
+  /api/v1/adventurers/{id}/ranks/history/:
+    # Получение списка авантюристов
+    get:
+      tags:
+        - adventurers
+      operationId: getAdventurerRankHistory
+      summary: Getting a list of rank history
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          description: 'User ID.'
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of rank history
+          content:
+            application-json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/paginationInfo'
+                  - type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/rankHistoryModel'
+        '400':
+          description: Bad Reaquest.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '403':
+          description: Forbidden.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
   /api/v1/account/notifications/:
     # Получить нотификации пользователя
     get:
@@ -1175,6 +1236,34 @@ components:
           type: string
           description: "Reason for changing rank"
           example: "Too weak."
+
+    rankHistoryModel:
+      type: object
+      properties:
+        oldRank:
+          $ref: '#/components/schemas/ranksModel'
+        newRank:
+          $ref: '#/components/schemas/ranksModel'
+        type:
+          $ref: '#/components/schemas/rankType'
+        reason:
+          type: string
+          description: "Reason for changing rank if type is Distributor"
+          example: "Too weak."
+        time:
+          description: 'Date the contract was created.'
+          type: string
+          format: date-time
+          example: '2017-07-21T17:32:28Z'
+
+    rankType:
+      description: 'Rank distribution type.'
+      type: string
+      enum:
+        - Auto
+        - Distributor
+      example:
+        Distributor
 
     role:
       description: 'User role in system. Define user privileges in the system.'
