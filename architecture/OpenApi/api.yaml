@@ -838,6 +838,95 @@ paths:
               schema:
                 $ref: '#/components/schemas/errorModel'
 
+    # Обновить персональную информацию
+    put:
+      tags:
+        - account
+      operationId: updateAccountInformation
+      summary: Update the account information
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/accountUpdateInfo'
+        required: true
+      responses:
+        '200':
+          description: The account was updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        '400':
+          description: Bad Reaquest.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+  /api/v1/account/password/:
+    # Обновить пароль пользователя
+    put:
+      tags:
+        - account
+      operationId: updateAccountPassword
+      summary: Update the password
+      security:
+        - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/passwordUpdateInfo'
+        required: true
+      responses:
+        '200':
+          description: The password was updated successfully.
+        '400':
+          description: Bad Reaquest.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '404':
+          description: Not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
   /api/v1/contracts/:
     #Получение списка всех контрактов
     get:
@@ -1686,6 +1775,22 @@ components:
           description: 'Unique identifier of the contractNotification.'
           type: string
           example: "The contract was too difficult."
+
+    accountUpdateInfo:
+      allOf:
+        - $ref: '#/components/schemas/userCommonInfoWithoutRoles'
+
+    passwordUpdateInfo:
+      type: object
+      properties:
+        oldPassword:
+          description: 'Old password for validation.'
+          type: string
+          example: "passwordOld123"
+        newPassword:
+          description: 'New password.'
+          type: string
+          example: "passwordNew456"
 
     errorModel:
       type: object
