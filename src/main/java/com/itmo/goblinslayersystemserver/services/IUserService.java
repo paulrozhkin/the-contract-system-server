@@ -28,6 +28,8 @@ public interface IUserService {
     User updateAdventurerStatus(Integer id, AdventurerStatus newStatus);
     User updateAdventurerRank(Integer id, AdventurerRankUpdateDto adventurerRankUpdateDto, User distributor);
     User updateAdventurerRank(Integer id, Integer experience);
+    User update(String username, AccountUpdateDto accountUpdateDto);
+    User updatePassword(String username, AccountPasswordUpdateDto passwordUpdateDto);
 
     void delete(Integer id);
 }
