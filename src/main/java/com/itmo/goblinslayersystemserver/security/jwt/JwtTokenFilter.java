@@ -1,5 +1,8 @@
 package com.itmo.goblinslayersystemserver.security.jwt;
 
+import com.itmo.goblinslayersystemserver.models.User;
+import com.itmo.goblinslayersystemserver.services.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
@@ -17,10 +20,12 @@ import java.io.IOException;
 
 public class JwtTokenFilter extends GenericFilterBean {
 
+    private IUserService userService;
     private JwtTokenProvider jwtTokenProvider;
 
-    public JwtTokenFilter(JwtTokenProvider jwtTokenProvider) {
+    public JwtTokenFilter(JwtTokenProvider jwtTokenProvider, IUserService userService) {
         this.jwtTokenProvider = jwtTokenProvider;
+        this.userService = userService;
     }
 
     @Override
@@ -33,6 +38,11 @@ public class JwtTokenFilter extends GenericFilterBean {
 
             if (auth != null) {
                 SecurityContextHolder.getContext().setAuthentication(auth);
+
+                User user = userService.get(auth.getName());
+                if (user.isBlocked()) {
+                    throw new JwtAuthenticationException("User is blocked.");
+                }
             }
         }
 
