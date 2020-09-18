@@ -14,5 +14,5 @@ public class UserUpdateAdminDto {
     @NonNull
     private List<RoleDto> roles;
     @NonNull
-    private Boolean blocked;
+    private Boolean isBlocked;
 }

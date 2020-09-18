@@ -16,6 +16,8 @@ import com.itmo.goblinslayersystemserver.services.IRolesService;
 import com.itmo.goblinslayersystemserver.services.IUserService;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -39,6 +41,8 @@ public class UserService implements IUserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    private Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Override
     public Page<User> get(String usernameFilter,
@@ -111,6 +115,7 @@ public class UserService implements IUserService {
         // Щифруем пароль в BCrypt
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
+        logger.info(String.format("Create new user:\n %s", user.toString()));
         return userRepository.saveAndFlush(user);
     }
 
@@ -139,7 +144,7 @@ public class UserService implements IUserService {
         User user = new User();
         user.setName(update.getName());
         user.setAddress(update.getAddress());
-        user.setBlocked(update.getBlocked());
+        user.setBlocked(update.getIsBlocked());
         user.setRoles(rolesService.getByDtoName(update.getRoles()));
         return update(id, user);
     }

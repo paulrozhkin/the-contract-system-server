@@ -8,7 +8,6 @@ import lombok.NonNull;
 @Data
 public class ContractUpdateDto {
 
-    @NonNull
     private Integer executor;
 
     @NonNull
@@ -26,6 +25,7 @@ public class ContractUpdateDto {
     @NonNull
     private String description;
 
+    @NonNull
     private String requestComment;
 
     private String registrarComment;

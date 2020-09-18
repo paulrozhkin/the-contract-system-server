@@ -104,4 +104,21 @@ public class User extends BaseEntity {
             orphanRemoval = true,
             fetch = FetchType.LAZY)
     private List<RankHistory> rankHistories;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", password='" + "*****" + '\'' +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", roles=" + roles +
+                ", blocked=" + blocked +
+                ", adventurerStatus=" + adventurerStatus +
+                ", adventurerExperience=" + adventurerExperience +
+                ", adventurerRank=" + adventurerRank +
+                ", adventurerReason='" + adventurerReason + '\'' +
+                ", rankHistories=" + rankHistories +
+                '}';
+    }
 }
