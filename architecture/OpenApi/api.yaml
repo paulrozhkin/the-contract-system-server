@@ -1557,6 +1557,7 @@ components:
         - Active
         - Dead
         - NotConfirmed
+        - Rejected
       example:
         Active
 
