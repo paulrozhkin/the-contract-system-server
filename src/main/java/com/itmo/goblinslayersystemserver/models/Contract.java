@@ -126,6 +126,9 @@ public class Contract extends BaseEntity {
             notifications = new ArrayList<>();
         }
 
-        notifications.add(newStatusChangeNotification);
+        // Если изменения статуса не было, то записывать его в историю не надо.
+        if (newStatusChangeNotification.getOldStatus() != newStatusChangeNotification.getNewStatus()) {
+            notifications.add(newStatusChangeNotification);
+        }
     }
 }
