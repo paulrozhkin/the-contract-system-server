@@ -33,16 +33,16 @@ import java.util.Optional;
 @Service
 public class UserService implements IUserService {
 
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
+
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private IRolesService rolesService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    private Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Override
     public Page<User> get(String usernameFilter,
