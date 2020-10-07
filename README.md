@@ -41,6 +41,16 @@ spring.liquibase.change-log=classpath:db/changelog/db.changelog-master.xml
 # JWT
 jwt.token.secret=<secret key to generate jwt XxnIa43zAUuo1gXHzkM5>
 ```
+
+Static-location template for Windows: 
+```
+spring.resources.static-locations=file:///C:/DATA/MyProject/BigProjects/GoblinSlayerRankSystem/Client/the-contract-system-web-client/dist/the-contract-system-web-client
+```
+Static-location template for Linux:
+```
+spring.resources.static-locations=file:/data/www/the-contact-system/client
+```
+
 5. Run server from maven script or in IntelliJ
 
 ### Production environment:

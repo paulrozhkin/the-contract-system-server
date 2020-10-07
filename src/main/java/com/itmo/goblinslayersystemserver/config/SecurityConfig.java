@@ -57,6 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                .antMatchers("/api/*").authenticated()
                 .antMatchers(Endpoints.AuthenticationRestControllerV1).permitAll()
                 .antMatchers(Endpoints.AdminUserRestControllerV1).hasRole(ROLE_ADMIN)
                 .antMatchers(Endpoints.AdventurersStatusUpdateRestControllerV1).hasAnyRole(ROLE_ADMIN, ROLE_REGISTRAR)
@@ -67,7 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(Endpoints.ContractCancelRestControllerV1).hasAnyRole(ROLE_ADMIN, ROLE_ADVENTURER, ROLE_REGISTRAR)
                 .antMatchers(HttpMethod.POST, Endpoints.AdventurersRestControllerV1).permitAll()
                 .antMatchers(HttpMethod.POST, Endpoints.UsersRestControllerV1).permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider, userService));
     }
