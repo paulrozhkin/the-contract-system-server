@@ -4,7 +4,7 @@ info:
   description: >-
     This is the API for a course project at ITMO University. The theme of the
     course is "The goblin slayer contract system". Server on github.
-  version: "0.4.0"
+  version: "1.0.0"
   title: Goblin Slayer Server API
 
 servers:
@@ -1557,6 +1557,7 @@ components:
         - Active
         - Dead
         - NotConfirmed
+        - Rejected
       example:
         Active
 

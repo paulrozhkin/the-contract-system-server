@@ -4,11 +4,8 @@ import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
 import com.itmo.goblinslayersystemserver.models.enums.ContractStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -129,6 +126,9 @@ public class Contract extends BaseEntity {
             notifications = new ArrayList<>();
         }
 
-        notifications.add(newStatusChangeNotification);
+        // Если изменения статуса не было, то записывать его в историю не надо.
+        if (newStatusChangeNotification.getOldStatus() != newStatusChangeNotification.getNewStatus()) {
+            notifications.add(newStatusChangeNotification);
+        }
     }
 }

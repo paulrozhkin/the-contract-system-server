@@ -2,8 +2,6 @@ package com.itmo.goblinslayersystemserver.dto;
 
 import com.itmo.goblinslayersystemserver.models.Role;
 import com.itmo.goblinslayersystemserver.models.User;
-import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
-import com.itmo.goblinslayersystemserver.models.enums.AdventurerStatus;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -23,7 +21,7 @@ public class UserDto {
     @NonNull
     private List<RoleDto> roles;
     @NonNull
-    private Boolean blocked;
+    private Boolean isBlocked;
 
     public UserDto(User user) {
         id = user.getId();
@@ -54,6 +52,6 @@ public class UserDto {
         });
 
         roles = rolesDto;
-        blocked = user.isBlocked();
+        isBlocked = user.isBlocked();
     }
 }

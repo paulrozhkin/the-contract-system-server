@@ -12,6 +12,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 /**
  * Security configuration class for JWT based Spring Security application.
@@ -44,11 +50,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .cors()
+                .and()
                 .httpBasic().disable()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                .antMatchers("/api/*").authenticated()
                 .antMatchers(Endpoints.AuthenticationRestControllerV1).permitAll()
                 .antMatchers(Endpoints.AdminUserRestControllerV1).hasRole(ROLE_ADMIN)
                 .antMatchers(Endpoints.AdventurersStatusUpdateRestControllerV1).hasAnyRole(ROLE_ADMIN, ROLE_REGISTRAR)
@@ -59,8 +68,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(Endpoints.ContractCancelRestControllerV1).hasAnyRole(ROLE_ADMIN, ROLE_ADVENTURER, ROLE_REGISTRAR)
                 .antMatchers(HttpMethod.POST, Endpoints.AdventurersRestControllerV1).permitAll()
                 .antMatchers(HttpMethod.POST, Endpoints.UsersRestControllerV1).permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider, userService));
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
+        //configuration.setAllowedOrigins(Collections.unmodifiableList(Collections.singletonList("*")));
+        configuration.setAllowedMethods(Collections.unmodifiableList(Arrays.asList(
+                HttpMethod.GET.name(),
+                HttpMethod.HEAD.name(),
+                HttpMethod.POST.name(),
+                HttpMethod.PUT.name()
+        )));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }
