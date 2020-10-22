@@ -132,7 +132,6 @@ public class ContractService implements IContractService {
         contract.setDescription(update.getDescription());
         contract.setRequestComment(update.getRequestComment());
         contract.setRegistrarComment(update.getRegistrarComment());
-        contract.setPerformedComment(update.getPerformedComment());
 
         if (contract.getContractStatus() == ContractStatus.Completed) {
             // За выполнение любого контракта даем 1 единцицу опыта авантюристу.
