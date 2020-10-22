@@ -37,6 +37,7 @@ public class ContractService implements IContractService {
     public Page<Contract> get(String nameContractFilter,
                               Integer customerFilter,
                               Integer executorFilter,
+                              AdventurerRank rankFilter,
                               AdventurerRank minRankFilter,
                               ContractStatus contractStatusFilter,
                               int pagePagination,
@@ -63,7 +64,12 @@ public class ContractService implements IContractService {
             where.and(expression);
         }
 
-        if (minRankFilter != null) {
+        if (rankFilter != null) {
+            BooleanExpression expression = contract.minRank.eq(rankFilter);
+            where.and(expression);
+        }
+
+        if (minRankFilter != null && rankFilter == null) {
             BooleanExpression expression = contract.minRank.in(AdventurerRank.GetRanksThatLessOrEqual(minRankFilter));
             where.and(expression);
         }
@@ -126,7 +132,6 @@ public class ContractService implements IContractService {
         contract.setDescription(update.getDescription());
         contract.setRequestComment(update.getRequestComment());
         contract.setRegistrarComment(update.getRegistrarComment());
-        contract.setPerformedComment(update.getPerformedComment());
 
         if (contract.getContractStatus() == ContractStatus.Completed) {
             // За выполнение любого контракта даем 1 единцицу опыта авантюристу.

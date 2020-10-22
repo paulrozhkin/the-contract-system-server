@@ -4,7 +4,7 @@ info:
   description: >-
     This is the API for a course project at ITMO University. The theme of the
     course is "The goblin slayer contract system". Server on github.
-  version: "1.0.0"
+  version: "1.0.1"
   title: Goblin Slayer Server API
 
 servers:
@@ -956,11 +956,17 @@ paths:
           required: false
           description: Filtration by executor
         - in: query
+          name: rank
+          schema:
+            $ref: '#/components/schemas/ranksModel'
+          required: false
+          description: Filtration by rank. Returned all contracts that are equal to the required rank
+        - in: query
           name: minRank
           schema:
             $ref: '#/components/schemas/ranksModel'
           required: false
-          description: Filtration by minimum rank. Returned all contracts that are less than or equal to the required minimum rank
+          description: Filtration by minimum rank. Returned all contracts that are less than or equal to the required minimum rank. If a rank filter is set, minRank is ignored.
         - in: query
           name: contractStatus
           schema:

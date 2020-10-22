@@ -12,6 +12,7 @@ public interface IContractService {
     Page<Contract> get(String nameContractFilter,
                        Integer customerFilter,
                        Integer executorFilter,
+                       AdventurerRank rankFilter,
                        AdventurerRank minRankFilter,
                        ContractStatus contractStatusFilter,
                        int pagePagination,

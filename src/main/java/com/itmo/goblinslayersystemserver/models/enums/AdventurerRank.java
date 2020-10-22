@@ -1,9 +1,7 @@
 package com.itmo.goblinslayersystemserver.models.enums;
 
 import lombok.Getter;
-
 import java.util.*;
-import java.util.stream.Collectors;
 
 public enum AdventurerRank {
      Platinum(10000),
