@@ -11,6 +11,6 @@ public interface ContractNotificationRepository extends JpaRepository<ContractNo
 
 
     @Query("Select cn from ContractNotification cn JOIN FETCH Contract c on c.id = cn.contract\n" +
-            "   where (c.executor = :userId or c.customer = :userId) and cn.confirmed = :confirmed")
+            "   where c.customer = :userId and cn.confirmed = :confirmed")
     List<ContractNotification> findByConfirmedBySpecificUser(@Param("confirmed") Boolean confirmed, @Param("userId") Integer userId);
 }
