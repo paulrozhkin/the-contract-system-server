@@ -78,7 +78,11 @@ public class UserService implements IUserService {
             // Используем ругулярное выражение для имени
             BooleanExpression expression = user.username.
                     likeIgnoreCase(String.format("%%%s%%", usernameFilter));
-            where.and(expression);
+
+            BooleanExpression expressionName = user.name.
+                    likeIgnoreCase(String.format("%%%s%%", usernameFilter));
+            
+            where.and(expression.or(expressionName));
         }
 
         if (rankFilter != null) {
@@ -181,6 +185,7 @@ public class UserService implements IUserService {
 
         user.getRankHistories().add(newHistoryItem);
         user.setAdventurerRank(newHistoryItem.getNewRank());
+        user.setAdventurerExperience(user.getAdventurerRank().getExperienceRequired());
 
         userRepository.save(user);
 
