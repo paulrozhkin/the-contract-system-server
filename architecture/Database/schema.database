@@ -16,6 +16,7 @@ Table users as U {
 
 Table files as F {
   id                        integer     [pk, increment]
+  user_id                   integer     [ref: > U.id]
   original_name             text
   local_name                text
   created                   timestamp
@@ -49,6 +50,7 @@ Table contracts as CT {
   registrar_comment         text
   performed_comment         text
   cancellation_comment      text
+  icon                      integer     [ref: > F.id]
   created                   timestamp
   updated                   timestamp
 }
