@@ -1,10 +1,10 @@
 package com.itmo.goblinslayersystemserver.controllers;
 
+import com.itmo.goblinslayersystemserver.dao.RankHistoryDao;
+import com.itmo.goblinslayersystemserver.dao.UserDao;
 import com.itmo.goblinslayersystemserver.dto.*;
-import com.itmo.goblinslayersystemserver.models.RankHistory;
-import com.itmo.goblinslayersystemserver.models.User;
-import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
-import com.itmo.goblinslayersystemserver.models.enums.AdventurerStatus;
+import com.itmo.goblinslayersystemserver.dao.enums.AdventurerRank;
+import com.itmo.goblinslayersystemserver.dao.enums.AdventurerStatus;
 import com.itmo.goblinslayersystemserver.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,7 +29,7 @@ public class AdventurersRestControllerV1 {
                                                   @RequestParam(required = false) AdventurerStatus status,
                                                   @RequestParam(defaultValue = "0") int page,
                                                   @RequestParam(defaultValue = "5") int size) {
-        Page<User> usersPage = userService.get(username,
+        Page<UserDao> usersPage = userService.get(username,
                 rank,
                 status,
                 page,
@@ -77,7 +77,7 @@ public class AdventurersRestControllerV1 {
     @PutMapping(value = "/{id}/ranks/", consumes = {"application/json"}, produces = {"application/json"})
     public AdventurerDto updateAdventurerRank(@PathVariable Integer id, @RequestBody AdventurerRankUpdateDto adventurerRankUpdateDto) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User distributor = userService.get(username);
+        UserDao distributor = userService.get(username);
 
         return new AdventurerDto(userService.updateAdventurerRank(id, adventurerRankUpdateDto, distributor));
     }
@@ -89,7 +89,7 @@ public class AdventurersRestControllerV1 {
     public ItemsDto<AdventurerRankHistoryDto> getAdventurerRankHistory(@PathVariable Integer id,
                                                                        @RequestParam(defaultValue = "0") int page,
                                                                        @RequestParam(defaultValue = "5") int size) {
-        Page<RankHistory> usersPage = userService.getAdventurerRankHistory(id, page, size);
+        Page<RankHistoryDao> usersPage = userService.getAdventurerRankHistory(id, page, size);
 
         return new ItemsDto<>(
                 usersPage.getNumber(),

@@ -1,4 +1,4 @@
-package com.itmo.goblinslayersystemserver.models.enums;
+package com.itmo.goblinslayersystemserver.dao.enums;
 
 public enum RoleEnum {
     ROLE_ADMIN,

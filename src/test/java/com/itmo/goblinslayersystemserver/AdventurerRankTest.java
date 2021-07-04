@@ -1,6 +1,6 @@
 package com.itmo.goblinslayersystemserver;
 
-import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
+import com.itmo.goblinslayersystemserver.dao.enums.AdventurerRank;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

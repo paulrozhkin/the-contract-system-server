@@ -2,7 +2,7 @@ package com.itmo.goblinslayersystemserver.controllers;
 
 import com.itmo.goblinslayersystemserver.dto.AuthenticationRequestDto;
 import com.itmo.goblinslayersystemserver.dto.AuthorizationTokensDto;
-import com.itmo.goblinslayersystemserver.models.User;
+import com.itmo.goblinslayersystemserver.dao.UserDao;
 import com.itmo.goblinslayersystemserver.security.jwt.JwtTokenProvider;
 import com.itmo.goblinslayersystemserver.services.implementation.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class AuthenticationRestControllerV1 {
         try {
             String username = requestDto.getUsername();
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
-            User user = userService.get(username);
+            UserDao user = userService.get(username);
 
             if (user == null) {
                 throw new UsernameNotFoundException("User with username: " + username + " not found");

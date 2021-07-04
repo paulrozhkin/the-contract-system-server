@@ -1,6 +1,6 @@
 package com.itmo.goblinslayersystemserver.security.jwt;
 
-import com.itmo.goblinslayersystemserver.models.User;
+import com.itmo.goblinslayersystemserver.dao.UserDao;
 import com.itmo.goblinslayersystemserver.services.IUserService;
 import com.itmo.goblinslayersystemserver.services.implementation.UserService;
 import org.slf4j.Logger;
@@ -44,7 +44,7 @@ public class JwtTokenFilter extends GenericFilterBean {
 
                 if (auth != null) {
                     SecurityContextHolder.getContext().setAuthentication(auth);
-                    User user = userService.get(auth.getName());
+                    UserDao user = userService.get(auth.getName());
                     if (user.isBlocked()) {
                         logger.info(String.format("User with id %d try to access to server, but he is blocked", user.getId()));
                         throw new JwtAuthenticationException("User is blocked.");

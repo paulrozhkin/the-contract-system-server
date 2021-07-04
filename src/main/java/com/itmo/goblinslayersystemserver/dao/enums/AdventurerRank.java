@@ -1,4 +1,4 @@
-package com.itmo.goblinslayersystemserver.models.enums;
+package com.itmo.goblinslayersystemserver.dao.enums;
 
 import lombok.Getter;
 import java.util.*;

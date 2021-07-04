@@ -2,15 +2,10 @@ package com.itmo.goblinslayersystemserver.controllers;
 
 import com.itmo.goblinslayersystemserver.dto.UserCreateDto;
 import com.itmo.goblinslayersystemserver.dto.UserDto;
-import com.itmo.goblinslayersystemserver.models.Role;
-import com.itmo.goblinslayersystemserver.models.User;
-import com.itmo.goblinslayersystemserver.models.enums.RoleEnum;
-import com.itmo.goblinslayersystemserver.services.IRolesService;
+import com.itmo.goblinslayersystemserver.dao.UserDao;
 import com.itmo.goblinslayersystemserver.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping(Endpoints.UsersRestControllerV1)
@@ -24,7 +19,7 @@ public class UsersRestControllerV1 {
      **/
     @PostMapping(consumes = {"application/json"}, produces = {"application/json"})
     public UserDto createUser(@RequestBody UserCreateDto user) {
-        User newUser = userService.create(user);
+        UserDao newUser = userService.create(user);
         return new UserDto(newUser);
     }
 

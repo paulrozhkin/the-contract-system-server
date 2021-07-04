@@ -1,7 +1,7 @@
 package com.itmo.goblinslayersystemserver.dto;
 
-import com.itmo.goblinslayersystemserver.models.Role;
-import com.itmo.goblinslayersystemserver.models.User;
+import com.itmo.goblinslayersystemserver.dao.RoleDao;
+import com.itmo.goblinslayersystemserver.dao.UserDao;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -23,14 +23,14 @@ public class UserDto {
     @NonNull
     private Boolean isBlocked;
 
-    public UserDto(User user) {
+    public UserDto(UserDao user) {
         id = user.getId();
         username = user.getUsername();
         name = user.getName();
         address = user.getAddress();
 
         List<RoleDto> rolesDto = new ArrayList<>();
-        List<Role> rolesDb = user.getRoles();
+        List<RoleDao> rolesDb = user.getRoles();
         rolesDb.forEach(x -> {
             switch (x.getName()) {
                 case ROLE_ADMIN:

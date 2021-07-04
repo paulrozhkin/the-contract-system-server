@@ -1,7 +1,7 @@
-package com.itmo.goblinslayersystemserver.models;
+package com.itmo.goblinslayersystemserver.dao;
 
-import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
-import com.itmo.goblinslayersystemserver.models.enums.AdventurerStatus;
+import com.itmo.goblinslayersystemserver.dao.enums.AdventurerRank;
+import com.itmo.goblinslayersystemserver.dao.enums.AdventurerStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -12,29 +12,29 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @Data
-public class User extends BaseEntity {
+public class UserDao extends BaseEntity {
     /**
      * Username пользователя
      **/
-    @Column(name="username")
+    @Column(name = "username")
     private String username;
 
     /**
      * Пароль пользователя
      **/
-    @Column(name="password")
+    @Column(name = "password")
     private String password;
 
     /**
      * ФИО пользователя
      **/
-    @Column(name="name")
+    @Column(name = "name")
     private String name;
 
     /**
      * Адрес проживания пользователя
      **/
-    @Column(name="address")
+    @Column(name = "address")
     private String address;
 
     /**
@@ -48,14 +48,14 @@ public class User extends BaseEntity {
     @JoinTable(name = "user_roles",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
-    @ElementCollection(targetClass=Role.class)
+    @ElementCollection(targetClass = RoleDao.class)
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<Role> roles;
+    private List<RoleDao> roles;
 
     /**
      * Флаг блокировки пользователя (true - пользователь заблокирован, false - пользователь разблокирован)
      **/
-    @Column(name="blocked")
+    @Column(name = "blocked")
     private boolean blocked;
 
     /**
@@ -65,14 +65,14 @@ public class User extends BaseEntity {
      * Мертв;
      * Не подтвержден.
      **/
-    @Column(name="adventurer_status")
+    @Column(name = "adventurer_status")
     @Enumerated(EnumType.STRING)
     private AdventurerStatus adventurerStatus;
 
     /**
      * Количество очков опыта авнюриста
      **/
-    @Column(name="adventurer_experience")
+    @Column(name = "adventurer_experience")
     private Integer adventurerExperience;
 
     /**
@@ -88,7 +88,7 @@ public class User extends BaseEntity {
      * Обсидиан;
      * Фарфор.
      **/
-    @Column(name="adventurer_rank")
+    @Column(name = "adventurer_rank")
     @Enumerated(EnumType.STRING)
     private AdventurerRank adventurerRank;
 
@@ -99,26 +99,15 @@ public class User extends BaseEntity {
     private String adventurerReason;
 
     @OneToMany(mappedBy = "adventurer",
-            targetEntity=RankHistory.class,
+            targetEntity = RankHistoryDao.class,
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.LAZY)
-    private List<RankHistory> rankHistories;
+    private List<RankHistoryDao> rankHistories;
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", password='" + "*****" + '\'' +
-                ", name='" + name + '\'' +
-                ", address='" + address + '\'' +
-                ", roles=" + roles +
-                ", blocked=" + blocked +
-                ", adventurerStatus=" + adventurerStatus +
-                ", adventurerExperience=" + adventurerExperience +
-                ", adventurerRank=" + adventurerRank +
-                ", adventurerReason='" + adventurerReason + '\'' +
-                ", rankHistories=" + rankHistories +
-                '}';
-    }
+    /**
+     * ID файла с аватаром пользователя
+     **/
+    @Column(name = "avatar")
+    private Integer avatar;
 }

@@ -1,6 +1,6 @@
-package com.itmo.goblinslayersystemserver.models;
+package com.itmo.goblinslayersystemserver.dao;
 
-import com.itmo.goblinslayersystemserver.models.enums.RoleEnum;
+import com.itmo.goblinslayersystemserver.dao.enums.RoleEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,19 +15,12 @@ import java.util.List;
 @Entity
 @Table(name = "roles")
 @Data
-public class Role extends BaseEntity {
+public class RoleDao extends BaseEntity {
 
     @Column(name = "name")
     @Enumerated(EnumType.STRING)
     private RoleEnum name;
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
-    private List<User> users;
-
-    @Override
-    public String toString() {
-        return "Role{" +
-                "id: " + super.getId() + ", " +
-                "name: " + name + "}";
-    }
+    private List<UserDao> users;
 }

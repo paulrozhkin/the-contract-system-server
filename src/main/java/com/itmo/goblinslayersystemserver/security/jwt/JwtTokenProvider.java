@@ -1,6 +1,6 @@
 package com.itmo.goblinslayersystemserver.security.jwt;
 
-import com.itmo.goblinslayersystemserver.models.Role;
+import com.itmo.goblinslayersystemserver.dao.RoleDao;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -48,7 +48,7 @@ public class JwtTokenProvider {
         secret = Base64.getEncoder().encodeToString(secret.getBytes());
     }
 
-    public String createToken(String username, List<Role> roles) {
+    public String createToken(String username, List<RoleDao> roles) {
 
         Claims claims = Jwts.claims().setSubject(username);
         claims.put("roles", getRoleNames(roles));
@@ -95,7 +95,7 @@ public class JwtTokenProvider {
         }
     }
 
-    private List<String> getRoleNames(List<Role> userRoles) {
+    private List<String> getRoleNames(List<RoleDao> userRoles) {
         List<String> result = new ArrayList<>();
 
         userRoles.forEach(role -> {

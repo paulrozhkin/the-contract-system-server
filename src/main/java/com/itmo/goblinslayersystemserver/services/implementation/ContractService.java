@@ -1,15 +1,15 @@
 package com.itmo.goblinslayersystemserver.services.implementation;
 
+import com.itmo.goblinslayersystemserver.dao.ContractDao;
+import com.itmo.goblinslayersystemserver.dao.UserDao;
 import com.itmo.goblinslayersystemserver.dto.ContractCreateDto;
 import com.itmo.goblinslayersystemserver.dto.ContractUpdateDto;
 import com.itmo.goblinslayersystemserver.exceptions.BadRequestException;
 import com.itmo.goblinslayersystemserver.exceptions.NotFoundException;
-import com.itmo.goblinslayersystemserver.models.Contract;
-import com.itmo.goblinslayersystemserver.models.QContract;
-import com.itmo.goblinslayersystemserver.models.User;
-import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
-import com.itmo.goblinslayersystemserver.models.enums.AdventurerStatus;
-import com.itmo.goblinslayersystemserver.models.enums.ContractStatus;
+import com.itmo.goblinslayersystemserver.dao.QContractDao;
+import com.itmo.goblinslayersystemserver.dao.enums.AdventurerRank;
+import com.itmo.goblinslayersystemserver.dao.enums.AdventurerStatus;
+import com.itmo.goblinslayersystemserver.dao.enums.ContractStatus;
 import com.itmo.goblinslayersystemserver.repositories.ContractRepository;
 import com.itmo.goblinslayersystemserver.services.IContractService;
 import com.itmo.goblinslayersystemserver.services.IUserService;
@@ -34,17 +34,17 @@ public class ContractService implements IContractService {
     IUserService userService;
 
     @Override
-    public Page<Contract> get(String nameContractFilter,
-                              Integer customerFilter,
-                              Integer executorFilter,
-                              AdventurerRank rankFilter,
-                              AdventurerRank minRankFilter,
-                              ContractStatus contractStatusFilter,
-                              int pagePagination,
-                              int sizePagination) {
+    public Page<ContractDao> get(String nameContractFilter,
+                                 Integer customerFilter,
+                                 Integer executorFilter,
+                                 AdventurerRank rankFilter,
+                                 AdventurerRank minRankFilter,
+                                 ContractStatus contractStatusFilter,
+                                 int pagePagination,
+                                 int sizePagination) {
 
         // Создаем параметры фильрации
-        QContract contract = QContract.contract;
+        QContractDao contract = QContractDao.contractDao;
         BooleanBuilder where = new BooleanBuilder();
 
         if (nameContractFilter != null) {
@@ -87,14 +87,14 @@ public class ContractService implements IContractService {
     }
 
     @Override
-    public Contract create(Contract contract) {
+    public ContractDao create(ContractDao contract) {
         contract.setContractStatus(ContractStatus.Created);
         return contractRepository.save(contract);
     }
 
     @Override
-    public Contract create(ContractCreateDto contractDto) {
-        Contract contract = new Contract();
+    public ContractDao create(ContractCreateDto contractDto) {
+        ContractDao contract = new ContractDao();
         contract.setAddress(contractDto.getAddress());
         contract.setCustomer(contractDto.getCustomer());
         contract.setDescription(contractDto.getDescription());
@@ -105,8 +105,8 @@ public class ContractService implements IContractService {
     }
 
     @Override
-    public Contract get(Integer id) {
-        Optional<Contract> contractOptional = contractRepository.findById(id);
+    public ContractDao get(Integer id) {
+        Optional<ContractDao> contractOptional = contractRepository.findById(id);
         if (!contractOptional.isPresent()) {
             throw new NotFoundException();
         }
@@ -115,10 +115,10 @@ public class ContractService implements IContractService {
     }
 
     @Override
-    public Contract update(Integer id, Contract update) {
-        Contract contract;
+    public ContractDao update(Integer id, ContractDao update) {
+        ContractDao contract;
 
-        Optional<Contract> contractOptional = contractRepository.findById(id);
+        Optional<ContractDao> contractOptional = contractRepository.findById(id);
         if (!contractOptional.isPresent()) {
             throw new NotFoundException();
         }
@@ -144,8 +144,8 @@ public class ContractService implements IContractService {
     }
 
     @Override
-    public Contract update(Integer id, ContractUpdateDto update) {
-        Contract contract = new Contract();
+    public ContractDao update(Integer id, ContractUpdateDto update) {
+        ContractDao contract = new ContractDao();
         contract.setExecutor(update.getExecutor());
         contract.setReward(update.getReward());
         contract.setMinRank(update.getMinRank());
@@ -163,13 +163,13 @@ public class ContractService implements IContractService {
     }
 
     @Override
-    public Contract startPerforming(Integer id, User executor) {
-        Optional<Contract> contractOptional = contractRepository.findById(id);
+    public ContractDao startPerforming(Integer id, UserDao executor) {
+        Optional<ContractDao> contractOptional = contractRepository.findById(id);
         if (!contractOptional.isPresent()) {
             throw new NotFoundException();
         }
 
-        Contract contract = contractOptional.get();
+        ContractDao contract = contractOptional.get();
 
         if (contract.getContractStatus() != ContractStatus.Accepted) {
             throw new BadRequestException("Contract have invalid status for start performing (must be Accepted) - " + contract.getContractStatus());
@@ -196,13 +196,13 @@ public class ContractService implements IContractService {
     }
 
     @Override
-    public Contract stopPerformingContract(Integer id, String performedComment) {
-        Optional<Contract> contractOptional = contractRepository.findById(id);
+    public ContractDao stopPerformingContract(Integer id, String performedComment) {
+        Optional<ContractDao> contractOptional = contractRepository.findById(id);
         if (!contractOptional.isPresent()) {
             throw new NotFoundException();
         }
 
-        Contract contract = contractOptional.get();
+        ContractDao contract = contractOptional.get();
 
         if (contract.getContractStatus() != ContractStatus.Performing) {
             throw new BadRequestException("Contract have invalid status for start performing (must be Performing) - " + contract.getContractStatus());
@@ -217,13 +217,13 @@ public class ContractService implements IContractService {
     }
 
     @Override
-    public Contract cancelContract(Integer id, String cancellationComment) {
-        Optional<Contract> contractOptional = contractRepository.findById(id);
+    public ContractDao cancelContract(Integer id, String cancellationComment) {
+        Optional<ContractDao> contractOptional = contractRepository.findById(id);
         if (!contractOptional.isPresent()) {
             throw new NotFoundException();
         }
 
-        Contract contract = contractOptional.get();
+        ContractDao contract = contractOptional.get();
 
         if (contract.getContractStatus() != ContractStatus.Performing) {
             throw new BadRequestException("Contract have invalid status for cancel performing (must be Performing) - " + contract.getContractStatus());

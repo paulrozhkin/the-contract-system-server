@@ -1,8 +1,8 @@
 package com.itmo.goblinslayersystemserver.dto;
 
-import com.itmo.goblinslayersystemserver.models.Contract;
-import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
-import com.itmo.goblinslayersystemserver.models.enums.ContractStatus;
+import com.itmo.goblinslayersystemserver.dao.ContractDao;
+import com.itmo.goblinslayersystemserver.dao.enums.AdventurerRank;
+import com.itmo.goblinslayersystemserver.dao.enums.ContractStatus;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -49,7 +49,7 @@ public class ContractDto {
 
     private String cancellationComment;
 
-    public ContractDto(Contract contract) {
+    public ContractDto(ContractDao contract) {
         id = contract.getId();
         customer = contract.getCustomer();
         executor = contract.getExecutor();

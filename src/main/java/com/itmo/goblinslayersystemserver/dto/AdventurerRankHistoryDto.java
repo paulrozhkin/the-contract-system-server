@@ -1,8 +1,8 @@
 package com.itmo.goblinslayersystemserver.dto;
 
-import com.itmo.goblinslayersystemserver.models.RankHistory;
-import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
-import com.itmo.goblinslayersystemserver.models.enums.RankHistoryType;
+import com.itmo.goblinslayersystemserver.dao.RankHistoryDao;
+import com.itmo.goblinslayersystemserver.dao.enums.AdventurerRank;
+import com.itmo.goblinslayersystemserver.dao.enums.RankHistoryType;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -20,7 +20,7 @@ public class AdventurerRankHistoryDto {
     @NonNull
     private Date time;
 
-    public AdventurerRankHistoryDto(RankHistory history) {
+    public AdventurerRankHistoryDto(RankHistoryDao history) {
         oldRank = history.getOldRank();
         newRank = history.getNewRank();
         type = history.getType();

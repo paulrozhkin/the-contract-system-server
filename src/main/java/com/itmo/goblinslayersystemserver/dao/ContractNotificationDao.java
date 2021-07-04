@@ -1,6 +1,6 @@
-package com.itmo.goblinslayersystemserver.models;
+package com.itmo.goblinslayersystemserver.dao;
 
-import com.itmo.goblinslayersystemserver.models.enums.ContractStatus;
+import com.itmo.goblinslayersystemserver.dao.enums.ContractStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -10,13 +10,13 @@ import javax.persistence.*;
 @Entity
 @Table(name = "contract_notifications")
 @Data
-public class ContractNotification extends BaseEntity {
+public class ContractNotificationDao extends BaseEntity {
     /**
      * ID заявителя
      **/
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contract")
-    private Contract contract;
+    private ContractDao contract;
 
     /**
      * Старый статус контракта (с которого изменили)

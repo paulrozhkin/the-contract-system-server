@@ -8,6 +8,7 @@ public class Endpoints {
     public static final String ContractsRestControllerV1 = RestControllerV1 + "/contracts/";
     public static final String UsersRestControllerV1 = RestControllerV1 + "/users/";
     public static final String AdventurersRestControllerV1 = RestControllerV1 + "/adventurers/";
+    public static final String FilesRestControllerV1 = RestControllerV1 + "/files/";
 
     // specific endpoints
     public static final String AdventurersStatusUpdateRestControllerV1 = AdventurersRestControllerV1 + "{id}/status/";

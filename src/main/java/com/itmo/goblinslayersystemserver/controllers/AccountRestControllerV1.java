@@ -1,10 +1,10 @@
 package com.itmo.goblinslayersystemserver.controllers;
 
+import com.itmo.goblinslayersystemserver.dao.UserDao;
 import com.itmo.goblinslayersystemserver.dto.AccountPasswordUpdateDto;
 import com.itmo.goblinslayersystemserver.dto.AccountUpdateDto;
 import com.itmo.goblinslayersystemserver.dto.NotificationDto;
 import com.itmo.goblinslayersystemserver.dto.UserDto;
-import com.itmo.goblinslayersystemserver.models.User;
 import com.itmo.goblinslayersystemserver.services.INotificationService;
 import com.itmo.goblinslayersystemserver.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +55,7 @@ public class AccountRestControllerV1 {
     @GetMapping(path = "notifications",consumes = {"application/json"}, produces = {"application/json"})
     public NotificationDto getCurrentUserNotifications() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userService.get(username);
+        UserDao user = userService.get(username);
         return notificationService.getUserNotifications(user.getId());
     }
 
@@ -65,7 +65,7 @@ public class AccountRestControllerV1 {
     @PostMapping(path = "notifications/contract-notifications/{contractNotificationId}")
     public ResponseEntity<Void> confirmedNotifications(@PathVariable Integer contractNotificationId) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userService.get(username);
+        UserDao user = userService.get(username);
 
         notificationService.confirmContractNotification(contractNotificationId, user);
 
