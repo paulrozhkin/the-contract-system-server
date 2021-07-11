@@ -22,6 +22,7 @@ public class UserDto {
     private List<RoleDto> roles;
     @NonNull
     private Boolean isBlocked;
+    private Integer avatar;
 
     public UserDto(UserDao user) {
         id = user.getId();
@@ -53,5 +54,6 @@ public class UserDto {
 
         roles = rolesDto;
         isBlocked = user.isBlocked();
+        avatar = user.getAvatar();
     }
 }

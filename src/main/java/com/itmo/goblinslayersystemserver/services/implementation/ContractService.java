@@ -101,6 +101,7 @@ public class ContractService implements IContractService {
         contract.setNameContract(contractDto.getNameContract());
         contract.setRequestComment(contractDto.getRequestComment());
         contract.setReward(contractDto.getReward());
+        contract.setIcon(contractDto.getIcon());
         return create(contract);
     }
 
@@ -116,14 +117,16 @@ public class ContractService implements IContractService {
 
     @Override
     public ContractDao update(Integer id, ContractDao update) {
-        ContractDao contract;
-
         Optional<ContractDao> contractOptional = contractRepository.findById(id);
         if (!contractOptional.isPresent()) {
             throw new NotFoundException();
         }
 
-        contract = contractOptional.get();
+        ContractDao contract = contractOptional.get();
+
+        boolean isStatusChangedToComplete = update.getContractStatus() == ContractStatus.Completed
+                && update.getContractStatus() != contract.getContractStatus();
+
         contract.setExecutor(update.getExecutor());
         contract.setReward(update.getReward());
         contract.setMinRank(update.getMinRank());
@@ -132,8 +135,9 @@ public class ContractService implements IContractService {
         contract.setDescription(update.getDescription());
         contract.setRequestComment(update.getRequestComment());
         contract.setRegistrarComment(update.getRegistrarComment());
+        contract.setIcon(update.getIcon());
 
-        if (contract.getContractStatus() == ContractStatus.Completed) {
+        if (isStatusChangedToComplete) {
             // За выполнение любого контракта даем 1 единцицу опыта авантюристу.
             userService.updateAdventurerRank(contract.getExecutor(), 1);
         }
@@ -154,6 +158,7 @@ public class ContractService implements IContractService {
         contract.setDescription(update.getDescription());
         contract.setRequestComment(update.getRequestComment());
         contract.setRegistrarComment(update.getRegistrarComment());
+        contract.setIcon(update.getIcon());
         return update(id, contract);
     }
 

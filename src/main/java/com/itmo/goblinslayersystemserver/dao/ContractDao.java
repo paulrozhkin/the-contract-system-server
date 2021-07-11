@@ -104,6 +104,12 @@ public class ContractDao extends BaseEntity {
             fetch = FetchType.LAZY)
     private List<ContractNotificationDao> notifications;
 
+    /**
+     * ID файла с иконкой контракта.
+     **/
+    @Column(name = "icon")
+    private Integer icon;
+
     public void setContractStatus(ContractStatus newStatus)
     {
         ContractNotificationDao newStatusChangeNotification = new ContractNotificationDao();

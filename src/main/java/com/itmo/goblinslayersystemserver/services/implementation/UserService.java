@@ -219,6 +219,7 @@ public class UserService implements IUserService {
 
         user.setName(accountUpdateDto.getName());
         user.setAddress(accountUpdateDto.getAddress());
+        user.setAvatar(accountUpdateDto.getAvatar());
 
         userRepository.save(user);
 

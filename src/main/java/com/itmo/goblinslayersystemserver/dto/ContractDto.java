@@ -49,6 +49,8 @@ public class ContractDto {
 
     private String cancellationComment;
 
+    private Integer icon;
+
     public ContractDto(ContractDao contract) {
         id = contract.getId();
         customer = contract.getCustomer();
@@ -64,5 +66,6 @@ public class ContractDto {
         registrarComment = contract.getRegistrarComment();
         performedComment = contract.getPerformedComment();
         cancellationComment = contract.getCancellationComment();
+        icon = contract.getIcon();
     }
 }

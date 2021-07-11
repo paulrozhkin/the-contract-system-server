@@ -9,4 +9,5 @@ public class AccountUpdateDto {
     private String name;
     @NonNull
     private String address;
+    private Integer avatar;
 }

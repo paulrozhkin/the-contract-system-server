@@ -1725,6 +1725,10 @@ components:
           description: 'Review of the Guild Registrar on the submitted contract.'
           type: string
           example: 'The abilities of goblins and Hobbs are not described.'
+        icon:
+          description: 'Main icon id of contract'
+          type: integer
+          example: '3'
 
     contractUpdateModel:
       allOf:
