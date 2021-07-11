@@ -3,6 +3,7 @@ package com.itmo.goblinslayersystemserver.controllers;
 import com.itmo.goblinslayersystemserver.dao.UserDao;
 import com.itmo.goblinslayersystemserver.dto.FileDto;
 import com.itmo.goblinslayersystemserver.models.FileInfo;
+import com.itmo.goblinslayersystemserver.models.GetFileResult;
 import com.itmo.goblinslayersystemserver.services.IFilesService;
 import com.itmo.goblinslayersystemserver.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,20 +24,21 @@ public class FilesRestControllerV1 {
     @Autowired
     private IFilesService filesService;
 
+    @Autowired
     private IUserService userService;
 
     /**
      * Загрузить файл
-     * @param fileName
+     *
      * @param file файл
      * @return информация о загруженном файле
      */
     @PostMapping(consumes = {"multipart/form-data"}, produces = {"application/json"})
-    public FileDto uploadFile(@RequestParam("fileName") String fileName, @RequestParam("file") MultipartFile file) {
+    public FileDto uploadFile(@RequestParam("file") MultipartFile file) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         UserDao uploader = userService.get(username);
 
-        FileInfo fileInfo = filesService.upload(fileName, file, uploader);
+        FileInfo fileInfo = filesService.upload(file, uploader);
         FileDto fileDto = new FileDto();
         fileDto.setId(fileInfo.getId());
         fileDto.setFileName(fileInfo.getFileName());
@@ -53,10 +55,10 @@ public class FilesRestControllerV1 {
     @GetMapping(value = "/{id}", consumes = {"application/json"}, produces = {"application/json"})
     public ResponseEntity<Resource> getFile(@PathVariable Integer id,
                                             HttpServletRequest request) {
-        Resource resource = null;
+        GetFileResult fileInfo = null;
 
         try {
-            resource = filesService.get(id);
+            fileInfo = filesService.get(id);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
@@ -64,7 +66,7 @@ public class FilesRestControllerV1 {
         // Try to determine file's content type
         String contentType = null;
         try {
-            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+            contentType = request.getServletContext().getMimeType(fileInfo.getFileResource().getFile().getAbsolutePath());
         } catch (IOException ex) {
             //logger.info("Could not determine file type.");
         }
@@ -76,8 +78,8 @@ public class FilesRestControllerV1 {
 
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                .body(resource);
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileInfo.getOriginalName() + "\"")
+                .body(fileInfo.getFileResource());
 
 
     }

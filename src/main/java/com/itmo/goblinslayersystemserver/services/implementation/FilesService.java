@@ -4,6 +4,8 @@ import com.itmo.goblinslayersystemserver.dao.FileDao;
 import com.itmo.goblinslayersystemserver.dao.UserDao;
 import com.itmo.goblinslayersystemserver.exceptions.NotFoundException;
 import com.itmo.goblinslayersystemserver.models.FileInfo;
+import com.itmo.goblinslayersystemserver.models.FileStorageResult;
+import com.itmo.goblinslayersystemserver.models.GetFileResult;
 import com.itmo.goblinslayersystemserver.repositories.FilesRepository;
 import com.itmo.goblinslayersystemserver.services.IFileStorageService;
 import com.itmo.goblinslayersystemserver.services.IFilesService;
@@ -24,29 +26,33 @@ public class FilesService implements IFilesService {
     IFileStorageService fileStorageService;
 
     @Override
-    public Resource get(Integer id) throws IOException {
+    public GetFileResult get(Integer id) throws IOException {
         Optional<FileDao> fileInfoOptional = filesRepository.findById(id);
         if (!fileInfoOptional.isPresent()) {
             throw new NotFoundException();
         }
 
         FileDao fileInfoDao = fileInfoOptional.get();
+        GetFileResult result = new GetFileResult();
+        result.setOriginalName(fileInfoDao.getOriginalName());
 
         try {
-            return fileStorageService.loadFileAsResource(fileInfoDao.getLocalName());
+            Resource fileResource = fileStorageService.loadFileAsResource(fileInfoDao.getLocalName());
+            result.setFileResource(fileResource);
+            return result;
         } catch (Exception ex) {
             throw new IOException(ex);
         }
     }
 
     @Override
-    public FileInfo upload(String fileName, MultipartFile file, UserDao user) {
+    public FileInfo upload(MultipartFile file, UserDao user) {
 
-        String localName = fileStorageService.storeFile(file);
+        FileStorageResult fileStorageResult = fileStorageService.storeFile(file);
         FileDao fileInfoDao = new FileDao();
         fileInfoDao.setUser(user);
-        fileInfoDao.setOriginalName(fileName);
-        fileInfoDao.setLocalName(localName);
+        fileInfoDao.setOriginalName(fileStorageResult.getOriginalName());
+        fileInfoDao.setLocalName(fileStorageResult.getStorageName());
 
         filesRepository.save(fileInfoDao);
 

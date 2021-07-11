@@ -1,5 +1,6 @@
 package com.itmo.goblinslayersystemserver.services.implementation;
 
+import com.itmo.goblinslayersystemserver.models.FileStorageResult;
 import com.itmo.goblinslayersystemserver.models.exceptions.FilesStorageException;
 import com.itmo.goblinslayersystemserver.services.IFileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,8 +55,9 @@ public class FileStorageService implements IFileStorageService {
         }
     }
 
-    public String storeFile(MultipartFile file)
+    public FileStorageResult storeFile(MultipartFile file)
     {
+        FileStorageResult result = new FileStorageResult();
         String originalFileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
         String fileName = "";
 
@@ -78,7 +80,10 @@ public class FileStorageService implements IFileStorageService {
             // Copy file to the target location (Replacing existing file with the same name)
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-            return fileName;
+
+            result.setOriginalName(originalFileName);
+            result.setStorageName(fileName);
+            return result;
         } catch (IOException ex) {
             throw new FilesStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }

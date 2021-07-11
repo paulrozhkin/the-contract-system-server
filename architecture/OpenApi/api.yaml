@@ -4,7 +4,7 @@ info:
   description: >-
     This is the API for a course project at ITMO University. The theme of the
     course is "The goblin slayer contract system". Server on github.
-  version: "1.0.1"
+  version: "1.1.0"
   title: Goblin Slayer Server API
 
 servers:
@@ -1351,7 +1351,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/errorModel'
-                
+
   /api/v1/files/:
     post:
       tags:
@@ -1366,8 +1366,6 @@ paths:
             schema:
               type: object
               properties:
-                fileName: # Part 1 - fileName
-                  type: string
                 file: # Part 2 - file
                   type: string
                   format: binary
@@ -1396,7 +1394,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/errorModel'
-                
+
   /api/v1/files/{id}:
     #Получение файла по id
     get:
