@@ -119,7 +119,7 @@ public class UserService implements IUserService {
         // Щифруем пароль в BCrypt
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        logger.info(String.format("Create new user:\n %s", user.toString()));
+        logger.info(String.format("Create new user:\n %s", user.getName()));
         return userRepository.saveAndFlush(user);
     }
 

@@ -52,7 +52,7 @@ public class FilesRestControllerV1 {
     /**
      * Get запрос для получения файла по его ID
      **/
-    @GetMapping(value = "/{id}", consumes = {"application/json"}, produces = {"application/json"})
+    @GetMapping(value = "/{id}")
     public ResponseEntity<Resource> getFile(@PathVariable Integer id,
                                             HttpServletRequest request) {
         GetFileResult fileInfo = null;
