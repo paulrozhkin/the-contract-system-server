@@ -1,7 +1,7 @@
 package com.itmo.goblinslayersystemserver.security.jwt;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.itmo.goblinslayersystemserver.models.User;
+import com.itmo.goblinslayersystemserver.dao.UserDao;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Date;
 
 /**
- * Spring Security wrapper for class {@link User}.
+ * Spring Security wrapper for class {@link UserDao}.
  *
  * @author Eugene Suleimanov
  * @version 1.0

@@ -1,20 +1,16 @@
 package com.itmo.goblinslayersystemserver.controllers.admin;
 
 import com.itmo.goblinslayersystemserver.controllers.Endpoints;
+import com.itmo.goblinslayersystemserver.dao.UserDao;
 import com.itmo.goblinslayersystemserver.dto.ItemsDto;
 import com.itmo.goblinslayersystemserver.dto.UserCreateAdminDto;
 import com.itmo.goblinslayersystemserver.dto.UserDto;
 import com.itmo.goblinslayersystemserver.dto.UserUpdateAdminDto;
-import com.itmo.goblinslayersystemserver.models.User;
-import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
-import com.itmo.goblinslayersystemserver.models.enums.ContractStatus;
 import com.itmo.goblinslayersystemserver.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -31,7 +27,7 @@ public class AdminUserRestControllerV1 {
     public ItemsDto<UserDto> getUsers(@RequestParam(required = false) String username,
                                       @RequestParam(defaultValue = "0") int page,
                                       @RequestParam(defaultValue = "5") int size) {
-        Page<User> usersPage = userService.get(username, page, size);
+        Page<UserDao> usersPage = userService.get(username, page, size);
 
         return new ItemsDto<>(
                 usersPage.getNumber(),
@@ -49,7 +45,7 @@ public class AdminUserRestControllerV1 {
      **/
     @PostMapping(consumes = {"application/json"}, produces = {"application/json"})
     public UserDto createUser(@RequestBody UserCreateAdminDto user) {
-        User newUser = userService.create(user);
+        UserDao newUser = userService.create(user);
         return new UserDto(newUser);
     }
 

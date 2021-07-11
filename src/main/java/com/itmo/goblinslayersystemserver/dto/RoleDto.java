@@ -1,6 +1,6 @@
 package com.itmo.goblinslayersystemserver.dto;
 
-import com.itmo.goblinslayersystemserver.models.enums.RoleEnum;
+import com.itmo.goblinslayersystemserver.dao.enums.RoleEnum;
 import lombok.Getter;
 
 public enum RoleDto {

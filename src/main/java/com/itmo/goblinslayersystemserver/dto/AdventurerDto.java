@@ -1,10 +1,10 @@
 package com.itmo.goblinslayersystemserver.dto;
 
+import com.itmo.goblinslayersystemserver.dao.UserDao;
 import com.itmo.goblinslayersystemserver.exceptions.BadRequestException;
-import com.itmo.goblinslayersystemserver.models.User;
-import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
-import com.itmo.goblinslayersystemserver.models.enums.AdventurerStatus;
-import com.itmo.goblinslayersystemserver.models.enums.RoleEnum;
+import com.itmo.goblinslayersystemserver.dao.enums.AdventurerRank;
+import com.itmo.goblinslayersystemserver.dao.enums.AdventurerStatus;
+import com.itmo.goblinslayersystemserver.dao.enums.RoleEnum;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -27,7 +27,7 @@ public class AdventurerDto {
     @NonNull
     private String reason;
 
-    public AdventurerDto(User user) {
+    public AdventurerDto(UserDao user) {
         if (user.getRoles().stream().noneMatch(role ->
                 role.getName() == RoleEnum.ROLE_ADVENTURER))
         {

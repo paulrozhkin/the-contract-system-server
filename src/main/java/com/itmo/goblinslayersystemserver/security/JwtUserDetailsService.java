@@ -1,6 +1,6 @@
 package com.itmo.goblinslayersystemserver.security;
 
-import com.itmo.goblinslayersystemserver.models.User;
+import com.itmo.goblinslayersystemserver.dao.UserDao;
 import com.itmo.goblinslayersystemserver.security.jwt.JwtUser;
 import com.itmo.goblinslayersystemserver.security.jwt.JwtUserFactory;
 import com.itmo.goblinslayersystemserver.services.implementation.UserService;
@@ -31,7 +31,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userService.get(username);
+        UserDao user = userService.get(username);
 
         if (user == null) {
             throw new UsernameNotFoundException("User with username: " + username + " not found");

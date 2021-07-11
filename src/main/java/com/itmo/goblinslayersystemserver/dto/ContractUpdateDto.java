@@ -1,7 +1,7 @@
 package com.itmo.goblinslayersystemserver.dto;
 
-import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
-import com.itmo.goblinslayersystemserver.models.enums.ContractStatus;
+import com.itmo.goblinslayersystemserver.dao.enums.AdventurerRank;
+import com.itmo.goblinslayersystemserver.dao.enums.ContractStatus;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -29,4 +29,6 @@ public class ContractUpdateDto {
     private String requestComment;
 
     private String registrarComment;
+
+    private Integer icon;
 }

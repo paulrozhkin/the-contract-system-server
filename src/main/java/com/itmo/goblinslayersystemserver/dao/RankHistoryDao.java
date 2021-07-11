@@ -1,7 +1,7 @@
-package com.itmo.goblinslayersystemserver.models;
+package com.itmo.goblinslayersystemserver.dao;
 
-import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
-import com.itmo.goblinslayersystemserver.models.enums.RankHistoryType;
+import com.itmo.goblinslayersystemserver.dao.enums.AdventurerRank;
+import com.itmo.goblinslayersystemserver.dao.enums.RankHistoryType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -11,13 +11,13 @@ import javax.persistence.*;
 @Entity
 @Table(name = "rank_history")
 @Data
-public class RankHistory extends BaseEntity {
+public class RankHistoryDao extends BaseEntity {
     /**
      * ID авантюриста
      **/
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "adventurer")
-    private User adventurer;
+    private UserDao adventurer;
 
     /**
      * Старый ранг (с которого изменили)
@@ -51,12 +51,12 @@ public class RankHistory extends BaseEntity {
      **/
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "distributor")
-    private User distributor;
+    private UserDao distributor;
 
     /**
      * Контракт, благодаря которому был поднят ранг (для типа Auto)
      **/
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contract")
-    private Contract contract;
+    private ContractDao contract;
 }

@@ -1,7 +1,7 @@
 package com.itmo.goblinslayersystemserver.security.jwt;
 
-import com.itmo.goblinslayersystemserver.models.User;
-import com.itmo.goblinslayersystemserver.models.Role;
+import com.itmo.goblinslayersystemserver.dao.RoleDao;
+import com.itmo.goblinslayersystemserver.dao.UserDao;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -18,7 +18,7 @@ public final class JwtUserFactory {
     public JwtUserFactory() {
     }
 
-    public static JwtUser create(User user) {
+    public static JwtUser create(UserDao user) {
         return new JwtUser(
                 user.getId(),
                 user.getUsername(),
@@ -31,7 +31,7 @@ public final class JwtUserFactory {
         );
     }
 
-    private static List<GrantedAuthority> mapToGrantedAuthorities(List<Role> userRoles) {
+    private static List<GrantedAuthority> mapToGrantedAuthorities(List<RoleDao> userRoles) {
         return userRoles.stream()
                 .map(role ->
                         new SimpleGrantedAuthority(role.getName().toString())

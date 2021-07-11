@@ -1,24 +1,17 @@
 package com.itmo.goblinslayersystemserver.controllers;
 
+import com.itmo.goblinslayersystemserver.dao.ContractDao;
+import com.itmo.goblinslayersystemserver.dao.UserDao;
 import com.itmo.goblinslayersystemserver.dto.*;
-import com.itmo.goblinslayersystemserver.models.Contract;
-import com.itmo.goblinslayersystemserver.models.User;
-import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
-import com.itmo.goblinslayersystemserver.models.enums.ContractStatus;
+import com.itmo.goblinslayersystemserver.dao.enums.AdventurerRank;
+import com.itmo.goblinslayersystemserver.dao.enums.ContractStatus;
 import com.itmo.goblinslayersystemserver.services.IContractService;
 import com.itmo.goblinslayersystemserver.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -44,7 +37,7 @@ public class ContractsRestControllerV1 {
                                               @RequestParam(defaultValue = "0") int page,
                                               @RequestParam(defaultValue = "5") int size) {
 
-        Page<Contract> contractsPage = contractService.get(
+        Page<ContractDao> contractsPage = contractService.get(
                 nameContract,
                 customer,
                 executor,
@@ -97,7 +90,7 @@ public class ContractsRestControllerV1 {
     @PostMapping(value = "/{id}/perform/", consumes = {"application/json"}, produces = {"application/json"})
     public ContractDto startPerformingContract(@PathVariable Integer id) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        User executor = userService.get(username);
+        UserDao executor = userService.get(username);
 
         return new ContractDto(contractService.startPerforming(id, executor));
     }

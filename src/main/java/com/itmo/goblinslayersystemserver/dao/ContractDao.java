@@ -1,7 +1,7 @@
-package com.itmo.goblinslayersystemserver.models;
+package com.itmo.goblinslayersystemserver.dao;
 
-import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
-import com.itmo.goblinslayersystemserver.models.enums.ContractStatus;
+import com.itmo.goblinslayersystemserver.dao.enums.AdventurerRank;
+import com.itmo.goblinslayersystemserver.dao.enums.ContractStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "contracts")
 @Data
-public class Contract extends BaseEntity {
+public class ContractDao extends BaseEntity {
     /**
      * ID заявителя
      **/
@@ -98,15 +98,21 @@ public class Contract extends BaseEntity {
      * Оповещения об изменении статуса контракта.
      **/
     @OneToMany(mappedBy = "contract",
-            targetEntity=ContractNotification.class,
+            targetEntity= ContractNotificationDao.class,
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.LAZY)
-    private List<ContractNotification> notifications;
+    private List<ContractNotificationDao> notifications;
+
+    /**
+     * ID файла с иконкой контракта.
+     **/
+    @Column(name = "icon")
+    private Integer icon;
 
     public void setContractStatus(ContractStatus newStatus)
     {
-        ContractNotification newStatusChangeNotification = new ContractNotification();
+        ContractNotificationDao newStatusChangeNotification = new ContractNotificationDao();
         newStatusChangeNotification.setConfirmed(false);
 
         // Если это новый контракт, то ставим ему статус ContractStatus.Created

@@ -1,7 +1,7 @@
 package com.itmo.goblinslayersystemserver.dto;
 
-import com.itmo.goblinslayersystemserver.models.ContractNotification;
-import com.itmo.goblinslayersystemserver.models.enums.ContractStatus;
+import com.itmo.goblinslayersystemserver.dao.ContractNotificationDao;
+import com.itmo.goblinslayersystemserver.dao.enums.ContractStatus;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -33,7 +33,7 @@ public class ContractNotificationDto {
     @NonNull
     private Date createTime;
 
-    public ContractNotificationDto(ContractNotification notification)
+    public ContractNotificationDto(ContractNotificationDao notification)
     {
         setId(notification.getId());
         setContractId(notification.getContract().getId());

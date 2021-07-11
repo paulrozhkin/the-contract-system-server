@@ -1,16 +1,16 @@
 package com.itmo.goblinslayersystemserver.services.implementation;
 
+import com.itmo.goblinslayersystemserver.dao.RankHistoryDao;
+import com.itmo.goblinslayersystemserver.dao.RoleDao;
+import com.itmo.goblinslayersystemserver.dao.UserDao;
 import com.itmo.goblinslayersystemserver.dto.*;
 import com.itmo.goblinslayersystemserver.exceptions.BadRequestException;
 import com.itmo.goblinslayersystemserver.exceptions.NotFoundException;
-import com.itmo.goblinslayersystemserver.models.QUser;
-import com.itmo.goblinslayersystemserver.models.RankHistory;
-import com.itmo.goblinslayersystemserver.models.Role;
-import com.itmo.goblinslayersystemserver.models.User;
-import com.itmo.goblinslayersystemserver.models.enums.AdventurerRank;
-import com.itmo.goblinslayersystemserver.models.enums.AdventurerStatus;
-import com.itmo.goblinslayersystemserver.models.enums.RankHistoryType;
-import com.itmo.goblinslayersystemserver.models.enums.RoleEnum;
+import com.itmo.goblinslayersystemserver.dao.QUserDao;
+import com.itmo.goblinslayersystemserver.dao.enums.AdventurerRank;
+import com.itmo.goblinslayersystemserver.dao.enums.AdventurerStatus;
+import com.itmo.goblinslayersystemserver.dao.enums.RankHistoryType;
+import com.itmo.goblinslayersystemserver.dao.enums.RoleEnum;
 import com.itmo.goblinslayersystemserver.repositories.UserRepository;
 import com.itmo.goblinslayersystemserver.services.IRolesService;
 import com.itmo.goblinslayersystemserver.services.IUserService;
@@ -45,12 +45,12 @@ public class UserService implements IUserService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public Page<User> get(String usernameFilter,
-                          int pagePagination,
-                          int sizePagination) {
+    public Page<UserDao> get(String usernameFilter,
+                             int pagePagination,
+                             int sizePagination) {
 
         // Создаем параметры фильрации
-        QUser user = QUser.user;
+        QUserDao user = QUserDao.userDao;
         BooleanBuilder where = new BooleanBuilder();
 
         if (usernameFilter != null) {
@@ -68,10 +68,10 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Page<User> get(String usernameFilter, AdventurerRank rankFilter,
-                          AdventurerStatus statusFilter, int pagePagination, int sizePagination) {
+    public Page<UserDao> get(String usernameFilter, AdventurerRank rankFilter,
+                             AdventurerStatus statusFilter, int pagePagination, int sizePagination) {
         // Создаем параметры фильрации
-        QUser user = QUser.user;
+        QUserDao user = QUserDao.userDao;
         BooleanBuilder where = new BooleanBuilder();
 
         if (usernameFilter != null) {
@@ -106,8 +106,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User create(User user) {
-        User userWithSameUsername = userRepository.findByUsername(user.getUsername());
+    public UserDao create(UserDao user) {
+        UserDao userWithSameUsername = userRepository.findByUsername(user.getUsername());
 
         if (userWithSameUsername != null) {
             throw new BadRequestException("A user with this username already exists");
@@ -119,19 +119,19 @@ public class UserService implements IUserService {
         // Щифруем пароль в BCrypt
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        logger.info(String.format("Create new user:\n %s", user.toString()));
+        logger.info(String.format("Create new user:\n %s", user.getName()));
         return userRepository.saveAndFlush(user);
     }
 
     @Override
-    public User update(Integer id, User update) {
-        Optional<User> userOptional = userRepository.findById(id);
+    public UserDao update(Integer id, UserDao update) {
+        Optional<UserDao> userOptional = userRepository.findById(id);
 
         if (!userOptional.isPresent()) {
             throw new NotFoundException();
         }
 
-        User user = userOptional.get();
+        UserDao user = userOptional.get();
 
         user.setName(update.getName());
         user.setAddress(update.getAddress());
@@ -144,8 +144,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User update(Integer id, UserUpdateAdminDto update) {
-        User user = new User();
+    public UserDao update(Integer id, UserUpdateAdminDto update) {
+        UserDao user = new UserDao();
         user.setName(update.getName());
         user.setAddress(update.getAddress());
         user.setBlocked(update.getIsBlocked());
@@ -154,8 +154,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User updateAdventurerStatus(Integer id, AdventurerStatus newStatus) {
-        User user = get(id);
+    public UserDao updateAdventurerStatus(Integer id, AdventurerStatus newStatus) {
+        UserDao user = get(id);
 
         if (user.getRoles().stream().noneMatch(role -> role.getName().equals(RoleEnum.ROLE_ADVENTURER))) {
             throw new BadRequestException("User not adventurer.");
@@ -168,14 +168,14 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User updateAdventurerRank(Integer id, AdventurerRankUpdateDto adventurerRankUpdateDto, User distributor) {
-        User user = get(id);
+    public UserDao updateAdventurerRank(Integer id, AdventurerRankUpdateDto adventurerRankUpdateDto, UserDao distributor) {
+        UserDao user = get(id);
 
         if (user.getRoles().stream().noneMatch(role -> role.getName().equals(RoleEnum.ROLE_ADVENTURER))) {
             throw new BadRequestException("User not adventurer.");
         }
 
-        RankHistory newHistoryItem = new RankHistory();
+        RankHistoryDao newHistoryItem = new RankHistoryDao();
         newHistoryItem.setAdventurer(user);
         newHistoryItem.setOldRank(user.getAdventurerRank());
         newHistoryItem.setNewRank(adventurerRankUpdateDto.getNewRank());
@@ -193,8 +193,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User updateAdventurerRank(Integer id, Integer experience) {
-        User user = get(id);
+    public UserDao updateAdventurerRank(Integer id, Integer experience) {
+        UserDao user = get(id);
 
         if (user.getRoles().stream().noneMatch(role -> role.getName().equals(RoleEnum.ROLE_ADVENTURER))) {
             throw new BadRequestException("User not adventurer.");
@@ -214,11 +214,12 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User update(String username, AccountUpdateDto accountUpdateDto) {
-        User user = get(username);
+    public UserDao update(String username, AccountUpdateDto accountUpdateDto) {
+        UserDao user = get(username);
 
         user.setName(accountUpdateDto.getName());
         user.setAddress(accountUpdateDto.getAddress());
+        user.setAvatar(accountUpdateDto.getAvatar());
 
         userRepository.save(user);
 
@@ -226,8 +227,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User updatePassword(String username, AccountPasswordUpdateDto passwordUpdateDto) {
-        User user = get(username);
+    public UserDao updatePassword(String username, AccountPasswordUpdateDto passwordUpdateDto) {
+        UserDao user = get(username);
 
         if (!passwordEncoder.matches(passwordUpdateDto.getOldPassword(), user.getPassword())) {
             throw new BadRequestException("Incorrect password entered.");
@@ -240,12 +241,12 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User create(UserCreateDto user) {
-        Role customerRole = rolesService.get(RoleEnum.ROLE_CUSTOMER);
-        ArrayList<Role> userRoles = new ArrayList<>();
+    public UserDao create(UserCreateDto user) {
+        RoleDao customerRole = rolesService.get(RoleEnum.ROLE_CUSTOMER);
+        ArrayList<RoleDao> userRoles = new ArrayList<>();
         userRoles.add(customerRole);
 
-        User newUser = new User();
+        UserDao newUser = new UserDao();
         newUser.setUsername(user.getUsername());
         newUser.setRoles(userRoles);
         newUser.setPassword(user.getPassword());
@@ -256,17 +257,17 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User create(UserCreateAdminDto user) {
+    public UserDao create(UserCreateAdminDto user) {
 
-        ArrayList<Role> userRoles = new ArrayList<>();
+        ArrayList<RoleDao> userRoles = new ArrayList<>();
         if (user.getRoles() == null || user.getRoles().isEmpty()) {
-            Role customerRole = rolesService.get(RoleEnum.ROLE_CUSTOMER);
+            RoleDao customerRole = rolesService.get(RoleEnum.ROLE_CUSTOMER);
             userRoles.add(customerRole);
         } else {
             user.getRoles().forEach(roleDto -> userRoles.add(rolesService.get(roleDto)));
         }
 
-        User newUser = new User();
+        UserDao newUser = new UserDao();
         newUser.setUsername(user.getUsername());
         newUser.setRoles(userRoles);
         newUser.setPassword(user.getPassword());
@@ -277,14 +278,14 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User create(AdventurerCreateDto user) {
-        Role customerRole = rolesService.get(RoleEnum.ROLE_CUSTOMER);
-        Role adventurerRole = rolesService.get(RoleEnum.ROLE_ADVENTURER);
-        ArrayList<Role> userRoles = new ArrayList<>();
+    public UserDao create(AdventurerCreateDto user) {
+        RoleDao customerRole = rolesService.get(RoleEnum.ROLE_CUSTOMER);
+        RoleDao adventurerRole = rolesService.get(RoleEnum.ROLE_ADVENTURER);
+        ArrayList<RoleDao> userRoles = new ArrayList<>();
         userRoles.add(customerRole);
         userRoles.add(adventurerRole);
 
-        User newUser = new User();
+        UserDao newUser = new UserDao();
         newUser.setUsername(user.getUsername());
         newUser.setRoles(userRoles);
         newUser.setPassword(user.getPassword());
@@ -299,8 +300,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User get(Integer id) {
-        Optional<User> userOptional = userRepository.findById(id);
+    public UserDao get(Integer id) {
+        Optional<UserDao> userOptional = userRepository.findById(id);
 
         if (!userOptional.isPresent()) {
             throw new NotFoundException();
@@ -310,21 +311,21 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User get(String username) {
+    public UserDao get(String username) {
         return userRepository.findByUsername(username);
     }
 
     @Override
-    public Page<RankHistory> getAdventurerRankHistory(Integer id, int pagePagination,
-                                                      int sizePagination) {
-        User user = get(id);
+    public Page<RankHistoryDao> getAdventurerRankHistory(Integer id, int pagePagination,
+                                                         int sizePagination) {
+        UserDao user = get(id);
 
         if (user.getRoles().stream().noneMatch(role -> role.getName().equals(RoleEnum.ROLE_ADVENTURER))) {
             throw new BadRequestException("User not adventurer.");
         }
 
         // Получем полный список истории рангов
-        List<RankHistory> rankHistoryList = user.getRankHistories();
+        List<RankHistoryDao> rankHistoryList = user.getRankHistories();
 
         // Создаем пагинацию
         Pageable paging = PageRequest.of(pagePagination, sizePagination);
@@ -339,8 +340,8 @@ public class UserService implements IUserService {
         userRepository.deleteById(id);
     }
 
-    private void addCustomerRole(User user) {
-        Role customerRole = rolesService.get(RoleEnum.ROLE_CUSTOMER);
+    private void addCustomerRole(UserDao user) {
+        RoleDao customerRole = rolesService.get(RoleEnum.ROLE_CUSTOMER);
 
         if (user.getRoles() == null) {
             user.setRoles(new ArrayList<>());
