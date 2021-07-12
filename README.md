@@ -40,6 +40,22 @@ spring.liquibase.change-log=classpath:db/changelog/db.changelog-master.xml
 
 # JWT
 jwt.token.secret=<secret key to generate jwt XxnIa43zAUuo1gXHzkM5>
+
+## MULTIPART (MultipartProperties)
+# Enable multipart uploads
+spring.servlet.multipart.enabled=true
+
+# Threshold after which files are written to disk.
+spring.servlet.multipart.file-size-threshold=2KB
+
+# Max file size.
+spring.servlet.multipart.max-file-size=200MB
+
+# Max Request Size
+spring.servlet.multipart.max-request-size=215MB
+
+# All files uploaded through the REST API will be stored in this directory
+files.upload-dir=<path to files>
 ```
 
 Static-location template for Windows: 
