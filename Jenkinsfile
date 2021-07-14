@@ -45,7 +45,7 @@ pipeline {
           sh 'scp ./target/*.jar jenkins@paulrozhkin.ru:/var/www/the-contract-system/server'
 
           // Restart server
-          sh "ssh -o StrictHostKeyChecking=no -l jenkins paulrozhkin.ru 'sudo systemctl restart the-contract-system-server' -a"
+          sh "ssh -o StrictHostKeyChecking=no -l -t jenkins paulrozhkin.ru 'sudo systemctl restart the-contract-system-server' -a"
 		}
       }
     }
