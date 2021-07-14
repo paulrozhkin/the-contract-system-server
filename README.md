@@ -26,7 +26,7 @@ The server application for the contract system in the world "Goblin Slayer".
 ## Deployment:
 This section describes how to deploy a server.
 
-## Deployment diagram
+### Deployment diagram
 
 <a href="#"> <img title="Contract System" src="https://raw.githubusercontent.com/paulrozhkin/the-contract-system-server/master/architecture/images/DeploymentDiagram.png" alt="Deployment diagram" width="800"/> </a>
 
